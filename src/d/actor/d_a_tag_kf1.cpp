@@ -5,140 +5,391 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_kf1.h"
+#include "d/actor/d_a_tsubo.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_hostIO.h"
+
+class daTag_Kf1_HIO_c : public JORReflexible {
+public:
+    struct hio_prm_c {
+        /* 0x00 */ f32 mAttnDist;
+        /* 0x04 */ f32 mAttnHeight;
+        /* 0x08 */ u8 field_0x8;
+    };  // Size: 0xC
+
+    daTag_Kf1_HIO_c();
+    virtual ~daTag_Kf1_HIO_c() {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ hio_prm_c mPrmTbl;
+};  // Size: 0x14
+
+static daTag_Kf1_HIO_c l_HIO;
+static fopAc_ac_c* l_check_inf[100];
+static int l_check_wrk;
 
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
-    /* Nonmatching */
+    static hio_prm_c a_prm_tbl = {
+        /* mAttnDist   */ 150.0f,
+        /* mAttnHeight */ 30.0f,
+        /* field_0x8   */ 0,
+    };
+    mPrmTbl = a_prm_tbl;
+    mNo = -1;
 }
 
 /* 00000120-000001B0       .text searchActor_Kutani__FPvPv */
-void searchActor_Kutani(void*, void*) {
-    /* Nonmatching */
+static void* searchActor_Kutani(void* i_actor, void*) {
+    if (l_check_wrk < 100 && fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_TSUBO_e) {
+        if (((daTsubo::Act_c*)i_actor)->prm_get_type() == 0xE) {
+            l_check_inf[l_check_wrk] = (fopAc_ac_c*)i_actor;
+            l_check_wrk++;
+        }
+    }
+    return NULL;
 }
 
 /* 000001B0-00000220       .text createInit__11daTag_Kf1_cFv */
-void daTag_Kf1_c::createInit() {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::createInit() {
+    mEvtCut.setActorInfo("TagKf1", this);
+    set_action(&daTag_Kf1_c::wait_action1, NULL);
+    return TRUE;
 }
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
-void daTag_Kf1_c::setStt(signed char) {
-    /* Nonmatching */
+void daTag_Kf1_c::setStt(s8 i_stt) {
+    mStt = i_stt;
+    switch ((s8)mStt) {
+    case 3:
+        break;
+    }
 }
 
 /* 00000234-00000294       .text next_msgStatus__11daTag_Kf1_cFPUl */
-void daTag_Kf1_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u16 daTag_Kf1_c::next_msgStatus(u32* pMsgNo) {
+    u16 status = fopMsgStts_MSG_CONTINUES_e;
+    switch (*pMsgNo) {
+    case 0x1C30:
+        *pMsgNo = 0x1C35;
+        break;
+    case 0x1C35:
+        *pMsgNo = 0x1C31;
+        break;
+    case 0x1C2E:
+        mRupee = dComIfGs_getRupee();
+        // fallthrough
+    default:
+        status = fopMsgStts_MSG_ENDS_e;
+        break;
+    }
+    return status;
 }
 
 /* 00000294-00000314       .text eventOrder__11daTag_Kf1_cFv */
 void daTag_Kf1_c::eventOrder() {
-    /* Nonmatching */
+    static char* a_demo_name_tbl[] = {"BENSYO"};
+
+    if (mOrder == 1 || mOrder == 2) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if (mOrder == 1) {
+            fopAcM_orderSpeakEvent(this);
+        }
+    } else if (mOrder >= 3) {
+        fopAcM_orderOtherEvent2(this, a_demo_name_tbl[mOrder - 3], dEvtFlag_NOPARTNER_e);
+    }
 }
 
 /* 00000314-00000380       .text checkOrder__11daTag_Kf1_cFv */
 void daTag_Kf1_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        if (dComIfGp_evmng_startCheck("BENSYO")) {
+            if (mOrder == 3) {
+                mOrder = 0;
+            }
+        }
+    }
 }
 
 /* 00000380-00000470       .text chkAttention__11daTag_Kf1_cF4cXyz */
-void daTag_Kf1_c::chkAttention(cXyz) {
-    /* Nonmatching */
+bool daTag_Kf1_c::chkAttention(cXyz i_pos) {
+    bool ret = false;
+    f32 dist = i_pos.abs(dComIfGp_getPlayer(0)->current.pos);
+    f32 height = dComIfGp_getPlayer(0)->current.pos.y - i_pos.y;
+    if (dist < l_HIO.mPrmTbl.mAttnDist && height < l_HIO.mPrmTbl.mAttnHeight) {
+        ret = true;
+    }
+    return ret;
 }
 
 /* 00000470-0000057C       .text partner_srch__11daTag_Kf1_cFv */
-void daTag_Kf1_c::partner_srch() {
-    /* Nonmatching */
+bool daTag_Kf1_c::partner_srch() {
+    bool ret = false;
+
+    for (int i = 0; i < 8; i++) {
+        mPartnerId[i] = fpcM_ERROR_PROCESS_ID_e;
+    }
+
+    l_check_wrk = 0;
+    for (int i = 0; i < 100; i++) {
+        l_check_inf[i] = NULL;
+    }
+
+    fpcM_Search(searchActor_Kutani, this);
+
+    if (l_check_wrk <= 8 && l_check_wrk != 0) {
+        int i;
+        mPartnerNum = i = 0;
+        for (int j = 0; i < l_check_wrk; i++, j++) {
+            mPartnerId[j] = fopAcM_GetID(l_check_inf[j]);
+            mPartnerNum++;
+        }
+        ret = true;
+    }
+    return ret;
 }
 
 /* 0000057C-00000604       .text checkPartner__11daTag_Kf1_cFv */
-void daTag_Kf1_c::checkPartner() {
-    /* Nonmatching */
+s16 daTag_Kf1_c::checkPartner() {
+    s16 num = 0;
+    for (int i = 0; i < mPartnerNum; i++) {
+        if (fopAcM_SearchByID(mPartnerId[i]) != NULL) {
+            num++;
+        }
+    }
+    return num;
 }
 
 /* 00000604-00000650       .text goto_nextStage__11daTag_Kf1_cFv */
 void daTag_Kf1_c::goto_nextStage() {
-    /* Nonmatching */
+    dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0, -1, -1, 0.0f, 0, TRUE, 0);
 }
 
 /* 00000650-000006DC       .text event_talkInit__11daTag_Kf1_cFi */
-void daTag_Kf1_c::event_talkInit(int) {
-    /* Nonmatching */
+void daTag_Kf1_c::event_talkInit(int i_staffIdx) {
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "MsgNo");
+    mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
+    if (pMsgNo != NULL) {
+        mCurrMsgNo = *pMsgNo;
+        if (mCurrMsgNo == 0x1C2D) {
+            dComIfGp_setMessageCountNumber(mBrokenNum * 10);
+        }
+    } else {
+        mCurrMsgNo = 0;
+    }
 }
 
 /* 000006DC-0000071C       .text event_mesSet__11daTag_Kf1_cFv */
-void daTag_Kf1_c::event_mesSet() {
-    /* Nonmatching */
+bool daTag_Kf1_c::event_mesSet() {
+    talk(0);
+    return mCurrMsgBsPcId != fpcM_ERROR_PROCESS_ID_e;
 }
 
 /* 0000071C-00000750       .text event_mesEnd__11daTag_Kf1_cFv */
-void daTag_Kf1_c::event_mesEnd() {
-    /* Nonmatching */
+bool daTag_Kf1_c::event_mesEnd() {
+    return talk(0) == fopMsgStts_BOX_CLOSED_e;
 }
 
 /* 00000750-000007A4       .text bensyoInit__11daTag_Kf1_cFv */
 void daTag_Kf1_c::bensyoInit() {
-    /* Nonmatching */
+    dComIfGp_setItemRupeeCount(-(mBrokenNum * 10));
+    mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
+    if (mRupee > mBrokenNum * 10) {
+        mCurrMsgNo = 0x1C2F;
+    } else {
+        mCurrMsgNo = 0x1C30;
+    }
 }
 
 /* 000007A4-000007C4       .text event_bensyo__11daTag_Kf1_cFv */
-void daTag_Kf1_c::event_bensyo() {
-    /* Nonmatching */
+bool daTag_Kf1_c::event_bensyo() {
+    return event_mesSet();
 }
 
 /* 000007C4-000007FC       .text event_cntTsubo__11daTag_Kf1_cFv */
 void daTag_Kf1_c::event_cntTsubo() {
-    /* Nonmatching */
+    mBrokenNum = mPartnerNum - checkPartner();
 }
 
 /* 000007FC-00000978       .text privateCut__11daTag_Kf1_cFv */
 void daTag_Kf1_c::privateCut() {
-    /* Nonmatching */
+    static char* cut_name_tbl[] = {
+        "MES_SET",
+        "MES_END",
+        "TSUBO_BENSYO",
+        "GO_NEXT",
+        "CNT_TSUBO",
+    };
+
+    int staffIdx = dComIfGp_evmng_getMyStaffId("TagKf1", NULL, 0);
+    if (staffIdx != -1) {
+        mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
+        if (mActIdx == -1) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+            return;
+        }
+
+        if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+            switch (mActIdx) {
+            case 0:
+                event_talkInit(staffIdx);
+                break;
+            case 2:
+                bensyoInit();
+                break;
+            case 3:
+                goto_nextStage();
+                break;
+            case 4:
+                event_cntTsubo();
+                break;
+            }
+        }
+
+        bool end;
+        switch (mActIdx) {
+        case 0:
+            end = event_mesSet();
+            break;
+        case 1:
+            end = event_mesEnd();
+            break;
+        case 2:
+            end = event_bensyo();
+            break;
+        case 3:
+        case 4:
+        default:
+            end = true;
+            break;
+        }
+
+        if (end) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        }
+    }
 }
 
 /* 00000978-00000A0C       .text event_proc__11daTag_Kf1_cFv */
 void daTag_Kf1_c::event_proc() {
-    /* Nonmatching */
+    if (dComIfGp_evmng_endCheck("BENSYO")) {
+        setStt(2);
+    } else {
+        bool attn = mEvtCut.getAttnFlag();
+        if (mEvtCut.cutProc()) {
+            if (!mEvtCut.getAttnFlag()) {
+                mEvtCut.setAttnFlag(attn);
+            }
+        } else {
+            privateCut();
+        }
+    }
 }
 
 /* 00000A0C-00000AB8       .text set_action__11daTag_Kf1_cFM11daTag_Kf1_cFPCvPvPv_iPv */
-void daTag_Kf1_c::set_action(int (daTag_Kf1_c::*)(void*), void*) {
-    /* Nonmatching */
+bool daTag_Kf1_c::set_action(ActionFunc i_action, void* i_arg) {
+    if (mAction != i_action) {
+        if (mAction != NULL) {
+            mActionState = -1;
+            (this->*mAction)(i_arg);
+        }
+        mAction = i_action;
+        mActionState = 0;
+        (this->*mAction)(i_arg);
+    }
+    return true;
 }
 
 /* 00000AB8-00000B14       .text wait01__11daTag_Kf1_cFv */
-void daTag_Kf1_c::wait01() {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::wait01() {
+    mOrder = 0;
+    if (mbAttention && mPartnerNum != checkPartner()) {
+        mOrder = 3;
+    }
+    return TRUE;
 }
 
 /* 00000B14-00000B1C       .text wait02__11daTag_Kf1_cFv */
-void daTag_Kf1_c::wait02() {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::wait02() {
+    return TRUE;
 }
 
 /* 00000B1C-00000BE8       .text wait_action1__11daTag_Kf1_cFPv */
-void daTag_Kf1_c::wait_action1(void*) {
-    /* Nonmatching */
+int daTag_Kf1_c::wait_action1(void*) {
+    if (mActionState == 0) {
+        setStt(1);
+        mActionState++;
+    } else if (mActionState != -1) {
+        if (mActionState == 1) {
+            partner_srch();
+            mActionState = 2;
+        }
+
+        mbAttention = chkAttention(current.pos);
+
+        switch (mStt) {
+        case 1:
+            wait01();
+            break;
+        case 2:
+            wait02();
+            break;
+        }
+    }
+    return TRUE;
 }
 
 /* 00000BE8-00000BF0       .text _draw__11daTag_Kf1_cFv */
 BOOL daTag_Kf1_c::_draw() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000BF0-00000C68       .text _execute__11daTag_Kf1_cFv */
 BOOL daTag_Kf1_c::_execute() {
-    /* Nonmatching */
+    checkOrder();
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
+        event_proc();
+    } else {
+        (this->*mAction)(NULL);
+    }
+    eventOrder();
+    return TRUE;
 }
 
 /* 00000C68-00000CBC       .text _delete__11daTag_Kf1_cFv */
 BOOL daTag_Kf1_c::_delete() {
-    /* Nonmatching */
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+    return TRUE;
 }
 
 /* 00000CBC-00000E98       .text _create__11daTag_Kf1_cFv */
 cPhs_State daTag_Kf1_c::_create() {
-    /* Nonmatching */
+    cPhs_State ret = cPhs_COMPLEATE_e;
+
+    fopAcM_ct(this, daTag_Kf1_c);
+
+    switch (fopAcM_GetName(this)) {
+    case fpcNm_TAG_KF1_e:
+        mType = 0;
+        break;
+    default:
+        return cPhs_ERROR_e;
+    }
+
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("クタニ焼き監視タグ", &l_HIO);
+    }
+
+    if (!createInit()) {
+        ret = cPhs_ERROR_e;
+    }
+    return ret;
 }
 
 /* 000010C0-000010E0       .text daTag_Kf1_Create__FP10fopAc_ac_c */

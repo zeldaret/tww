@@ -5,100 +5,361 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_waterfall.h"
+#include "d/d_bg_s_func.h"
+#include "d/d_bg_s_wtr_chk.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_audio.h"
+#include "m_Do/m_Do_mtx.h"
+#include "res/Object/Wfall.h"
+
+const char daWfall_c::m_arcname[] = "Wfall";
+const u8 daWfall_c::m_wait_timer = 0x32;
+const s16 daWfall_c::m_heapsize[] = {0x35A0, 0x4870};
 
 /* 00000078-000000F0       .text _delete__9daWfall_cFv */
 bool daWfall_c::_delete() {
-    /* Nonmatching */
+    mEmitterCb0.remove();
+    mEmitterCb1.remove();
+    dComIfG_resDelete(&mPhs, m_arcname);
+    mDoAud_seDeleteObject(&mGatePos);
+    return true;
 }
 
 /* 000000F0-00000110       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daWfall_c*)i_this)->CreateHeap();
 }
 
 /* 00000110-0000048C       .text CreateHeap__9daWfall_cFv */
-void daWfall_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daWfall_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BDL_YSWTR00_e);
+    JUT_ASSERT(253, modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BTK_YSWTR00_e);
+    JUT_ASSERT(269, pbtk != NULL);
+    if (!mBtkAnm.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP)) {
+        return FALSE;
+    }
+    mBtkAnm.setPlaySpeed(1.0f);
+
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BDL_HSUI1_e);
+    JUT_ASSERT(281, modelData != NULL);
+    mpGateModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpGateModel == NULL) {
+        return FALSE;
+    }
+
+    if (mType == 1) {
+        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BDL_YSMNM00_e);
+        JUT_ASSERT(297, modelData != NULL);
+        mpMinamoModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+        if (mpMinamoModel == NULL) {
+            return FALSE;
+        }
+
+        pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BTK_YSMNM00_e);
+        JUT_ASSERT(312, pbtk != NULL);
+        if (!mMinamoBtkAnm.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP)) {
+            return FALSE;
+        }
+
+        J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BRK_YSMNM00_e);
+        JUT_ASSERT(323, pbrk != NULL);
+        if (!mMinamoBrkAnm.init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE)) {
+            return FALSE;
+        }
+        mMinamoBrkAnm.setPlaySpeed(0.0f);
+    }
+    return TRUE;
 }
 
 /* 0000048C-00000708       .text CreateInit__9daWfall_cFv */
 void daWfall_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    if (mType == 1) {
+        fopAcM_setCullSizeBox(this, -1000.0f, 0.0f, -200.0f, 1200.0f, 1000.0f, 3800.0f);
+    } else {
+        fopAcM_setCullSizeBox(this, -250.0f, 0.0f, 0.0f, 250.0f, 1000.0f, 800.0f);
+    }
+    fopAcM_setCullSizeFar(this, 2.5f);
+    set_mtx();
+
+    mEmitterPos0 = current.pos;
+    mEmitterPos1 = current.pos;
+    mEmitterAngle0 = current.angle;
+    mEmitterAngle1 = current.angle;
+
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_SIRENSUIRYU00, &mEmitterPos0, &mEmitterAngle0, NULL, 0xFF, &mEmitterCb0);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_SIRENSUIRYU01, &mEmitterPos1, &mEmitterAngle1, NULL, 0xFF, &mEmitterCb1);
+
+    mSwNo = fopAcM_GetParam(this) & 0xFF;
+    if (fopAcM_isSwitch(this, mSwNo)) {
+        mode_wtr_off_init();
+        mGatePos = current.pos;
+        mEvState = 10;
+        if (mType == 1) {
+            mMinamoBrkAnm.setFrame(mMinamoBrkAnm.getEndFrame());
+        }
+    } else {
+        mode_wtr_on_init();
+        mGatePos = current.pos;
+        mGatePos.y += 863.0f;
+        if (mType == 1) {
+            mMinamoBrkAnm.setFrame(0.0f);
+        }
+    }
+
+    mEventIdx = dComIfGp_evmng_getEventIdx("GATECLOSE");
 }
 
 /* 00000708-00000838       .text _create__9daWfall_cFv */
 cPhs_State daWfall_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daWfall_c);
+
+    cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
+    if (ret == cPhs_COMPLEATE_e) {
+        mType = (fopAcM_GetParam(this) >> 8) & 0xF;
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+    return ret;
 }
 
 /* 00000938-000009B8       .text set_mtx__9daWfall_cFv */
 void daWfall_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 000009B8-00000A1C       .text set_gate_mtx__9daWfall_cFv */
 void daWfall_c::set_gate_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(mGatePos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpGateModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000A1C-00000AD0       .text set_minamo_mtx__9daWfall_cFv */
 void daWfall_c::set_minamo_mtx() {
-    /* Nonmatching */
+    getWaterHeight();
+    cXyz minamo_scale(1.0f, 1.0f, 1.0f);
+    cXyz pos(0.0f, 0.0f, 0.0f);
+    pos.y = 1.0f + dBgS_ObjGndChk_Wtr_Func(pos);
+    mpMinamoModel->setBaseScale(minamo_scale);
+    mDoMtx_stack_c::transS(pos);
+    mpMinamoModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000AD0-00000C94       .text _execute__9daWfall_cFv */
 bool daWfall_c::_execute() {
-    /* Nonmatching */
+    switch (mEvState) {
+    case 0:
+        if (eventInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck(mEventIdx)) {
+            mEvState++;
+        } else if (fopAcM_isSwitch(this, mSwNo)) {
+            fopAcM_orderOtherEventId(this, mEventIdx);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
+        }
+        break;
+    case 1:
+        if (dComIfGp_evmng_startCheck(mEventIdx)) {
+            mode_wtr_off_init();
+            mEvState++;
+        }
+        break;
+    case 2:
+        if (dComIfGp_evmng_endCheck(mEventIdx)) {
+            dComIfGp_event_reset();
+            mEvState = 10;
+        }
+        break;
+    case 10:
+        m352 = 0;
+        break;
+    }
+
+    if (!fopAcM_isSwitch(this, mSwNo)) {
+        mode_wtr_on_init();
+        mEvState = 0;
+    }
+
+    if (mType == 1) {
+        mMinamoBrkAnm.play();
+        mMinamoBtkAnm.play();
+        set_minamo_mtx();
+    }
+
+    mode_proc_call();
+    set_mtx();
+    set_gate_mtx();
+    return true;
 }
 
 /* 00000C94-00000D20       .text mode_proc_call__9daWfall_cFv */
 void daWfall_c::mode_proc_call() {
-    /* Nonmatching */
+    typedef void (daWfall_c::*ModeFunc)();
+    static ModeFunc mode_proc[] = {
+        &daWfall_c::mode_wtr_on,
+        &daWfall_c::mode_wtr_off,
+    };
+    (this->*mode_proc[mMode])();
 }
 
 /* 00000D20-00000D48       .text mode_wtr_on_init__9daWfall_cFv */
 void daWfall_c::mode_wtr_on_init() {
-    /* Nonmatching */
+    mMode = 0;
+    if (mType == 1) {
+        mMinamoBrkAnm.setPlaySpeed(-1.0f);
+    }
 }
 
 /* 00000D48-00000DEC       .text mode_wtr_on__9daWfall_cFv */
 void daWfall_c::mode_wtr_on() {
-    /* Nonmatching */
+    cLib_addCalc(&mGatePos.y, 100.0f + (760.0f + current.pos.y), 0.1f, 10.0f, 5.0f);
+    scale.y = getWaterScaleFromGatePos();
+    mBtkAnm.setPlaySpeed(1.0f);
+    mBtkAnm.play();
+    BOOL on = setEmitter00Pos();
+    on |= setEmitter01Pos();
+    if (on) {
+        set_se();
+    }
 }
 
 /* 00000DEC-00000E14       .text mode_wtr_off_init__9daWfall_cFv */
 void daWfall_c::mode_wtr_off_init() {
-    /* Nonmatching */
+    mMode = 1;
+    if (mType == 1) {
+        mMinamoBrkAnm.setPlaySpeed(1.0f);
+    }
 }
 
 /* 00000E14-00000EE8       .text mode_wtr_off__9daWfall_cFv */
 void daWfall_c::mode_wtr_off() {
-    /* Nonmatching */
+    cLib_addCalc(&mGatePos.y, current.pos.y, 0.1f, 10.0f, 5.0f);
+    if ((scale.y = getWaterScaleFromGatePos()) > 0.0f) {
+        mBtkAnm.setPlaySpeed(1.0f);
+        mBtkAnm.play();
+        BOOL on = setEmitter00Pos();
+        on |= setEmitter01Pos();
+        if (on) {
+            set_se();
+        }
+    } else {
+        if (mEmitterCb0.getEmitter() != NULL) {
+            mEmitterCb0.getEmitter()->stopCreateParticle();
+        }
+        if (mEmitterCb1.getEmitter() != NULL) {
+            mEmitterCb1.getEmitter()->stopCreateParticle();
+        }
+    }
 }
 
 /* 00000EE8-00000FF0       .text setEmitter00Pos__9daWfall_cFv */
-void daWfall_c::setEmitter00Pos() {
-    /* Nonmatching */
+BOOL daWfall_c::setEmitter00Pos() {
+    BOOL ret = FALSE;
+    mEmitterPos0 = current.pos;
+    f32 water_h = getWaterHeight();
+    if (water_h > mGatePos.y) {
+        if (mEmitterCb0.getEmitter() != NULL) {
+            mEmitterCb0.getEmitter()->stopCreateParticle();
+        }
+    } else {
+        if (mEmitterCb0.getEmitter() != NULL) {
+            mEmitterCb0.getEmitter()->playCreateParticle();
+        }
+        ret = TRUE;
+    }
+    mEmitterPos0.y = water_h;
+
+    f32 ratio = fabs(water_h - current.pos.y) / (760.0f * scale.y);
+    if (ratio > 1.0f) {
+        ratio = 1.0f;
+    }
+    if (ratio < -1.0f) {
+        ratio = -1.0f;
+    }
+    f32 angle = asin(ratio);
+    mEmitterPos0.x += 250.0f * scale.y * angle;
+    return ret;
 }
 
 /* 00000FF0-00001098       .text setEmitter01Pos__9daWfall_cFv */
-void daWfall_c::setEmitter01Pos() {
-    /* Nonmatching */
+BOOL daWfall_c::setEmitter01Pos() {
+    BOOL ret = FALSE;
+    f32 water_h = getWaterHeight();
+    if (water_h > mGatePos.y) {
+        if (mEmitterCb1.getEmitter() != NULL) {
+            mEmitterCb1.getEmitter()->stopCreateParticle();
+        }
+    } else {
+        if (mEmitterCb1.getEmitter() != NULL) {
+            mEmitterCb1.getEmitter()->playCreateParticle();
+        }
+        ret = TRUE;
+    }
+    mEmitterPos1.y = current.pos.y - 760.0f * (1.0f - scale.y);
+    return ret;
 }
 
 /* 00001098-000010D8       .text getWaterScaleFromGatePos__9daWfall_cFv */
-void daWfall_c::getWaterScaleFromGatePos() {
-    /* Nonmatching */
+f32 daWfall_c::getWaterScaleFromGatePos() {
+    f32 height = mGatePos.y - current.pos.y;
+    if (height < 0.0f) {
+        height = 0.0f;
+    }
+    height /= 760.0f;
+    if (height > 1.0f) {
+        height = 1.0f;
+    }
+    return height;
 }
 
 /* 000010D8-0000124C       .text getWaterHeight__9daWfall_cFv */
-void daWfall_c::getWaterHeight() {
-    /* Nonmatching */
+f32 daWfall_c::getWaterHeight() {
+    dBgS_WtrChk wtrChk;
+    cXyz pos = current.pos;
+    f32 ret = current.pos.y;
+    pos.x -= 400.0f;
+    wtrChk.Set(pos, 1500.0f + pos.y);
+    if (dComIfG_Bgsp()->SplGrpChk(&wtrChk)) {
+        ret = wtrChk.GetHeight();
+    }
+    return ret;
 }
 
 /* 00001370-000013E0       .text set_se__9daWfall_cFv */
 void daWfall_c::set_se() {
-    /* Nonmatching */
+    mDoAud_seStart(JA_SE_ATM_WATER_GATE, &mGatePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+}
+
+bool daWfall_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mBtkAnm.entry(mpModel->getModelData());
+    mDoExt_modelUpdateDL(mpModel);
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpGateModel, &tevStr);
+    mDoExt_modelUpdateDL(mpGateModel);
+
+    if (mType == 1) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpMinamoModel, &tevStr);
+        mMinamoBtkAnm.entry(mpMinamoModel->getModelData());
+        mMinamoBrkAnm.entry(mpMinamoModel->getModelData());
+        mDoExt_modelUpdateDL(mpMinamoModel);
+    }
+    return true;
 }
 
 /* 000013E0-00001400       .text daWfall_Create__FPv */
@@ -112,8 +373,8 @@ static BOOL daWfall_Delete(void* i_this) {
 }
 
 /* 00001424-00001550       .text daWfall_Draw__FPv */
-static BOOL daWfall_Draw(void*) {
-    /* Nonmatching */
+static BOOL daWfall_Draw(void* i_this) {
+    return ((daWfall_c*)i_this)->_draw();
 }
 
 /* 00001550-00001574       .text daWfall_Execute__FPv */

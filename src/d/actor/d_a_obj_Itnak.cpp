@@ -6,8 +6,31 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Itnak.h"
 #include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
+#include "res/Object/Itnak.h"
 
 namespace daObjItnak {
+
+namespace {
+    struct Attr_c {
+        /* 0x00 */ f32 mR0;
+        /* 0x04 */ f32 mH0;
+        /* 0x08 */ f32 mR1;
+        /* 0x0C */ f32 mH1;
+        /* 0x10 */ Vec mOffset1;
+        /* 0x1C */ f32 mR2;
+        /* 0x20 */ f32 mH2;
+        /* 0x24 */ Vec mOffset2;
+    };  // Size: 0x30
+
+    const Attr_c L_attr = {
+        68.0f, 230.0f, 62.0f, 121.0f, {41.0f, 44.0f, 84.0f}, 47.0f, 205.0f, {-88.0f, 83.0f, 86.0f},
+    };
+} // namespace
 
 const dCcD_SrcCyl M_cyl_src = {
     // dCcD_SrcGObjInf
@@ -42,54 +65,164 @@ const dCcD_SrcCyl M_cyl_src = {
 }; // namespace daObjItnak
 
 
+const char daObjItnak::Act_c::M_arcname[] = "Itnak";
+
 /* 00000078-0000009C       .text solidHeapCB__Q210daObjItnak5Act_cFP10fopAc_ac_c */
-void daObjItnak::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjItnak::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 0000009C-0000016C       .text create_heap__Q210daObjItnak5Act_cFv */
-void daObjItnak::Act_c::create_heap() {
-    /* Nonmatching */
+bool daObjItnak::Act_c::create_heap() {
+    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_ITNAK_BDL_ITNAK_e);
+    JUT_ASSERT(321, mdl_data != NULL);
+
+    if (mdl_data != NULL) {
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
+    }
+    set_mtx();
+    return mdl_data != NULL && mpModel != NULL;
 }
 
 /* 0000016C-000003A0       .text _create__Q210daObjItnak5Act_cFv */
 cPhs_State daObjItnak::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, Act_c);
+
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
+    mArg0 = param_get_arg0();
+
+    if (ret == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
+            mDrawFlag = mArg0;
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+            fopAcM_setCullSizeBox(this, -120.0f, 0.0f, -100.0f, 120.0f, 280.0f, 150.0f);
+
+            cXyz pos(current.pos.x, 100.0f + current.pos.y, current.pos.z);
+            mGndChk.SetPos(&pos);
+            mGndChk.SetActorPid(fopAcM_GetID(this));
+            mGroundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
+
+            mStts0.Init(0xff, 0xff, this);
+            mCyl0.Set(M_cyl_src);
+            mCyl0.SetStts(&mStts0);
+            mCyl0.SetTgVec((cXyz&)cXyz::Zero);
+            mCyl0.OnTgNoHitMark();
+
+            mStts1.Init(0xff, 0xff, this);
+            mCyl1.Set(M_cyl_src);
+            mCyl1.SetStts(&mStts1);
+            mCyl1.SetTgVec((cXyz&)cXyz::Zero);
+            mCyl1.OnTgNoHitMark();
+
+            mStts2.Init(0xff, 0xff, this);
+            mCyl2.Set(M_cyl_src);
+            mCyl2.SetStts(&mStts2);
+            mCyl2.SetTgVec((cXyz&)cXyz::Zero);
+            mCyl2.OnTgNoHitMark();
+        } else {
+            ret = cPhs_ERROR_e;
+        }
+    }
+    return ret;
 }
 
 /* 00000D10-00000D40       .text _delete__Q210daObjItnak5Act_cFv */
 bool daObjItnak::Act_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return true;
 }
 
 /* 00000D40-00000DEC       .text set_mtx__Q210daObjItnak5Act_cFv */
 void daObjItnak::Act_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    cMtx_copy(mDoMtx_stack_c::get(), mMtx);
+    mpModel->calc();
 }
 
 /* 00000DEC-00000EB0       .text set_co_se__Q210daObjItnak5Act_cFP8dCcD_Cyl */
-void daObjItnak::Act_c::set_co_se(dCcD_Cyl*) {
-    /* Nonmatching */
+BOOL daObjItnak::Act_c::set_co_se(dCcD_Cyl* i_cyl) {
+    if (i_cyl->ChkTgHit()) {
+        daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), i_cyl, 0xD);
+        dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
+        daObj::HitEff_hibana(this, i_cyl);
+        i_cyl->ClrTgHit();
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00000EB0-00000F94       .text manage_draw_flag__Q210daObjItnak5Act_cFv */
 void daObjItnak::Act_c::manage_draw_flag() {
-    /* Nonmatching */
+    if (mArg0 == 1) {
+        if (mDrawFlag == 1 && is_switch() == true) {
+            mDrawFlag = 0;
+        }
+    } else if (mArg0 == 0) {
+        if (mDrawFlag == 0 && is_switch() == true) {
+            mDrawFlag = 1;
+        }
+    } else {
+        mDrawFlag = 1;
+    }
 }
 
 /* 00000F94-00001118       .text set_collision__Q210daObjItnak5Act_cFv */
 void daObjItnak::Act_c::set_collision() {
-    /* Nonmatching */
+    if (mDrawFlag == 1) {
+        if (!set_co_se(&mCyl0)) {
+            mCyl0.SetR(68.0f);
+            mCyl0.SetH(230.0f);
+            mCyl0.SetC(current.pos);
+            dComIfG_Ccsp()->Set(&mCyl0);
+        }
+
+        if (!set_co_se(&mCyl1)) {
+            cXyz offset(41.0f, 44.0f, 84.0f);
+            cXyz pos;
+            cMtx_multVec(mMtx, &offset, &pos);
+            mCyl1.SetR(62.0f);
+            mCyl1.SetH(121.0f);
+            mCyl1.SetC(pos);
+            dComIfG_Ccsp()->Set(&mCyl1);
+        }
+
+        if (!set_co_se(&mCyl2)) {
+            cXyz offset(-88.0f, 83.0f, 86.0f);
+            cXyz pos;
+            cMtx_multVec(mMtx, &offset, &pos);
+            mCyl2.SetR(47.0f);
+            mCyl2.SetH(205.0f);
+            mCyl2.SetC(pos);
+            dComIfG_Ccsp()->Set(&mCyl2);
+        }
+
+        fopAcM_rollPlayerCrash(this, 68.0f, 0xD);
+    }
 }
 
 /* 00001118-00001158       .text _execute__Q210daObjItnak5Act_cFv */
 bool daObjItnak::Act_c::_execute() {
-    /* Nonmatching */
+    set_mtx();
+    manage_draw_flag();
+    set_collision();
+    return true;
 }
 
 /* 00001158-0000123C       .text _draw__Q210daObjItnak5Act_cFv */
 bool daObjItnak::Act_c::_draw() {
-    /* Nonmatching */
+    if (mDrawFlag != 0) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpModel, &tevStr);
+        mDoExt_modelUpdateDL(mpModel);
+
+        cXyz pos = cXyz(current.pos.x, 30.0f + current.pos.y, current.pos.z);
+        mShadowId = dComIfGd_setShadow(mShadowId, 1, mpModel, &pos, 800.0f, 60.0f, current.pos.y, mGroundY, mGndChk,
+                                       &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+    }
+    return true;
 }
 
 namespace daObjItnak {

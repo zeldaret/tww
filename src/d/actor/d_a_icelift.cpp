@@ -5,71 +5,298 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_icelift.h"
+#include "d/d_bg_s_movebg_actor.h"
 #include "d/d_bg_w.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "d/d_lib.h"
+#include "d/d_path.h"
+#include "res/Object/Ylsic.h"
+#include "res/Object/Yllic.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
+
+const char* daIlift_c::m_arcname[] = {"Ylsic", "Yllic"};
+const int daIlift_c::m_bmdidx[] = {dRes_INDEX_YLSIC_BDL_YLSIC_e, dRes_INDEX_YLLIC_BDL_YLLIC_e};
+const int daIlift_c::m_dzbidx[] = {dRes_INDEX_YLSIC_DZB_YLSIC_e, dRes_INDEX_YLLIC_DZB_YLLIC_e};
+const u32 daIlift_c::m_heapsize[] = {0xAE0, 0x1B80};
+const f32 daIlift_c::m_down_param = 4.0f;
+const f32 daIlift_c::m_max_speed = 4.0f;
 
 /* 00000078-000000E0       .text _delete__9daIlift_cFv */
 bool daIlift_c::_delete() {
-    /* Nonmatching */
+    if (heap) {
+        dComIfG_Bgsp()->Release(mpBgW);
+    }
+    dComIfG_resDelete(&mPhs, m_arcname[mType]);
+    return true;
 }
 
 /* 000000E0-00000100       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daIlift_c*)i_this)->CreateHeap();
 }
 
+static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
+
 /* 00000100-00000284       .text CreateHeap__9daIlift_cFv */
-void daIlift_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daIlift_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mType], m_bmdidx[mType]);
+    JUT_ASSERT(235, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (!mpModel) {
+        return FALSE;
+    }
+
+    mpBgW = new dBgW();
+    if (mpBgW) {
+        cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes(m_arcname[mType], m_dzbidx[mType]);
+        if (mpBgW->Set(pData, cBgW::MOVE_BG_e, &mMtx) == 1) {
+            return FALSE;
+        }
+        mpBgW->SetCrrFunc(dBgS_MoveBGProc_TypicalRotY);
+        mpBgW->SetRideCallback(rideCallBack);
+    } else {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 00000284-00000480       .text rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+static void rideCallBack(dBgW*, fopAc_ac_c* i_act, fopAc_ac_c* i_other) {
+    daIlift_c* i_this = (daIlift_c*)i_act;
+    cXyz posOffset = i_other->current.pos - i_this->current.pos;
+    i_this->mRideOffset = posOffset;
+
+    if (fopAcM_GetName(i_other) == fpcNm_PLAYER_e) {
+        i_this->mbRide = true;
+        i_this->mWaveTimer = 0;
+        cXyz up_vec(0.0f, 1.0f, 0.0f);
+        posOffset = posOffset.outprod(up_vec);
+        i_this->mRideDist = posOffset.abs();
+        if (posOffset.normalizeRS()) {
+            f32 down = daIlift_c::m_down_param;
+            i_this->mTargetTilt = -i_this->mRideDist * down;
+            cLib_addCalcAngleS2(&i_this->mTiltAngle, i_this->mTargetTilt, 8, 0x200);
+            f32 tiltFactor = cM_ssin(i_this->mTiltAngle);
+            i_this->mTargetRotation.x = posOffset.x * tiltFactor;
+            i_this->mTargetRotation.y = posOffset.y * tiltFactor;
+            i_this->mTargetRotation.z = posOffset.z * tiltFactor;
+            i_this->mTargetRotation.w = cM_scos(i_this->mTiltAngle);
+            i_this->m508 = 10.0f;
+        }
+    }
 }
 
 /* 00000480-00000680       .text CreateInit__9daIlift_cFv */
 void daIlift_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -200.0f, -250.0f, -200.0f, 200.0f, 250.0f, 200.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    mAcch.ClrWaterNone();
+    mAcch.ClrRoofNone();
+    gravity = -5.0f;
+
+    mTargetRotation = ZeroQuat;
+    mCurrentRotation = mTargetRotation;
+
+    mPathId = (fopAcM_GetParam(this) >> 4) & 0xFF;
+    if (mPathId != 0xFF) {
+        mpPath = dPath_GetRoomPath(mPathId, fopAcM_GetRoomNo(this));
+        if (mpPath != NULL) {
+            mPntDir = 1;
+            mPntIdx = 1;
+            dPnt* pnt = &mpPath->m_points[mPntIdx];
+            mNextPos = pnt->m_position;
+            mPrevPos = mNextPos;
+            current.pos.x = mpPath->m_points[0].m_position.x;
+            current.pos.y = mpPath->m_points[0].m_position.y;
+            current.pos.z = mpPath->m_points[0].m_position.z;
+        } else {
+            mPathId = 0xFF;
+        }
+    }
+
+    mSwitchNo = (fopAcM_GetParam(this) >> 12) & 0xFF;
+
+    dComIfG_Bgsp()->Regist(mpBgW, this);
+    set_mtx();
+    mpBgW->Move();
 }
 
 /* 00000680-00000794       .text _create__9daIlift_cFv */
 cPhs_State daIlift_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daIlift_c);
+
+    mType = fopAcM_GetParam(this) & 0xF;
+    if (mType >= 2) {
+        return cPhs_ERROR_e;
+    }
+
+    cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    if (res == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
+            return cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+    }
+    return res;
 }
 
 /* 00000804-0000089C       .text set_mtx__9daIlift_cFv */
 void daIlift_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::quatM(&mCurrentRotation);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.x);
+    cMtx_copy(mDoMtx_stack_c::get(), mMtx);
 }
 
 /* 0000089C-000009C8       .text _execute__9daIlift_cFv */
 bool daIlift_c::_execute() {
-    /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    mTargetSpeed = m_max_speed;
+    mFrameCount++;
+    mWaveTimer++;
+
+    path_move();
+    lift_wave();
+
+    mDoMtx_quatSlerp(&mCurrentRotation, &mTargetRotation, &mCurrentRotation, 0.25f);
+
+    mbRideOld = mbRide;
+    mbRide = false;
+
+    if (mSwitchNo != 0xFF) {
+        if (!fopAcM_isSwitch(this, mSwitchNo)) {
+            mpBgW->ChangeAttributeCodeByPathPntNo(0x40, 0x15);
+            mpBgW->ChangeAttributeCodeByPathPntNo(0x41, 9);
+        } else {
+            mpBgW->ChangeAttributeCodeByPathPntNo(0x40, 0xF);
+            mpBgW->ChangeAttributeCodeByPathPntNo(0x41, 0);
+        }
+    }
+
+    set_mtx();
+    mpBgW->Move();
+
+    mPlayerOldPos = player->current.pos;
+    return true;
 }
 
 /* 000009C8-00000C8C       .text lift_wave__9daIlift_cFv */
 void daIlift_c::lift_wave() {
-    /* Nonmatching */
+    cXyz up_vec(0.0f, 1.0f, 0.0f);
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    if (!mbRide && mbRideOld) {
+        f32 dist = (mPlayerOldPos - player->current.pos).absXZ();
+        mTargetTilt = dist / 18.0f * (10.0f * (m_down_param * -mRideDist));
+        mRideDist = 0.0f;
+    }
+
+    if (!mbRide) {
+        f32 wave = cM_scos(mWaveTimer * 0x400);
+        cLib_addCalcAngleS(&mTiltAngle, mTargetTilt * wave / mWaveTimer, 4, 0x800, 0x400);
+        f32 tiltFactor = cM_ssin(mTiltAngle);
+
+        cXyz axis = mRideOffset.outprod(up_vec);
+        axis = axis.normZP();
+        if (axis != cXyz::Zero) {
+            mTargetRotation.x = axis.x * tiltFactor;
+            mTargetRotation.y = axis.y * tiltFactor;
+            mTargetRotation.z = axis.z * tiltFactor;
+            mTargetRotation.w = cM_scos(mTiltAngle);
+        }
+
+        if (mWaveTimer > 120) {
+            mTargetTilt = 0;
+        }
+    }
 }
 
 /* 00000C8C-00000CB8       .text path_move__9daIlift_cFv */
 void daIlift_c::path_move() {
-    /* Nonmatching */
+    if (mPathId != 0xFF) {
+        lift_normal_move();
+    }
 }
 
 /* 00000CB8-00000E5C       .text lift_normal_move__9daIlift_cFv */
 void daIlift_c::lift_normal_move() {
-    /* Nonmatching */
+    switch (mMoveState) {
+    case 0:
+        mMoveState = 1;
+        mMoveTimer = 0;
+        set_next_pnt();
+        // fallthrough
+    case 1:
+        mMoveTimer++;
+        if (cLib_addCalc(&mSpeed, mTargetSpeed, 0.25f, 1.0f, 1.0f) == 0.0f) {
+            mMoveState = 2;
+        }
+        break;
+
+    case 2:
+        mMoveTimer = 0;
+        if ((current.pos - mNextPos).abs() < 50.0f) {
+            mMoveState = 3;
+        }
+        break;
+
+    case 3:
+        mMoveTimer++;
+        if (cLib_addCalc(&mSpeed, mTargetSpeed / 2.2f, 0.25f, 1.0f, 1.0f) == 0.0f) {
+            mMoveState = 0;
+        }
+        break;
+    }
+
+    cLib_addCalcPos2(&current.pos, mNextPos, 1.0f, mSpeed);
 }
 
 /* 00000E5C-00000F58       .text set_next_pnt__9daIlift_cFv */
 void daIlift_c::set_next_pnt() {
-    /* Nonmatching */
+    if (mPathId != 0xFF) {
+        mPntIdx += mPntDir;
+        dPath* path = mpPath;
+        if (dPath_ChkClose(mpPath)) {
+            if (mPntIdx > (s8)path->m_num - 1) {
+                mPntIdx = 0;
+            } else if (mPntIdx < 0) {
+                mPntIdx = path->m_num - 1;
+            }
+        } else if (mPntIdx > path->m_num - 1) {
+            mPntDir = -1;
+            mPntIdx = mpPath->m_num - 2;
+        } else if (mPntIdx < 0) {
+            mPntDir = 1;
+            mPntIdx = 1;
+        }
+
+        mPrevPos = mNextPos;
+        dPnt* pnt = &mpPath->m_points[mPntIdx];
+        mNextPos = pnt->m_position;
+    }
 }
 
 /* 00000F58-00000FF8       .text _draw__9daIlift_cFv */
 bool daIlift_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+
+    return true;
 }
 
 /* 00000FF8-00001018       .text daIlift_Create__FPv */

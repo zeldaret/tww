@@ -5,50 +5,149 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_aygr.h"
+#include "d/d_bg_w.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "res/Object/Aygr.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
+
+const char daObjAygr::Act_c::M_arcname[] = "Aygr";
+Mtx daObjAygr::Act_c::M_tmp_mtx;
 
 /* 00000078-000002A4       .text CreateHeap__Q29daObjAygr5Act_cFv */
 BOOL daObjAygr::Act_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* model_data_yagura = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AYGR_BDL_AYGR_e);
+    JUT_ASSERT(80, model_data_yagura != NULL);
+
+    mpModel = mDoExt_J3DModel__create(model_data_yagura, 0, 0x11020203);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    if (prm_get_mdl()) {
+        J3DModelData* model_data_hashigo = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AYGR_BDL_AYGRH_e);
+        JUT_ASSERT(89, model_data_hashigo != NULL);
+
+        mpModelH = mDoExt_J3DModel__create(model_data_hashigo, 0, 0x11020203);
+        if (mpModelH == NULL) {
+            return FALSE;
+        }
+
+        BOOL ok = TRUE;
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::scaleM(scale);
+        cMtx_copy(mDoMtx_stack_c::get(), mMtxH);
+
+        mpBgWH = new dBgW();
+        if (mpBgWH == NULL || mpBgWH->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AYGR_DZB_AYGRH_e), cBgW::MOVE_BG_e, &mMtxH)) {
+            ok = FALSE;
+        }
+        if (ok != TRUE) {
+            return FALSE;
+        }
+        mHasBgWH = true;
+    } else {
+        mpModelH = NULL;
+        mpBgWH = NULL;
+        mHasBgWH = false;
+    }
+    return TRUE;
 }
 
 /* 000002A4-00000310       .text Create__Q29daObjAygr5Act_cFv */
 BOOL daObjAygr::Act_c::Create() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    init_mtx();
+    fopAcM_setCullSizeBox(this, -500.0f, -100.0f, -500.0f, 500.0f, 4000.0f, 500.0f);
+    return TRUE;
 }
 
 /* 00000310-000004D4       .text Mthd_Create__Q29daObjAygr5Act_cFv */
 cPhs_State daObjAygr::Act_c::Mthd_Create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daObjAygr::Act_c);
+
+    mHasBgWH = false;
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_AYGR_DZB_AYGR_e, NULL, 0x85F0);
+        if (mpBgW != NULL && mpBgW->ChkUsed()) {
+            mpBgW->Move();
+            mpBgW->SetLock();
+        }
+
+        if (prm_get_mdl()) {
+            dComIfG_Bgsp()->Regist(mpBgWH, this);
+            if (mpBgWH != NULL && mpBgWH->ChkUsed()) {
+                mpBgWH->Move();
+                mpBgWH->SetLock();
+            }
+        }
+
+        JUT_ASSERT(183, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+    }
+    return phase_state;
 }
 
 /* 000004D4-000004DC       .text Delete__Q29daObjAygr5Act_cFv */
 BOOL daObjAygr::Act_c::Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000004DC-0000054C       .text Mthd_Delete__Q29daObjAygr5Act_cFv */
 BOOL daObjAygr::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+    if (mHasBgWH) {
+        dComIfG_Bgsp()->Release(mpBgWH);
+    }
+    BOOL result = MoveBGDelete();
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return result;
 }
 
 /* 0000054C-000005F8       .text set_mtx__Q29daObjAygr5Act_cFv */
 void daObjAygr::Act_c::set_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    if (prm_get_mdl()) {
+        mpModelH->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+    cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
 /* 000005F8-00000674       .text init_mtx__Q29daObjAygr5Act_cFv */
 void daObjAygr::Act_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    if (prm_get_mdl()) {
+        mpModelH->setBaseScale(scale);
+    }
+    set_mtx();
 }
 
 /* 00000674-000006B0       .text Execute__Q29daObjAygr5Act_cFPPA3_A4_f */
-BOOL daObjAygr::Act_c::Execute(Mtx**) {
-    /* Nonmatching */
+BOOL daObjAygr::Act_c::Execute(Mtx** mtx) {
+    set_mtx();
+    *mtx = &M_tmp_mtx;
+    return TRUE;
 }
 
 /* 000006B0-0000079C       .text Draw__Q29daObjAygr5Act_cFv */
 BOOL daObjAygr::Act_c::Draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    if (prm_get_mdl()) {
+        g_env_light.setLightTevColorType(mpModelH, &tevStr);
+    }
+
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    if (prm_get_mdl()) {
+        mDoExt_modelUpdateDL(mpModelH);
+    }
+    dComIfGd_setList();
+
+    return TRUE;
 }
 
 namespace daObjAygr {
