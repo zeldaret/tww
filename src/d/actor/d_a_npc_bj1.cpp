@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bj1.h"
 #include "d/actor/d_a_jbo.h"
+#include "d/actor/d_a_player.h"
 #include "d/d_kankyo_wether.h"
 
 static daNpc_Bj1_HIO_c l_HIO;
@@ -83,24 +84,24 @@ static BOOL nodeCallBack_Bj1(J3DNode* i_node, int i_calcTiming) {
 /* 00000338-000004C4       .text nodeBj1Control__11daNpc_Bj1_cFP7J3DNodeP8J3DModel */
 void daNpc_Bj1_c::nodeBj1Control(J3DNode* i_node, J3DModel* i_model) {
     static cXyz a_eye_pos_off(26.0f, 26.0f, 0.0f);
-    s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
+    int jntNo = ((J3DJoint*)i_node)->getJntNo();
     mDoMtx_stack_c::copy(i_model->getAnmMtx(jntNo));
 
-    if (jntNo == field_0x6CC) {
+    if (jntNo == m_head_jnt_num) {
         mDoMtx_stack_c::XrotM(m_jnt.getHead_y());
         mDoMtx_stack_c::ZrotM(-m_jnt.getHead_x());
-        mDoMtx_stack_c::scaleM(field_0x7F0.x, field_0x7F0.y, field_0x7F0.z);
-        mDoMtx_stack_c::multVec(&field_0x7E4, &mEyePos);
+        mDoMtx_stack_c::scaleM(mHeadScale.x, mHeadScale.y, mHeadScale.z);
+        mDoMtx_stack_c::multVec(&mEyeOffset, &mEyePos);
     }
 
-    if (jntNo == field_0x6CD) {
+    if (jntNo == m_backbone_jnt_num) {
         mDoMtx_stack_c::XrotM(m_jnt.getBackbone_y());
         mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
-        mDoMtx_stack_c::scaleM(field_0x7FC.x, field_0x7FC.y, field_0x7FC.z);
+        mDoMtx_stack_c::scaleM(mBackboneScale.x, mBackboneScale.y, mBackboneScale.z);
     }
 
-    if (jntNo == field_0x6CF) {
-        cMtx_copy(mDoMtx_stack_c::get(), field_0x704);
+    if (jntNo == m_armR_jnt_num) {
+        cMtx_copy(mDoMtx_stack_c::get(), mHandMtx);
     }
 
     cMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
@@ -122,13 +123,13 @@ void daNpc_Bj1_c::nodePrpControl(J3DNode* i_node, J3DModel* i_model) {
     s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
 
     if (jntNo == field_0x6E9) {
-        cMtx_copy(field_0x704, mDoMtx_stack_c::get());
+        cMtx_copy(mHandMtx, mDoMtx_stack_c::get());
         mDoMtx_stack_c::transM(-1.5f, 4.5f, -4.2f);
         mDoMtx_stack_c::XYZrotM(-0x4000, -0x5555, 0);
         cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
         i_model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
     }
-    if (jntNo == field_0x6E8) {
+    if (jntNo == m_prp_jnt_num) {
         mDoMtx_stack_c::YrotS(field_0x6F0);
         mDoMtx_stack_c::revConcat(i_model->getAnmMtx(jntNo));
         cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
@@ -237,28 +238,28 @@ bool daNpc_Bj1_c::createInit() {
             return false;
     }
 
-    field_0x7F0 = l_bj1_prm_tbl[mType].head_scale;
-    field_0x7FC = l_bj1_prm_tbl[mType].backbone_scale;
-    field_0x7E4 = l_bj1_prm_tbl[mType].eye_offset;
+    mHeadScale = l_bj1_prm_tbl[mType].head_scale;
+    mBackboneScale = l_bj1_prm_tbl[mType].backbone_scale;
+    mEyeOffset = l_bj1_prm_tbl[mType].eye_offset;
     gravity = -4.5f;
     field_0x7CC = current.pos;
 
     u32 pathIdx = (fpcM_GetParam(this) >> 16) & 0xFF;
-    field_0x83F = pathIdx;
+    mPathIdx = pathIdx;
 
     if (pathIdx != 0xFF) {
-        field_0x734.setInf(pathIdx, fopAcM_GetRoomNo(this), true);
-        if (field_0x734.isPath()) {
+        mPathRun.setInf(pathIdx, fopAcM_GetRoomNo(this), true);
+        if (mPathRun.isPath()) {
             fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
         } else {
             return false;
         }
     }
-    field_0x73C.setActorInfo2(a_staff_tbl[field_0x8B5], this);
-    field_0x8AF = 0xB;
+    mEventCut.setActorInfo2(a_staff_tbl[mSpecificType], this);
+    mAnmNum = 0xB;
 
     bool init_success;
-    switch (field_0x8B5) {
+    switch (mSpecificType) {
         case 0:
         case 2:
         case 4:
@@ -306,9 +307,9 @@ bool daNpc_Bj1_c::createInit() {
 
 /* 00000C90-00000E00       .text setMtx_anmProc__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setMtx_anmProc() {
-    switch (field_0x8AF) {
+    switch (mAnmNum) {
         case 4:
-            if (field_0x8A9) {
+            if (mJumpMode) {
                 if (speed.y < 0.0f) {
                     if (mpMorf->getFrame() < 7.0f) {
                         mpMorf->setFrame(mpMorf->getEndFrame());
@@ -321,7 +322,7 @@ void daNpc_Bj1_c::setMtx_anmProc() {
             }
             break;
         case 7:
-            if (field_0x83C && !field_0x888 && !cLib_calcTimer(&field_0x894)) {
+            if (mbMorfAnimStopped && !mpDrugPotEmitter3 && !cLib_calcTimer(&mDrugPotTimer)) {
                 s8 reverb = dComIfGp_getReverb(current.roomNo);
                 mDoAud_seStart(JA_SE_OBJ_CRG_DRUG_MADE, &current.pos, 0, reverb);
                 setAnm_NUM(0x5);
@@ -339,16 +340,16 @@ void daNpc_Bj1_c::setMtx(bool i_param1) {
             uVar5 = dComIfG_Bgsp()->GetMtrlSndId(mObjAcch.m_gnd);
         }
         s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
-        field_0x83C = mpMorf->play(&eyePos, uVar5, reverb);
-        if (mpMorf->getFrame() < field_0x808) {
-            field_0x83C = true;
+        mbMorfAnimStopped = mpMorf->play(&eyePos, uVar5, reverb);
+        if (mpMorf->getFrame() < mFrame) {
+            mbMorfAnimStopped = true;
         }
-        field_0x808 = mpMorf->getFrame();
+        mFrame = mpMorf->getFrame();
         setMtx_anmProc();
-        field_0x6E4->play(&eyePos, 0, 0);
-        if (field_0x84D) {
+        mpPrpMorf->play(&eyePos, 0, 0);
+        if (mbSetPeraPrtcl) {
             setPrtcl_peraProOpen();
-            field_0x84D = 0;
+            mbSetPeraPrtcl = 0;
         }
         mObjAcch.CrrPos(*dComIfG_Bgsp());
     }
@@ -358,21 +359,21 @@ void daNpc_Bj1_c::setMtx(bool i_param1) {
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
-    field_0x6E4->calc();
+    mpPrpMorf->calc();
 
-    if (field_0x6D4) {
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(field_0x6CE));
-        field_0x6D4->setBaseTRMtx(mDoMtx_stack_c::get());
-        field_0x6D4->calc();
+    if (mpArmLModel) {
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_armL_jnt_num));
+        mpArmLModel->setBaseTRMtx(mDoMtx_stack_c::get());
+        mpArmLModel->calc();
     }
 
-    if (field_0x6D8) {
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(field_0x6CF));
-        field_0x6D8->setBaseTRMtx(mDoMtx_stack_c::get());
-        field_0x6D8->calc();
+    if (mpArmRModel) {
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_armR_jnt_num));
+        mpArmRModel->setBaseTRMtx(mDoMtx_stack_c::get());
+        mpArmRModel->calc();
     }
 
-    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(field_0x6CC));
+    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_head_jnt_num));
     field_0x6D0->setBaseTRMtx(mDoMtx_stack_c::get());
     field_0x6D0->calc();
     flwPrtcl_danceLR();
@@ -387,27 +388,27 @@ u32 daNpc_Bj1_c::anmNum_toResID(int i_idx) {
 
 /* 000010AC-00001188       .text setAnm_anm__11daNpc_Bj1_cFPQ211daNpc_Bj1_c9anm_prm_c */
 BOOL daNpc_Bj1_c::setAnm_anm(anm_prm_c* i_anm_prm) {
-    if (field_0x8AF == i_anm_prm->anmNum) {
+    if (mAnmNum == i_anm_prm->anmNum) {
         return TRUE;
     }
-    field_0x8AF = i_anm_prm->anmNum;
+    mAnmNum = i_anm_prm->anmNum;
 
-    u32 resID = anmNum_toResID(field_0x8AF);
+    u32 resID = anmNum_toResID(mAnmNum);
     dNpc_setAnmIDRes(mpMorf, i_anm_prm->loopMode, i_anm_prm->morf, i_anm_prm->speed, resID, -1, "Bj");
 
-    switch (field_0x8AF) {
+    switch (mAnmNum) {
         case 7:
             setPrtcl_danceLR();
-            field_0x888 = NULL;
-            field_0x894 = 0x1E;
+            mpDrugPotEmitter3 = NULL;
+            mDrugPotTimer = 0x1E;
             break;
         default:
             delPrtcl_danceLR();
     }
 
-    field_0x808 = 0.0f;
+    mFrame = 0.0f;
     field_0x83D = 0;
-    field_0x83C = 0;
+    mbMorfAnimStopped = 0;
     return TRUE;
 }
 
@@ -434,14 +435,14 @@ void daNpc_Bj1_c::setAnm_prp(s8 i_param1) {
     s8 reverb;
     switch (i_param1) {
         case 1:
-            field_0x6E4->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes("Bj", 0x28), 0, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+            mpPrpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes("Bj", 0x28), 0, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
             reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
             mDoAud_seStart(JA_SE_CM_PRAPELLO_OPEN, &current.pos, 0, reverb);
-            field_0x84D = 1;
+            mbSetPeraPrtcl = 1;
             break;
         case 2:
-            field_0x6E4->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes("Bj", 0x28), 2, 0.0f, -1.0f, 0.0f, -1.0f, NULL);
-            field_0x6E4->setFrame(7.0f);
+            mpPrpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes("Bj", 0x28), 2, 0.0f, -1.0f, 0.0f, -1.0f, NULL);
+            mpPrpMorf->setFrame(7.0f);
             reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
             mDoAud_seStart(JA_SE_CM_PRAPELLO_CLOSE, &current.pos, 0, reverb);
             break;
@@ -479,13 +480,13 @@ void daNpc_Bj1_c::control_anmAtr() {
             break;
         case 6:
         case 7:
-            if (field_0x83C) {
+            if (mbMorfAnimStopped) {
                 field_0x8AD = 0;
                 setAnm_NUM(0);
             }
             break;
         case 10:
-            if (field_0x83C) {
+            if (mbMorfAnimStopped) {
                 field_0x8AD = 2;
                 setAnm_NUM(3);
             }
@@ -507,7 +508,7 @@ void daNpc_Bj1_c::anmAtr(u16 i_param1) {
     u8 tag;
     switch (i_param1) {
         case 6:
-            if (field_0x8B7 == 0) {
+            if (!field_0x8B7) {
                 field_0x8AD = 0xFF;
                 chg_anmAtr(dComIfGp_getMesgAnimeAttrInfo());
                 field_0x8B7++;
@@ -531,7 +532,7 @@ void daNpc_Bj1_c::anmAtr(u16 i_param1) {
 void daNpc_Bj1_c::eventOrder() {
     if (field_0x8B0 == 1 || field_0x8B0 == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
-        if (field_0x8B5 == 12) {
+        if (mSpecificType == 12) {
             eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
         }
         if (field_0x8B0 == 1) {
@@ -612,8 +613,8 @@ void daNpc_Bj1_c::lookBack() {
     dstPos.set(0.0f, 0.0f, 0.0f);
     dstPos_p = NULL;
     desiredYRot = current.angle.y;
-    bool headOnlyFollow = mHeadOnlyFollow; // ideally bool-typed member
-    switch (field_0x8B3) {                 // s8
+    bool headOnlyFollow = mHeadOnlyFollow;
+    switch (mLookBackState) {
         case 1:
             dstPos = dNpc_playerEyePos(-20.0f);
             dstPos_p = &dstPos;
@@ -631,21 +632,21 @@ void daNpc_Bj1_c::lookBack() {
             src_pos.y = eyePos.y;
             break;
         case 3:
-            desiredYRot = field_0x83A;
+            desiredYRot = mLookTargetAngleY;
             break;
     }
-    cLib_addCalcAngleS2(&field_0x838, l_HIO.children[mType].hio_prm.mCalcAngleTarget, 4, 0x800);
+    cLib_addCalcAngleS2(&mHeadLookAtMaxVel, l_HIO.children[mType].hio_prm.mCalcAngleTarget, 4, 0x800);
     if (!m_jnt.trnChk()) {
-        field_0x838 = 0;
+        mHeadLookAtMaxVel = 0;
     }
-    m_jnt.lookAtTarget(&current.angle.y, dstPos_p, src_pos, desiredYRot, field_0x838, headOnlyFollow);
+    m_jnt.lookAtTarget(&current.angle.y, dstPos_p, src_pos, desiredYRot, mHeadLookAtMaxVel, headOnlyFollow);
 }
 
 /* 000019A0-00001A44       .text getMaskInf__11daNpc_Bj1_cFPUc */
 bool daNpc_Bj1_c::getMaskInf(u8* i_mask) {
     bool ret = i_mask != NULL;
     if (ret) {
-        switch (field_0x8B5) {
+        switch (mSpecificType) {
             case 1:
                 *i_mask = 0x1;
                 break;
@@ -797,7 +798,7 @@ u16 daNpc_Bj1_c::next_msgStatus(u32* i_msg_no) {
             dComIfGs_onEventBit(0x1B80);
         case 0x1424:
             if (dComIfGs_getBeastNum(dBeastIdx_BOKOBABA_SEED_e) < 4) {
-                if (field_0x840 != 0) {
+                if (field_0x840) {
                     *i_msg_no = 0x1427;
                 } else {
                     *i_msg_no = 0x1425;
@@ -806,7 +807,7 @@ u16 daNpc_Bj1_c::next_msgStatus(u32* i_msg_no) {
                 if (dComIfGs_checkEmptyBottle()) {
                     *i_msg_no = 0x1428;
                 } else {
-                    if (field_0x841 != 0) {
+                    if (field_0x841) {
                         *i_msg_no = 0x1430;
                     } else {
                         *i_msg_no = 0x142E;
@@ -1011,7 +1012,7 @@ u32 daNpc_Bj1_c::getMsg_Corog() {
 /* 0000242C-000024EC       .text getMsg__11daNpc_Bj1_cFv */
 u32 daNpc_Bj1_c::getMsg() {
     u32 msgNo = 0;
-    switch (field_0x8B5) {
+    switch (mSpecificType) {
         case 0:
             msgNo = getMsg_BJ1_0();
             break;
@@ -1090,7 +1091,7 @@ bool daNpc_Bj1_c::partner_srch_sub(fpcLyIt_JudgeFunc i_searchFunc) {
         l_check_inf[i] = 0;
     }
     fpcM_Search(i_searchFunc, this);
-    if (l_check_wrk != 0) {
+    if (l_check_wrk) {
         mPartnerProcID = fopAcM_GetID(l_check_inf[0]);
         o_retval = true;
     }
@@ -1101,7 +1102,7 @@ bool daNpc_Bj1_c::partner_srch_sub(fpcLyIt_JudgeFunc i_searchFunc) {
 void daNpc_Bj1_c::partner_srch() {
     bool found_partner = false;
     if (field_0x8B6 == 1) {
-        switch (field_0x8B5) {
+        switch (mSpecificType) {
             case 4:
                 found_partner = partner_srch_sub(searchActor_Jb);
         }
@@ -1127,24 +1128,24 @@ void daNpc_Bj1_c::setCollision_SP_() {
 
 /* 000027B0-00002840       .text set_pthPoint__11daNpc_Bj1_cFUc */
 void daNpc_Bj1_c::set_pthPoint(u8 i_pointIdx) {
-    if (field_0x734.isPath()) {
-        u8 idx = cLib_maxLimit(i_pointIdx, field_0x734.maxPoint());
-        field_0x734.setIdx(idx);
-        current.pos = field_0x734.getPoint(idx);
-        field_0x734.nextIdxAuto();
+    if (mPathRun.isPath()) {
+        u8 idx = cLib_maxLimit(i_pointIdx, mPathRun.maxPoint());
+        mPathRun.setIdx(idx);
+        current.pos = mPathRun.getPoint(idx);
+        mPathRun.nextIdxAuto();
     }
 }
 
 /* 00002840-00002988       .text bj_clcFlySpd__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::bj_clcFlySpd() {
-    switch (field_0x8A8) {
+    switch (mFlyMode) {
         case 1:
             {
                 s16 target = cLib_targetAngleY(&current.pos, &mTargetPos);
                 cLib_addCalcAngleS(&current.angle.y, target, l_HIO.children[mType].hio_prm.mFlyScale, l_HIO.children[mType].hio_prm.mFlyMaxStep, 0);
-                field_0x848 = (mTargetPos.y - current.pos.y) > l_HIO.children[mType].hio_prm.field_0x28;
+                mbAscending = (mTargetPos.y - current.pos.y) > l_HIO.children[mType].hio_prm.field_0x28;
                 f32 spdY = l_HIO.children[mType].hio_prm.field_0x2C;
-                if (field_0x848 == 0) {
+                if (!mbAscending) {
                     spdY *= -1.0f;
                 }
                 cLib_chaseF(&speed.y, spdY, l_HIO.children[mType].hio_prm.field_0x30);
@@ -1166,9 +1167,9 @@ u32 daNpc_Bj1_c::bj_movPass(bool i_param1) {
     u8 point_idx;
     u32 ret = 0;
     f32 dist_xz;
-    if (field_0x734.isPath() && (point_idx = field_0x734.getIdx(), dPath_ChkClose(field_0x734.getPath()))) {
-        if (field_0x734.chkPointPass(current.pos, field_0x734.getDir())) {
-            field_0x734.nextIdxAuto();
+    if (mPathRun.isPath() && (point_idx = mPathRun.getIdx(), dPath_ChkClose(mPathRun.getPath()))) {
+        if (mPathRun.chkPointPass(current.pos, mPathRun.getDir())) {
+            mPathRun.nextIdxAuto();
             ret = 1;
             if (i_param1) {
                 goto block_y;
@@ -1178,10 +1179,10 @@ u32 daNpc_Bj1_c::bj_movPass(bool i_param1) {
     }
 
     dist_xz = (mTargetPos - current.pos).absXZ();
-    if (dist_xz <= field_0x81C) {
+    if (dist_xz <= mArrivalDist) {
         ret = 1;
-        if (field_0x734.isPath()) {
-            if (!field_0x734.nextIdxAuto()) {
+        if (mPathRun.isPath()) {
+            if (!mPathRun.nextIdxAuto()) {
                 ret = 2;
             }
         }
@@ -1192,91 +1193,91 @@ u32 daNpc_Bj1_c::bj_movPass(bool i_param1) {
     return ret;
 
 block_y:
-    u8 idx = field_0x734.getIdx();
-    idxCoords = field_0x734.getPoint(idx);
-    cmpCoords = field_0x734.getPoint(point_idx);
-    field_0x848 = cmpCoords.y <= idxCoords.y;
+    u8 idx = mPathRun.getIdx();
+    idxCoords = mPathRun.getPoint(idx);
+    cmpCoords = mPathRun.getPoint(point_idx);
+    mbAscending = cmpCoords.y <= idxCoords.y;
     return ret;
 }
 
 /* 00002B80-00002EDC       .text bj_flyMove__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::bj_flyMove() {
-    if (field_0x8A8 == 0) {
+    if (!mFlyMode) {
         return false;
     }
-    if (field_0x849 != 0) {
+    if (mbFlyMoveEnd) {
         field_0x847 = 1;
         return true;
     }
-    if (field_0x734.isPath()) {
-        mTargetPos = field_0x734.getPoint(field_0x734.getIdx());
+    if (mPathRun.isPath()) {
+        mTargetPos = mPathRun.getPoint(mPathRun.getIdx());
     }
-    if (field_0x8A8 == 1 || field_0x8A8 == 2 || field_0x8A8 == 7) {
+    if (mFlyMode == 1 || mFlyMode == 2 || mFlyMode == 7) {
         s16 max = l_HIO.children[mType].hio_prm.field_0x40;
-        s16 tmp = field_0x6F2 + l_HIO.children[mType].hio_prm.field_0x42;
+        s16 tmp = mPrpSpin + l_HIO.children[mType].hio_prm.field_0x42;
         if (tmp > max) {
             tmp = max;
         }
-        field_0x6F2 = tmp;
+        mPrpSpin = tmp;
     }
-    switch (field_0x8A8) {
+    switch (mFlyMode) {
         case 1:
             {
                 bj_clcFlySpd();
                 switch (bj_movPass(true)) {
                     case 1:
                     case 2:
-                        field_0x849 = 1;
+                        mbFlyMoveEnd = 1;
                         break;
                 }
                 break;
             }
         case 2:
             bj_clcFlySpd();
-            field_0x849 = (current.pos.y - mObjAcch.GetGroundH()) < l_HIO.children[mType].hio_prm.field_0x3C;
-            if (field_0x849 != 0) {
+            mbFlyMoveEnd = (current.pos.y - mObjAcch.GetGroundH()) < l_HIO.children[mType].hio_prm.field_0x3C;
+            if (mbFlyMoveEnd) {
                 setAnm_NUM(1);
                 speed.y = 0.0f;
-                field_0x8A8 = 3;
+                mFlyMode = 3;
             }
             break;
         case 6:
-            field_0x849 = field_0x6E4->isStop() ? TRUE : FALSE;
-            if (field_0x849 != 0) {
-                field_0x8A8 = 7;
+            mbFlyMoveEnd = mpPrpMorf->isStop() ? TRUE : FALSE;
+            if (mbFlyMoveEnd) {
+                mFlyMode = 7;
             }
             break;
         case 7:
-            field_0x849 = field_0x6F2 > l_HIO.children[mType].hio_prm.field_0x46;
-            if (field_0x849 != 0) {
+            mbFlyMoveEnd = mPrpSpin > l_HIO.children[mType].hio_prm.field_0x46;
+            if (mbFlyMoveEnd) {
                 setAnm_NUM(10);
-                field_0x82E = l_HIO.children[mType].hio_prm.field_0x20;
-                field_0x8A8 = 1;
+                mFlyDelayTimer = l_HIO.children[mType].hio_prm.field_0x20;
+                mFlyMode = 1;
             }
             break;
         case 3:
             {
-                s16 tmp = field_0x6F2 - l_HIO.children[mType].hio_prm.field_0x42;
-                field_0x6F2 = tmp < 0 ? 0 : tmp;
-                field_0x849 = (field_0x6F2 == 0);
-                if (field_0x849 != 0) {
+                s16 tmp = mPrpSpin - l_HIO.children[mType].hio_prm.field_0x42;
+                mPrpSpin = tmp < 0 ? 0 : tmp;
+                mbFlyMoveEnd = (mPrpSpin == 0);
+                if (mbFlyMoveEnd) {
                     setAnm_prp(2);
-                    field_0x8A8 = 4;
+                    mFlyMode = 4;
                 }
                 break;
             }
         case 4:
-            field_0x849 = field_0x6E4->checkFrame(0.0f) ? TRUE : FALSE;
-            if (field_0x849 != 0) {
+            mbFlyMoveEnd = mpPrpMorf->checkFrame(0.0f) ? TRUE : FALSE;
+            if (mbFlyMoveEnd) {
                 field_0x84C = 0;
                 gravity = -4.5f;
-                field_0x8A8 = 5;
+                mFlyMode = 5;
             }
             break;
         case 5:
-            field_0x849 = mObjAcch.ChkGroundHit();
-            if (field_0x849 != 0) {
-                field_0x8A8 = 0;
+            mbFlyMoveEnd = mObjAcch.ChkGroundHit();
+            if (mbFlyMoveEnd) {
+                mFlyMode = 0;
             }
             break;
     }
@@ -1285,7 +1286,7 @@ bool daNpc_Bj1_c::bj_flyMove() {
 
 /* 00002EDC-00002F5C       .text bj_clcMovSpd__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::bj_clcMovSpd() {
-    if (field_0x8A9 == 0) {
+    if (!mJumpMode) {
         s16 target = cLib_targetAngleY(&current.pos, &mTargetPos);
         cLib_addCalcAngleS(&current.angle.y, target, l_HIO.children[mType].hio_prm.field_0x4E, l_HIO.children[mType].hio_prm.field_0x50, 0);
     }
@@ -1294,25 +1295,25 @@ void daNpc_Bj1_c::bj_clcMovSpd() {
 
 /* 00002F5C-000030A4       .text bj_nMove__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::bj_nMove() {
-    if (field_0x84A != 0) {
+    if (mbMoveEnd) {
         field_0x847 = 1;
     } else {
-        switch (field_0x8A9) {
+        switch (mJumpMode) {
             case 1:
-                field_0x8A9 = 2;
+                mJumpMode = 2;
                 break;
             case 2:
                 if (mObjAcch.ChkGroundHit()) {
                     setAnm_NUM(8);
                     speedF = 0.0f;
                     gravity = -4.5f;
-                    field_0x8A9 = 0;
+                    mJumpMode = 0;
                 }
                 break;
             default:
-                switch (field_0x8AA) {
+                switch (mMoveMode) {
                     case 1:
-                        if (field_0x8A9 == 0) {
+                        if (!mJumpMode) {
                             bj_clcMovSpd();
                             f32 speed = speedF * l_HIO.children[mType].hio_prm.field_0x54;
                             if (speed < 0.5f) {
@@ -1321,11 +1322,11 @@ void daNpc_Bj1_c::bj_nMove() {
                             mpMorf->setPlaySpeed(speed);
                             switch (bj_movPass(false)) {
                                 case 1:
-                                    field_0x84A = 1;
+                                    mbMoveEnd = 1;
                                     break;
                                 case 2:
-                                    field_0x84A = 1;
-                                    field_0x8AA = 0;
+                                    mbMoveEnd = 1;
+                                    mMoveMode = 0;
                                     break;
                             }
                         }
@@ -1341,11 +1342,11 @@ void daNpc_Bj1_c::setPrtcl_drugPot_1() {
     f32 transX, transZ;
     s16 angleY;
     if (dComIfGp_getMapTrans(fopAcM_GetRoomNo(this), &transX, &transZ, &angleY)) {
-        field_0x858.set(0, angleY, 0);
-        field_0x860.set(transX, 0.0f, transZ);
-        field_0x87C = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT00, &field_0x860, &field_0x858, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
-        field_0x880 = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT01, &field_0x860, &field_0x858, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
-        field_0x884 = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT02, &field_0x860, &field_0x858, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        mDrugPotAngle.set(0, angleY, 0);
+        mDrugPotPos.set(transX, 0.0f, transZ);
+        mpDrugPotEmitter0 = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT00, &mDrugPotPos, &mDrugPotAngle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        mpDrugPotEmitter1 = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT01, &mDrugPotPos, &mDrugPotAngle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        mpDrugPotEmitter2 = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT02, &mDrugPotPos, &mDrugPotAngle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
     }
 }
 
@@ -1354,72 +1355,72 @@ void daNpc_Bj1_c::setPrtcl_drugPot_2() {
     f32 transX, transZ;
     s16 angleY;
     if (dComIfGp_getMapTrans(fopAcM_GetRoomNo(this), &transX, &transZ, &angleY)) {
-        field_0x858.set(0, angleY, 0);
-        field_0x860.set(transX, 0.0f, transZ);
-        field_0x888 = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT03, &field_0x860, &field_0x858, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        mDrugPotAngle.set(0, angleY, 0);
+        mDrugPotPos.set(transX, 0.0f, transZ);
+        mpDrugPotEmitter3 = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT03, &mDrugPotPos, &mDrugPotAngle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
     }
 }
 
 /* 000032B4-00003330       .text delPrtcl_drugPot__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::delPrtcl_drugPot() {
-    JPABaseEmitter* emitter = field_0x87C;
+    JPABaseEmitter* emitter = mpDrugPotEmitter0;
     if (emitter != NULL) {
         emitter->setMaxFrame(-1);
         emitter->setStatus(JPAEmtrStts_StopEmit);
-        field_0x87C = NULL;
+        mpDrugPotEmitter0 = NULL;
     }
-    emitter = field_0x880;
+    emitter = mpDrugPotEmitter1;
     if (emitter != NULL) {
         emitter->setMaxFrame(-1);
         emitter->setStatus(JPAEmtrStts_StopEmit);
-        field_0x880 = NULL;
+        mpDrugPotEmitter1 = NULL;
     }
-    emitter = field_0x884;
+    emitter = mpDrugPotEmitter2;
     if (emitter != NULL) {
         emitter->setMaxFrame(-1);
         emitter->setStatus(JPAEmtrStts_StopEmit);
-        field_0x884 = NULL;
+        mpDrugPotEmitter2 = NULL;
     }
 }
 
 /* 00003330-000033F4       .text setPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_danceLR() {
     delPrtcl_danceLR();
-    field_0x88C = dComIfGp_particle_set(dPa_name::ID_AK_SN_NIYATODANCEL00, &current.pos, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
-    field_0x890 = dComIfGp_particle_set(dPa_name::ID_AK_SN_NIYATODANCER00, &current.pos, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+    mpDanceEmitterL = dComIfGp_particle_set(dPa_name::ID_AK_SN_NIYATODANCEL00, &current.pos, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+    mpDanceEmitterR = dComIfGp_particle_set(dPa_name::ID_AK_SN_NIYATODANCER00, &current.pos, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
 }
 
 /* 000033F4-00003484       .text flwPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::flwPrtcl_danceLR() {
-    if (field_0x88C != NULL) {
-        field_0x88C->setGlobalRTMatrix(mpMorf->getModel()->getAnmMtx(field_0x6CE));
+    if (mpDanceEmitterL != NULL) {
+        mpDanceEmitterL->setGlobalRTMatrix(mpMorf->getModel()->getAnmMtx(m_armL_jnt_num));
     }
-    if (field_0x890 != NULL) {
-        field_0x890->setGlobalRTMatrix(mpMorf->getModel()->getAnmMtx(field_0x6CF));
+    if (mpDanceEmitterR != NULL) {
+        mpDanceEmitterR->setGlobalRTMatrix(mpMorf->getModel()->getAnmMtx(m_armR_jnt_num));
     }
 }
 
 /* 00003484-000034D8       .text delPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::delPrtcl_danceLR() {
-    JPABaseEmitter* emitter = field_0x88C;
+    JPABaseEmitter* emitter = mpDanceEmitterL;
     if (emitter != NULL) {
         emitter->setMaxFrame(-1);
         emitter->setStatus(JPAEmtrStts_StopEmit);
-        field_0x88C = NULL;
+        mpDanceEmitterL = NULL;
     }
-    emitter = field_0x890;
+    emitter = mpDanceEmitterR;
     if (emitter != NULL) {
         emitter->setMaxFrame(-1);
         emitter->setStatus(JPAEmtrStts_StopEmit);
-        field_0x890 = NULL;
+        mpDanceEmitterR = NULL;
     }
 }
 
 /* 000034D8-00003594       .text setPrtcl_peraProOpen__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_peraProOpen() {
-    mDoMtx_stack_c::copy(field_0x6E4->getModel()->getAnmMtx(field_0x6E8));
-    mDoMtx_stack_c::multVecZero(&field_0x86C);
-    field_0x878 = dComIfGp_particle_set(dPa_name::ID_AK_SN_PERAPROOPEN00, &field_0x86C, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+    mDoMtx_stack_c::copy(mpPrpMorf->getModel()->getAnmMtx(m_prp_jnt_num));
+    mDoMtx_stack_c::multVecZero(&mPeraProPos);
+    mpPeraProEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_PERAPROOPEN00, &mPeraProPos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
 }
 
 /* 00003594-00003774       .text createSeed__11daNpc_Bj1_cFv */
@@ -1428,10 +1429,10 @@ BOOL daNpc_Bj1_c::createSeed() {
     fopAc_ac_c* actors[4];
     cXyz pos;
     for (i = 0; i < 4; i++) {
-        field_0x898[i] = fpcM_ERROR_PROCESS_ID_e;
+        mSeedProcID[i] = fpcM_ERROR_PROCESS_ID_e;
         actors[i] = NULL;
     }
-    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(field_0x6CF));
+    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_armR_jnt_num));
     mDoMtx_stack_c::multVecZero(&pos);
     for (i = 0; i < 4; i++) {
         s16 a_ang_tbl[] = { -0x1000, -0xA00, 0xA00, 0x1000 };
@@ -1444,7 +1445,7 @@ BOOL daNpc_Bj1_c::createSeed() {
             break;
         }
         fopAcM_OnStatus(actors[i], fopAcStts_UNK4000_e);
-        field_0x898[i] = fopAcM_GetID(actors[i]);
+        mSeedProcID[i] = fopAcM_GetID(actors[i]);
     }
     return i == 4 ? TRUE : FALSE;
 }
@@ -1452,9 +1453,9 @@ BOOL daNpc_Bj1_c::createSeed() {
 /* 00003774-000037E4       .text deleteSeed__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::deleteSeed() {
     for (int i = 0; i < 4; i++) {
-        fopAc_ac_c* actor = searchByID(field_0x898[i]);
+        fopAc_ac_c* actor = searchByID(mSeedProcID[i]);
         if (actor != NULL) {
-            field_0x898[i] = -1;
+            mSeedProcID[i] = -1;
             fopAcM_delete(actor);
         }
     }
@@ -1464,16 +1465,16 @@ BOOL daNpc_Bj1_c::deleteSeed() {
 /* 000037E4-00003998       .text charDecide__11daNpc_Bj1_cFi */
 bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
     mType = -1;
-    field_0x8B5 = -1;
+    mSpecificType = -1;
     switch (fpcM_GetName(this)) {
         case fpcNm_NPC_BJ1_e:
             mType = 0;
             switch (i_param1) {
                 case TRUE:
-                    field_0x8B5 = 1;
+                    mSpecificType = 1;
                     break;
                 default:
-                    field_0x8B5 = 0;
+                    mSpecificType = 0;
                     break;
             }
             break;
@@ -1481,10 +1482,10 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             mType = 1;
             switch (i_param1) {
                 case TRUE:
-                    field_0x8B5 = 3;
+                    mSpecificType = 3;
                     break;
                 default:
-                    field_0x8B5 = 2;
+                    mSpecificType = 2;
                     break;
             }
             break;
@@ -1492,10 +1493,10 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             mType = 2;
             switch (i_param1) {
                 case TRUE:
-                    field_0x8B5 = 5;
+                    mSpecificType = 5;
                     break;
                 default:
-                    field_0x8B5 = 4;
+                    mSpecificType = 4;
                     break;
             }
             break;
@@ -1503,10 +1504,10 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             mType = 3;
             switch (i_param1) {
                 case TRUE:
-                    field_0x8B5 = 7;
+                    mSpecificType = 7;
                     break;
                 default:
-                    field_0x8B5 = 6;
+                    mSpecificType = 6;
                     break;
             }
             break;
@@ -1514,10 +1515,10 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             mType = 4;
             switch (i_param1) {
                 case TRUE:
-                    field_0x8B5 = 9;
+                    mSpecificType = 9;
                     break;
                 default:
-                    field_0x8B5 = 8;
+                    mSpecificType = 8;
                     break;
             }
             break;
@@ -1525,25 +1526,25 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             mType = 5;
             switch (i_param1) {
                 case TRUE:
-                    field_0x8B5 = 11;
+                    mSpecificType = 11;
                     break;
                 default:
-                    field_0x8B5 = 10;
+                    mSpecificType = 10;
                     break;
             }
             break;
         case fpcNm_NPC_BJ7_e:
             mType = 6;
-            field_0x8B5 = 12;
+            mSpecificType = 12;
             break;
         case fpcNm_NPC_BJ8_e:
             mType = 7;
             switch (i_param1) {
                 case TRUE:
-                    field_0x8B5 = 14;
+                    mSpecificType = 14;
                     break;
                 default:
-                    field_0x8B5 = 13;
+                    mSpecificType = 13;
                     break;
             }
             break;
@@ -1551,10 +1552,10 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             mType = 8;
             switch (i_param1) {
                 case TRUE:
-                    field_0x8B5 = 16;
+                    mSpecificType = 16;
                     break;
                 default:
-                    field_0x8B5 = 15;
+                    mSpecificType = 15;
                     break;
             }
             break;
@@ -1594,10 +1595,10 @@ void daNpc_Bj1_c::eInit_setShapeAngleY(int* i_param1, s16 i_param2) {
 }
 
 /* 00003A14-00003A30       .text eInit_setEvTimer__11daNpc_Bj1_cFPi */
-void daNpc_Bj1_c::eInit_setEvTimer(int* i_param1) {
-    field_0x830 = 0;
-    if (i_param1 != NULL) {
-        field_0x830 = *i_param1;
+void daNpc_Bj1_c::eInit_setEvTimer(int* i_evTimer) {
+    mEvTimer = 0;
+    if (i_evTimer != NULL) {
+        mEvTimer = *i_evTimer;
     }
 }
 
@@ -1637,28 +1638,77 @@ void daNpc_Bj1_c::eInit_ATTENTION_(int*, int*, int*, cXyz*, int*, int*, int*) {
 
 /* 00003D3C-00003E24       .text eInit_PLYER_MOV_1___11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::eInit_PLYER_MOV_1_() {
-    /* Nonmatching */
+    cXyz offset, goal;
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    s16 angle = cLib_targetAngleY(&mInitialPos, &player->current.pos);
+    if (abs((s16)(angle - mInitialAngle.y)) > 0x1000) {
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_YrotM(mDoMtx_stack_c::now, mInitialAngle.y);
+        offset.set(0.0f, 0.0f, 120.0f);
+        mDoMtx_multVec(mDoMtx_stack_c::now, &offset, &goal);
+    } else {
+        goal.set(player->current.pos.x, player->current.pos.y, player->current.pos.z);
+    }
+    dComIfGp_evmng_setGoal(&goal);
 }
 
 /* 00003E24-00003F04       .text eInit_MOV___11daNpc_Bj1_cFPfPfPfPi */
-void daNpc_Bj1_c::eInit_MOV_(f32*, f32*, f32*, int*) {
-    /* Nonmatching */
+BOOL daNpc_Bj1_c::eInit_MOV_(f32* i_dist, f32* i_speed, f32* i_accel, int* i_timer) {
+    u8 idx = mPathRun.getIdx();
+    setAnm_NUM(8);
+    mLookBackState = 0;
+    mArrivalDist = eInit_prmFloat(i_dist, 0.0f);
+    mTargetFlySpeed = eInit_prmFloat(i_speed, 0.0f);
+    mTargetFlyStep = eInit_prmFloat(i_accel, 0.0f);
+    mTargetPos = mPathRun.getPoint(idx);
+    eInit_setEvTimer(i_timer);
+    mbMoveEnd = 0;
+    mMoveMode = 1;
 }
 
 /* 00003F04-00003F74       .text eInit_JMP___11daNpc_Bj1_cFPfPf */
-void daNpc_Bj1_c::eInit_JMP_(f32*, f32*) {
-    /* Nonmatching */
+void daNpc_Bj1_c::eInit_JMP_(f32* i_param1, f32* i_param2) {
+    mJumpMode = 1;
+    speed.y = eInit_prmFloat(i_param1, 0.0f);
+    gravity = eInit_prmFloat(i_param2, 0.0f);
+    setAnm_NUM(4);
 }
 
 /* 00003F74-0000406C       .text eInit_CHG_PTH___11daNpc_Bj1_cFPiPi */
-void daNpc_Bj1_c::eInit_CHG_PTH_(int*, int*) {
-    /* Nonmatching */
+void daNpc_Bj1_c::eInit_CHG_PTH_(int* i_count, int* i_idx) {
+    int count;
+    u8 idx;
+    mPathRun.setInf(mPathIdx, fopAcM_GetRoomNo(this), true);
+    if (mPathRun.isPath() && i_count != NULL) {
+        count = *i_count;
+        if (count > 0) {
+            dPath* path = mPathRun.nextPath(fopAcM_GetRoomNo(this));
+            int i = 0;
+            int limit = count - 1;
+            for (; i < limit; i++) {
+                if (path == NULL) {
+                    break;
+                }
+                path = dPath_GetNextRoomPath(path, fopAcM_GetRoomNo(this));
+            }
+            if (path != NULL) {
+                mPathRun.setInfDrct(path);
+            }
+        }
+    }
+    if (i_idx != NULL) {
+        idx = *i_idx;
+        if (idx >= mPathRun.maxPoint()) {
+            idx = mPathRun.maxPoint() - 1;
+        }
+        mPathRun.setIdx(idx);
+    }
 }
 
 /* 0000406C-000040BC       .text eInit_END_MOV___11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::eInit_END_MOV_() {
     setAnm_NUM(0);
-    field_0x8AA = 0;
+    mMoveMode = 0;
     mTargetFlySpeed = 0.0f;
     speedF = mTargetFlySpeed;
     mTargetFlyStep = 0.0f;
@@ -1667,7 +1717,7 @@ void daNpc_Bj1_c::eInit_END_MOV_() {
 /* 000040BC-000040F4       .text eInit_SET_TNE___11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::eInit_SET_TNE_() {
     setAnm_NUM(9);
-    field_0x8B3 = 0;
+    mLookBackState = 0;
 }
 
 /* 000040F4-00004114       .text eInit_DEL_TNE___11daNpc_Bj1_cFv */
@@ -1695,8 +1745,8 @@ void daNpc_Bj1_c::event_actionInit(int) {
 
 /* 000044E4-00004530       .text eMove_ATTENTION___11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::eMove_ATTENTION_() {
-    if (field_0x830 >= 0) {
-        return cLib_calcTimer(&field_0x830) == 0;
+    if (mEvTimer >= 0) {
+        return cLib_calcTimer(&mEvTimer) == 0;
     } else {
         return m_jnt.trnChk() == 0;
     }
@@ -1704,16 +1754,16 @@ bool daNpc_Bj1_c::eMove_ATTENTION_() {
 
 /* 00004530-00004580       .text eMove_MOV___11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::eMove_MOV_() {
-    if (field_0x830 >= 0) {
-        return cLib_calcTimer(&field_0x830) == 0;
+    if (mEvTimer >= 0) {
+        return cLib_calcTimer(&mEvTimer) == 0;
     } else {
-        return 1 - field_0x84A == 0;
+        return mbMoveEnd == true;
     }
 }
 
 /* 00004580-00004594       .text eMove_JMP___11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::eMove_JMP_() {
-    return field_0x8A9 == 0;
+    return mJumpMode == 0;
 }
 
 /* 00004594-000045F0       .text eMove_SET_TNE___11daNpc_Bj1_cFv */
@@ -1721,17 +1771,17 @@ bool daNpc_Bj1_c::eMove_SET_TNE_() {
     if (mpMorf->checkFrame(20.0f)) {
         createSeed();
     }
-    return field_0x83C != 0;
+    return mbMorfAnimStopped != 0;
 }
 
 /* 000045F0-00004678       .text eMove_PTH_MOV___11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::eMove_PTH_MOV_() {
-    bool finished = field_0x8AA == 0;
+    bool finished = mMoveMode == 0;
     if (!finished) {
-        if (field_0x84A != 0) {
-            mTargetPos = field_0x734.getPoint(field_0x734.getIdx());
+        if (mbMoveEnd) {
+            mTargetPos = mPathRun.getPoint(mPathRun.getIdx());
         }
-        field_0x84A = 0;
+        mbMoveEnd = 0;
     }
     return finished;
 }
@@ -1796,7 +1846,7 @@ void daNpc_Bj1_c::endEvent() {
 
 /* 000047F4-0000482C       .text isEventEntry__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::isEventEntry() {
-    dComIfGp_evmng_getMyStaffId(field_0x73C.getActorName(), NULL, 0);
+    dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), NULL, 0);
 }
 
 /* 0000482C-00004914       .text event_proc__11daNpc_Bj1_cFi */
@@ -1817,7 +1867,7 @@ void daNpc_Bj1_c::event_proc(int i_param1) {
         }
         endEvent();
     } else {
-        if (!field_0x73C.cutProc()) {
+        if (!mEventCut.cutProc()) {
             privateCut(i_param1);
         }
         lookBack();
@@ -1841,7 +1891,7 @@ BOOL daNpc_Bj1_c::set_action(ActionFunc i_action, void* i_param2) {
 /* 000049C0-00004B60       .text setStt__11daNpc_Bj1_cFSc */
 void daNpc_Bj1_c::setStt(s8 i_status) {
     s8 status = mStatus;
-    field_0x832 = 0;
+    mAttTimer = 0;
     mStatus = i_status;
     switch (mStatus) {
         case 0:
@@ -1850,40 +1900,40 @@ void daNpc_Bj1_c::setStt(s8 i_status) {
         case 8:
             break;
         case 2:
-            if (field_0x8B5 == 4) {
+            if (mSpecificType == 4) {
                 daNpc_Bj1_c* partner = (daNpc_Bj1_c*)searchByID(mPartnerProcID);
                 if (partner != NULL) {
                     field_0x84B = partner->m_jnt.field_0x2A != 0;
                 }
             }
             field_0x8AD = 0xFF;
-            field_0x8B3 = 1;
-            field_0x8B2 = status;
+            mLookBackState = 1;
+            mPrevStatus = status;
             m_jnt.setTrn();
             return;
         case 3:
-            field_0x8B3 = 0;
+            mLookBackState = 0;
             mTargetFlySpeed = l_HIO.children[mType].hio_prm.field_0x34;
             mTargetFlyStep = l_HIO.children[mType].hio_prm.field_0x38;
             gravity = 0.0f;
-            field_0x849 = 0;
-            field_0x8A8 = 6;
+            mbFlyMoveEnd = 0;
+            mFlyMode = 6;
             setAnm_prp(1);
             field_0x84C = 1;
             break;
         case 4:
-            field_0x8B3 = 1;
+            mLookBackState = 1;
             mHeadOnlyFollow = true;
             mTargetFlySpeed = 0.0f;
             break;
         case 5:
-            field_0x834 = 0x5A;
+            mFlyWaitTimer = 0x5A;
             break;
         case 6:
             mTargetFlySpeed = l_HIO.children[mType].hio_prm.field_0x58;
             mTargetFlyStep = l_HIO.children[mType].hio_prm.field_0x5C;
-            field_0x81C = l_HIO.children[mType].hio_prm.field_0x60;
-            field_0x8AA = 1;
+            mArrivalDist = l_HIO.children[mType].hio_prm.field_0x60;
+            mMoveMode = 1;
             break;
     }
     setAnm();
@@ -1894,22 +1944,22 @@ BOOL daNpc_Bj1_c::wait_1() {
     if (field_0x8B0 == 1 || field_0x8B0 >= 3) {
         return TRUE;
     }
-    if (field_0x855 != 0) {
+    if (field_0x855) {
         if (chk_talk()) {
             setStt(2);
         }
         return TRUE;
     }
     field_0x8B0 = 2;
-    if (mbAttention != 0) {
-        field_0x832 = 0x3C;
+    if (mbAttention) {
+        mAttTimer = 0x3C;
     }
-    if (cLib_calcTimer(&field_0x832) != 0) {
-        field_0x8B3 = 1;
+    if (cLib_calcTimer(&mAttTimer)) {
+        mLookBackState = 1;
         mHeadOnlyFollow = false;
     } else {
-        field_0x8B3 = 3;
-        field_0x83A = field_0x7B8.y;
+        mLookBackState = 3;
+        mLookTargetAngleY = mInitialAngle.y;
         m_jnt.setTrn();
     }
 
@@ -1921,23 +1971,23 @@ BOOL daNpc_Bj1_c::wait_2() {
     if (field_0x8B0 == 1 || field_0x8B0 >= 3) {
         return TRUE;
     }
-    if (field_0x855 != 0) {
+    if (field_0x855) {
         if (chk_talk()) {
             setStt(2);
         }
         return TRUE;
     }
     field_0x8B0 = 2;
-    if (mbAttention != 0) {
-        field_0x832 = 0x3C;
-        field_0x834 = 0x5A;
+    if (mbAttention) {
+        mAttTimer = 0x3C;
+        mFlyWaitTimer = 0x5A;
     }
-    if (cLib_calcTimer(&field_0x832) != 0) {
-        field_0x8B3 = 1;
+    if (cLib_calcTimer(&mAttTimer)) {
+        mLookBackState = 1;
         mHeadOnlyFollow = false;
         return TRUE;
     } else {
-        if (cLib_calcTimer(&field_0x834) == 0) {
+        if (!cLib_calcTimer(&mFlyWaitTimer)) {
             setStt(3);
         }
     }
@@ -1947,26 +1997,26 @@ BOOL daNpc_Bj1_c::wait_2() {
 
 /* 00004D10-00004E2C       .text wait_3__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::wait_3() {
-    cLib_addCalcAngleS(&current.angle.y, field_0x7B8.y, l_HIO.children[mType].hio_prm.field_0x4E, l_HIO.children[mType].hio_prm.field_0x50, 0);
+    cLib_addCalcAngleS(&current.angle.y, mInitialAngle.y, l_HIO.children[mType].hio_prm.field_0x4E, l_HIO.children[mType].hio_prm.field_0x50, 0);
     if (field_0x8B0 == 1 || field_0x8B0 >= 3) {
         return TRUE;
     }
-    if (field_0x855 != 0) {
+    if (field_0x855) {
         if (chk_talk()) {
             setStt(2);
         }
         return TRUE;
     }
     field_0x8B0 = 2;
-    if (mbAttention != 0) {
-        field_0x832 = 0x3C;
+    if (mbAttention) {
+        mAttTimer = 0x3C;
     }
-    if (cLib_calcTimer(&field_0x832) != 0 && chk_drct(46.0f) != 0) {
-        field_0x8B3 = 1;
+    if (cLib_calcTimer(&mAttTimer) && chk_drct(46.0f)) {
+        mLookBackState = 1;
         mHeadOnlyFollow = false;
     } else {
-        field_0x8B3 = 3;
-        field_0x83A = field_0x7B8.y;
+        mLookBackState = 3;
+        mLookTargetAngleY = mInitialAngle.y;
         m_jnt.setTrn();
     }
 
@@ -1978,26 +2028,26 @@ BOOL daNpc_Bj1_c::wait_4() {
     if (field_0x8B0 == 1 || field_0x8B0 >= 3) {
         return TRUE;
     }
-    if (field_0x855 != 0) {
+    if (field_0x855) {
         if (chk_talk()) {
             setStt(2);
         }
         return TRUE;
     }
-    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2902) && dComIfGs_isGetItem(6, 0) != 0) {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2902) && dComIfGs_isGetItem(6, 0)) {
         field_0x8B0 = 5;
         return TRUE;
     } else {
         field_0x8B0 = 2;
-        if (mbAttention != 0) {
-            field_0x832 = 0x3C;
+        if (mbAttention) {
+            mAttTimer = 0x3C;
         }
-        if (cLib_calcTimer(&field_0x832) != 0) {
-            field_0x8B3 = 1;
+        if (cLib_calcTimer(&mAttTimer)) {
+            mLookBackState = 1;
             mHeadOnlyFollow = false;
         } else {
-            field_0x8B3 = 3;
-            field_0x83A = field_0x7B8.y;
+            mLookBackState = 3;
+            mLookTargetAngleY = mInitialAngle.y;
             m_jnt.setTrn();
         }
     }
@@ -2008,9 +2058,9 @@ BOOL daNpc_Bj1_c::wait_4() {
 /* 00004F48-000050CC       .text flyMov__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::flyMov() {
     field_0x8B0 = 0;
-    field_0x849 = 0;
-    if (field_0x8A8 == 1) {
-        if (cLib_calcTimer(&field_0x82E) != 0) {
+    mbFlyMoveEnd = 0;
+    if (mFlyMode == 1) {
+        if (cLib_calcTimer(&mFlyDelayTimer)) {
             return TRUE;
         }
         f32 dist_xz = (current.pos - dComIfGp_getPlayer(0)->current.pos).absXZ();
@@ -2026,14 +2076,14 @@ BOOL daNpc_Bj1_c::flyMov() {
 /* 000050CC-0000514C       .text fall01__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::fall01() {
     field_0x8B0 = 0;
-    field_0x849 = 0;
-    if (field_0x8A8 == 0) {
+    mbFlyMoveEnd = 0;
+    if (!mFlyMode) {
         setStt(5);
         return TRUE;
     }
-    if (field_0x8A8 == 1 && (int)speedF == 0) {
+    if (mFlyMode == 1 && !(int)speedF) {
         speedF = 0.0f;
-        field_0x8A8 = 2;
+        mFlyMode = 2;
     }
     return TRUE;
 }
@@ -2122,8 +2172,8 @@ BOOL daNpc_Bj1_c::talk_1() {
                 }
                 field_0x83E = 0xFF;
                 field_0x855 = 0;
-                setStt(field_0x8B2);
-                field_0x832 = 0x3C;
+                setStt(mPrevStatus);
+                mAttTimer = 0x3C;
                 endEvent();
                 break;
         }
@@ -2133,17 +2183,17 @@ BOOL daNpc_Bj1_c::talk_1() {
 
 /* 00005510-000055D8       .text walk_1__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::walk_1() {
-    field_0x84A = 0;
-    if (field_0x8AA == 0) {
-        field_0x7AC = current.pos;
-        field_0x7B8 = current.angle;
+    mbMoveEnd = 0;
+    if (!mMoveMode) {
+        mInitialPos = current.pos;
+        mInitialAngle = current.angle;
         mTargetFlySpeed = 0.0f;
         mTargetFlyStep = 0.0f;
         speedF = mTargetFlySpeed;
         setStt(7);
         return TRUE;
     }
-    mTargetPos = field_0x734.getPoint(field_0x734.getIdx());
+    mTargetPos = mPathRun.getPoint(mPathRun.getIdx());
     mHeadOnlyFollow = true;
     return TRUE;
 }
@@ -2269,7 +2319,7 @@ BOOL daNpc_Bj1_c::wait_action4(void*) {
 
 /* 00005928-000059C4       .text demo__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::demo() {
-    if (demoActorID == 0) {
+    if (!demoActorID) {
         if (mbInDemo) {
             mbInDemo = false;
         }
@@ -2298,13 +2348,13 @@ BOOL daNpc_Bj1_c::_execute() {
 
 /* 00006128-000061A4       .text _delete__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::_delete() {
-    dComIfG_resDelete(&field_0x6C4, "Bj");
+    dComIfG_resDelete(&mPhase, "Bj");
     if (heap != NULL) {
         if (mpMorf != NULL) {
             mpMorf->stopZelAnime();
         }
-        if (field_0x6E4 != NULL) {
-            field_0x6E4->stopZelAnime();
+        if (mpPrpMorf != NULL) {
+            mpPrpMorf->stopZelAnime();
         }
     }
     delPrtcl_drugPot();
@@ -2322,7 +2372,7 @@ cPhs_State daNpc_Bj1_c::_create() {
     static u32 a_size_tbl[] = { 0x272E0, 0x272E0, 0x272E0, 0x272E0, 0x272E0, 0x272E0, 0x272E0, 0x272E0, 0x272E0 };
 
     fopAcM_ct_Retail(this, daNpc_Bj1_c);
-    cPhs_State state = dComIfG_resLoad(&field_0x6C4, "Bj");
+    cPhs_State state = dComIfG_resLoad(&mPhase, "Bj");
     if (state != cPhs_COMPLEATE_e) {
         return state;
     }
