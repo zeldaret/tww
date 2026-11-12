@@ -43,8 +43,27 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 000000EC-00000194       .text __ct__15daNpc_Kg2_HIO_cFv */
 daNpc_Kg2_HIO_c::daNpc_Kg2_HIO_c() {
-    /* Nonmatching */
+    mNpc.m04 = -20.0f;
+    mNpc.mMaxHeadX = 0x9C4;
+    mNpc.mMaxHeadY = 7000;
+    mNpc.mMaxBackboneX = 2000;
+    mNpc.mMaxBackboneY = 8000;
+    mNpc.mMinHeadX = -0x9C4;
+    mNpc.mMinHeadY = -7000;
+    mNpc.mMinBackboneX = -2000;
+    mNpc.mMinBackboneY = -8000;
+    mNpc.mMaxTurnStep = 0x1000;
+    mNpc.mMaxHeadTurnVel = 1000;
+    mNpc.mAttnYOffset = 35.0f;
+    mNpc.mMaxAttnAngleY = 0x4000;
+    mNpc.m22 = 0;
+    mNpc.mMaxAttnDistXZ = 400.0f;
+    field_0x30[0] = 0;
+    mNo = -1;
+    return;
 }
+
+static daNpc_Kg2_HIO_c l_HIO;
 
 /* 00000194-00000368       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
