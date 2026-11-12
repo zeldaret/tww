@@ -87,7 +87,7 @@ void JAIZelAnime::startAnimSound(void* i_basic, u32 i_soundID, JAISound** i_soun
         }
     }
 
-    int var_r27 = (i_actor->field_0xc & 0xFF000000) >> 0x18;
+    u16 var_r27 = (i_actor->field_0xc & 0xFF000000) >> 0x18;
     i_actor->field_0xc &= 0xFFFFFF;
 
     if (i_actor->field_0x4 != NULL) {
@@ -160,9 +160,13 @@ void JAIZelAnime::setSpeedModifySound(JAISound* i_sound, JAIAnimeFrameSoundData*
     if (i_data->mPitchFactor != 0) {
         switch (i_sound->getMapInfo()) {
         case 6:
-            break;
         case 0x12:
-        case 0x17:
+        case 0x13:
+        case 0x14:
+        case 0x15:
+        case 0x16:
+            break;
+        default:
             base_pitch += i_data->mPitchFactor * (param_2 - 1.0f) / 32;
             break;
         }
@@ -220,20 +224,14 @@ void JAIZelAnime::setPlayPosition(f32 param_0) {
         return;
     }
 
-    int var_r0 = mpAsData->datas;
+    u32 n = mpAsData->datas;
     int count = 0;
-    int i = 0;
-    
-    while ((u32)var_r0 > 0) {
-        if (mpAsData->mAfsData[i].mStartFrame >= param_0) {
+    for (u32 j = 0; j < n; j++) {
+        if (mpAsData->mAfsData[count].mStartFrame >= param_0) {
             break;
         }
-
         count++;
-        i++;
-        var_r0--;
     }
-
     if (mDataCounterInc == 1) {
         dataCounter = count;
         mCurrentTime = param_0;
