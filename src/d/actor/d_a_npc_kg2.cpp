@@ -9,6 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_lib.h"
 #include "d/d_snap.h"
+#include "res/Object/Kg.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -65,6 +66,32 @@ daNpc_Kg2_HIO_c::daNpc_Kg2_HIO_c() {
 
 static daNpc_Kg2_HIO_c l_HIO;
 
+static const int l_bck_ix_tbl[] = {
+    dRes_INDEX_KG_BCK_KG_WAIT01_e,
+    dRes_INDEX_KG_BCK_KG_WAIT02_e,
+    dRes_INDEX_KG_BCK_KG_TALK01_e,
+    dRes_INDEX_KG_BCK_KG_KAMAE_e,
+    dRes_INDEX_KG_BCK_KG_KWAIT_e,
+    dRes_INDEX_KG_BCK_KG_CAPTAIN_e,
+    dRes_INDEX_KG_BCK_KG_CAPTAIN02_e,
+    dRes_INDEX_KG_BCK_KG_KIDS_e,
+    dRes_INDEX_KG_BCK_KG_RADIO_e,
+    dRes_INDEX_KG_BCK_KG_SASIKAE_e,
+    dRes_INDEX_KG_BCK_KG_GONZO_e,
+    dRes_INDEX_KG_BCK_KG_TETORA_e,
+    dRes_INDEX_KG_BCK_KG_KAMAE_e,
+    dRes_INDEX_KG_BCK_KG_KWAIT_e,
+    dRes_INDEX_KG_BCK_KG_TETORA02_e,
+};
+
+static const int l_btp_ix_tbl[] = {
+    dRes_INDEX_KG_BTP_KG_e,
+    dRes_INDEX_KG_BTP_MOPEN_e,
+    dRes_INDEX_KG_BTP_WARAI_e,
+    dRes_INDEX_KG_BTP_RADIO_e,
+    dRes_INDEX_KG_BTP_SLEEP_e,
+};
+
 /* 00000194-00000368       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
@@ -86,8 +113,64 @@ void daNpc_Kg2_c::playTexPatternAnm() {
 }
 
 /* 000006EC-00000838       .text setAnm__11daNpc_Kg2_cFScf */
-void daNpc_Kg2_c::setAnm(signed char, float) {
+void daNpc_Kg2_c::setAnm(s8 param_1, f32 param_2) {
     /* Nonmatching */
+    static int a_play_mode_tbl[] = {
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_LOOP,
+    };
+    static f32 a_morf_frame_tbl[] = {
+        8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f,
+        8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f,
+    };
+    static f32 a_play_speed_tbl[] = {
+        1.0f, 1.0f, 1.0f, 1.0f,  1.0f, 1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
+    };
+
+    f32 fvar = param_2;
+    if (fvar < 0.0f) {
+        fvar = a_morf_frame_tbl[param_1];
+    }
+
+    if (param_1 != field_0x749 && field_0x749 != -1) {
+        field_0x749 = param_1;
+        dNpc_setAnm(
+            mpMorf,
+            a_play_mode_tbl[field_0x749],
+            fvar,
+            a_play_speed_tbl[field_0x749],
+            l_bck_ix_tbl[field_0x749],
+            -1,
+            "Kg2"
+        );
+        if (field_0x749 == 0xC) {
+            mpMorf->setFrame(mpMorf->getEndFrame() - 1.0f);
+            mpMorf->setPlaySpeed(-1.0f);
+        }
+    }
+
+    if (field_0x749 == 2) {
+        m_jnt.offHeadLock();
+        m_jnt.onBackBoneLock();
+    } else {
+        m_jnt.onHeadLock();
+        m_jnt.onBackBoneLock();
+    }
+    return;
 }
 
 /* 00000838-000009E8       .text subAnm__11daNpc_Kg2_cFv */
