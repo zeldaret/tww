@@ -118,6 +118,32 @@ bool daNpc_Kg2_c::initTexPatternAnm(bool i_modify) {
 /* 000005A0-000006EC       .text playTexPatternAnm__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::playTexPatternAnm() {
     /* Nonmatching */
+    if (field_0x738[0] == 1 && field_0x748 == 0 && field_0x704 == 2) {
+        field_0x704 = 0;
+        field_0x748 = 4;
+        initTexPatternAnm(true);
+        return;
+    }
+
+    if (cLib_calcTimer(&field_0x706) == 0) {
+        if (field_0x748 == 4) {
+            if (field_0x704 == 0) {
+                field_0x704 = 1;
+                field_0x706 = cM_rndF(150.0f) + 150.0f;
+            } else {
+                field_0x704 = 0;
+                field_0x706 = (s16)(cM_rndF(150.0f) + 150) << 1;
+            }
+        } else {
+            if (field_0x704 >= m_btp->getFrameMax()) {
+                field_0x704 -= m_btp->getFrameMax();
+                field_0x706 = cM_rndF(100.0f) + 30.0f;
+            } else {
+                field_0x704 += 1;
+            }
+        }
+    }
+    return;
 }
 
 /* 000006EC-00000838       .text setAnm__11daNpc_Kg2_cFScf */
