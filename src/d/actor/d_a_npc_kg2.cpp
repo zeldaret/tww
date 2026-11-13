@@ -302,6 +302,41 @@ void daNpc_Kg2_c::setAttention() {
 /* 00001308-00001448       .text lookBack__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::lookBack() {
     /* Nonmatching */
+    cXyz pos_1;
+    pos_1.x = 0.0f;
+    pos_1.y = 0.0f;
+    pos_1.z = 0.0f;
+    cXyz* pos_p = 0x0;
+    s16 svar = current.angle.y;
+    switch (field_0x760) {
+        case 2:
+        case 1:
+            if (field_0x760 == 2) {
+                m_jnt.setTrn();
+            }
+            if (field_0x72C) {
+                cXyz tmp = dNpc_playerEyePos(l_HIO.mNpc.m04);
+                pos_p = &tmp;
+                pos_1 = current.pos;
+                pos_1.y = eyePos.y;
+            }
+            break;
+    }
+
+    if (m_jnt.trnChk()) {
+        cLib_addCalcAngleS2(&field_0x720, l_HIO.mNpc.mMaxHeadTurnVel, 4, 0x800);
+    } else {
+        field_0x720 = 0;
+    }
+
+    m_jnt.lookAtTarget(
+        &current.angle.y,
+        pos_p,
+        pos_1,
+        svar,
+        field_0x720,
+        true);
+    return;
 }
 
 /* 00001448-00001468       .text CallbackCreateHeap__FP10fopAc_ac_c */
