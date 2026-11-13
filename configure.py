@@ -1733,7 +1733,7 @@ config.libs = [
     ActorRel(Matching, "d_a_npc_p1"),
     ActorRel(NonMatching, "d_a_npc_p2"),
     ActorRel(EquivalentFor("GZLJ01", "GZLE01", "GZLP01") or MatchingFor("D44J01"), "d_a_npc_people"), # regalloc
-    ActorRel(NonMatching, "d_a_npc_pf1"),
+    ActorRel(Matching,    "d_a_npc_pf1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_npc_photo"),
     ActorRel(Matching,    "d_a_npc_pm1"),
     ActorRel(Matching,    "d_a_npc_roten"),
