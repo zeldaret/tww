@@ -674,7 +674,32 @@ BOOL daNpc_Kg2_c::_delete() {
 
 /* 00002BFC-00002D14       .text _execute__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::_execute() {
-    /* Nonmatching */
+    m_jnt.setParam(
+        l_HIO.mNpc.mMaxBackboneX,
+        l_HIO.mNpc.mMaxBackboneY,
+        l_HIO.mNpc.mMinBackboneX,
+        l_HIO.mNpc.mMinBackboneY,
+        l_HIO.mNpc.mMaxHeadX,
+        l_HIO.mNpc.mMaxHeadY,
+        l_HIO.mNpc.mMinHeadX,
+        l_HIO.mNpc.mMinHeadY,
+        l_HIO.mNpc.mMaxTurnStep
+    );
+
+    playTexPatternAnm();
+    mpMorf->play(&eyePos, 0, 0);
+    mpMorf->calc();
+    checkOrder();
+    processMove();
+    eventOrder();
+    subAnm();
+    fopAcM_posMoveF(this, mStts.GetCCMoveP());
+    mObjAcch.CrrPos(*dComIfG_Bgsp());
+    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
+    set_mtx();
+    setCollision(60.0f, 150.0f);
+    return 1;
 }
 
 /* 00002D14-00002E74       .text _draw__11daNpc_Kg2_cFv */
