@@ -63,9 +63,8 @@ BOOL daTag_Kf1_c::createInit() {
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
 void daTag_Kf1_c::setStt(s8 i_stt) {
     mStt = i_stt;
-    switch ((s8)mStt) {
-    case 3:
-        break;
+    if (mStt >= 3) {
+        return;
     }
 }
 
@@ -344,6 +343,9 @@ int daTag_Kf1_c::wait_action1(void*) {
 
 /* 00000BE8-00000BF0       .text _draw__11daTag_Kf1_cFv */
 BOOL daTag_Kf1_c::_draw() {
+    // Color literal for debug drawing. Unused in non-debug builds.
+    (GXColor){0xFF, 0x00, 0x00, 0x80};
+
     return TRUE;
 }
 
