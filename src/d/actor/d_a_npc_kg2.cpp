@@ -296,7 +296,18 @@ void daNpc_Kg2_c::anmAtr(u16 i_msgStatus) {
 
 /* 000012EC-00001308       .text setAttention__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::setAttention() {
-    /* Nonmatching */
+    f32 fvar_2;
+    f32 fvar_3;
+    f32 fvar_1;
+
+    fvar_1 = mAttPos.z;
+    fvar_2 = mAttPos.y;
+    fvar_3 = mAttPos.x;
+
+    eyePos.x = fvar_3;
+    eyePos.y = fvar_2;
+    eyePos.z = fvar_1;
+    return;
 }
 
 /* 00001308-00001448       .text lookBack__11daNpc_Kg2_cFv */
