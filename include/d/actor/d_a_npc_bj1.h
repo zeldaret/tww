@@ -145,13 +145,13 @@ public:
     /* 0x6CD */ s8 m_backbone_jnt_num;
     /* 0x6CE */ s8 m_armL_jnt_num;
     /* 0x6CF */ s8 m_armR_jnt_num;
-    /* 0x6D0 */ J3DModel* field_0x6D0;
+    /* 0x6D0 */ J3DModel* mpFaceModel;
     /* 0x6D4 */ J3DModel* mpArmLModel;
     /* 0x6D8 */ J3DModel* mpArmRModel;
     /* 0x6DC */ s8 field_0x6DC;
     /* 0x6DD */ s8 field_0x6DD;
     /* 0x6DE */ u8 padding_0x6DE[0x6E0 - 0x6DE];
-    /* 0x6E0 */ u32 field_0x6E0;
+    /* 0x6E0 */ u32 mShadowId;
     /* 0x6E4 */ mDoExt_McaMorf* mpPrpMorf;
     /* 0x6E8 */ s8 m_prp_jnt_num;
     /* 0x6E9 */ s8 field_0x6E9;
@@ -207,7 +207,7 @@ public:
     /* 0x849 */ bool mbFlyMoveEnd;
     /* 0x84A */ bool mbMoveEnd;
     /* 0x84B */ bool field_0x84B;
-    /* 0x84C */ u8 field_0x84C;
+    /* 0x84C */ u8 mpDrawPrp;
     /* 0x84D */ u8 mbSetPeraPrtcl;
     /* 0x84E */ u8 field_0x84E;
     /* 0x84F */ u8 padding_0x84F[0x850 - 0x84F];
@@ -254,7 +254,8 @@ public:
         /* 0x00 */ u8 field_0x00[0x12];
         /* 0x12 */ s16 mCalcAngleTarget;
         /* 0x14 */ f32 mAttPosOffsetY;
-        /* 0x14 */ u8 field_0x14[0x20 - 0x18];
+        /* 0x18 */ u8 field_0x18;
+        /* 0x19 */ u8 field_0x19[0x20 - 0x19];
         /* 0x20 */ s16 field_0x20;
         /* 0x22 */ s16 mFlyScale;
         /* 0x24 */ s16 mFlyMaxStep;

@@ -8,6 +8,8 @@
 #include "d/actor/d_a_jbo.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_kankyo_wether.h"
+#include "d/d_snap.h"
+#include "res/Object/Bj.h"
 
 static daNpc_Bj1_HIO_c l_HIO;
 static fopAc_ac_c* l_check_inf[20];
@@ -374,8 +376,8 @@ void daNpc_Bj1_c::setMtx(bool i_param1) {
     }
 
     mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_head_jnt_num));
-    field_0x6D0->setBaseTRMtx(mDoMtx_stack_c::get());
-    field_0x6D0->calc();
+    mpFaceModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpFaceModel->calc();
     flwPrtcl_danceLR();
     setAttention(i_param1);
 }
@@ -1269,7 +1271,7 @@ bool daNpc_Bj1_c::bj_flyMove() {
         case 4:
             mbFlyMoveEnd = mpPrpMorf->checkFrame(0.0f) ? TRUE : FALSE;
             if (mbFlyMoveEnd) {
-                field_0x84C = 0;
+                mpDrawPrp = 0;
                 gravity = -4.5f;
                 mFlyMode = 5;
             }
@@ -2046,7 +2048,7 @@ void daNpc_Bj1_c::setStt(s8 i_status) {
             mbFlyMoveEnd = 0;
             mFlyMode = 6;
             setAnm_prp(1);
-            field_0x84C = 1;
+            mpDrawPrp = 1;
             break;
         case 4:
             mLookBackState = 1;
@@ -2461,8 +2463,8 @@ bool daNpc_Bj1_c::demo() {
 /* 000059C4-00005AC4       .text shadowDraw__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::shadowDraw() {
     cXyz pos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
-    field_0x6E0 = dComIfGd_setShadow(
-        field_0x6E0,
+    mShadowId = dComIfGd_setShadow(
+        mShadowId,
         1,
         mpMorf->getModel(),
         &pos,
@@ -2476,22 +2478,103 @@ void daNpc_Bj1_c::shadowDraw() {
         1.0f,
         &dDlst_shadowControl_c::mSimpleTexObj
     );
-    if (field_0x6E0) {
+    if (mShadowId) {
         if (mpArmLModel != NULL) {
-            dComIfGd_addRealShadow(field_0x6E0, mpArmLModel);
+            dComIfGd_addRealShadow(mShadowId, mpArmLModel);
         }
         if (mpArmRModel != NULL) {
-            dComIfGd_addRealShadow(field_0x6E0, mpArmRModel);
+            dComIfGd_addRealShadow(mShadowId, mpArmRModel);
         }
-        if (field_0x84C != NULL) {
-            dComIfGd_addRealShadow(field_0x6E0, mpPrpMorf->getModel());
+        if (mpDrawPrp != NULL) {
+            dComIfGd_addRealShadow(mShadowId, mpPrpMorf->getModel());
         }
     }
 }
 
 /* 00005AC4-00005E38       .text _draw__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::_draw() {
-    /* Nonmatching */
+    J3DModel* model = mpMorf->getModel();
+    if (field_0x844 != 0 || field_0x845 != 0) {
+        return TRUE;
+    }
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(model, &tevStr);
+
+    switch (mType) {
+        case 1:
+        case 3:
+        case 8:
+            mpMorf->entryDL((J3DMaterialTable*)dComIfG_getObjectIDRes("Bj", dRes_ID_BJ_BMT_BJ2_e));
+            break;
+        case 2:
+        case 6:
+        case 7:
+            mpMorf->entryDL((J3DMaterialTable*)dComIfG_getObjectIDRes("Bj", dRes_ID_BJ_BMT_BJ3_e));
+            break;
+        case 0:
+        case 4:
+        case 5:
+        default:
+            mpMorf->entryDL();
+            break;
+    }
+
+    if (mpArmLModel != NULL) {
+        g_env_light.setLightTevColorType(mpArmLModel, &tevStr);
+        mDoExt_modelEntryDL(mpArmLModel);
+    }
+    if (mpArmRModel != NULL) {
+        g_env_light.setLightTevColorType(mpArmRModel, &tevStr);
+        mDoExt_modelEntryDL(mpArmRModel);
+    }
+    g_env_light.setLightTevColorType(mpFaceModel, &tevStr);
+    mDoExt_modelEntryDL(mpFaceModel);
+
+    if (mpDrawPrp != 0) {
+        g_env_light.setLightTevColorType(mpPrpMorf->getModel(), &tevStr);
+        mpPrpMorf->entryDL();
+    }
+    shadowDraw();
+
+    switch (mType) {
+        case 0:
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BJ1, this, 1.0f, 1.0f, 1.0f);
+            break;
+        case 1:
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BJ2, this, 1.0f, 1.0f, 1.0f);
+            break;
+        case 2:
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BJ3, this, 1.0f, 1.0f, 1.0f);
+            break;
+        case 3:
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BJ4, this, 1.0f, 1.0f, 1.0f);
+            break;
+        case 4:
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BJ5, this, 1.0f, 1.0f, 1.0f);
+            break;
+        case 5:
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BJ6, this, 1.0f, 1.0f, 1.0f);
+            break;
+        case 6:
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BJ7, this, 1.0f, 1.0f, 1.0f);
+            break;
+        case 7:
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BJ8, this, 1.0f, 1.0f, 1.0f);
+            break;
+        case 8:
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BJ9, this, 1.0f, 1.0f, 1.0f);
+            break;
+    }
+    if (l_HIO.children[mType].hio_prm.field_0x18) {
+        cXyz pos;
+        if (mSpecificType == 6) {
+            pos = current.pos;
+            pos.y = mObjAcch.GetGroundH();
+        }
+        pos = current.pos;
+        pos.y = eyePos.y;
+    }
+    return TRUE;
 }
 
 /* 00005E38-00006128       .text _execute__11daNpc_Bj1_cFv */
