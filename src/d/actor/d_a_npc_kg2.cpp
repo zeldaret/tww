@@ -96,8 +96,27 @@ void daNpc_Kg2_c::subAnm() {
 }
 
 /* 000009E8-00000B3C       .text chkAttention__11daNpc_Kg2_cF4cXyzs */
-BOOL daNpc_Kg2_c::chkAttention(cXyz, short) {
+BOOL daNpc_Kg2_c::chkAttention(cXyz param_1, s16 param_2) {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    f32 fvar_1 = l_HIO.mNpc.mMaxAttnDistXZ;
+    int ivar_1 = l_HIO.mNpc.mMaxAttnAngleY;
+    cXyz delta;
+    delta.x = player->current.pos.x - param_1.x;
+    delta.z = player->current.pos.z - param_1.z;
+
+    f32 fvar_2 = std::sqrtf(delta.x*delta.x + delta.z*delta.z);
+    s16 svar = cM_atan2s(delta.x, delta.z);
+    if (field_0x72C) {
+        fvar_1 += 40.0f;
+        ivar_1 += 1820;
+    }
+    svar -= param_2;
+    BOOL bvar = 0;
+    if (ivar_1 > abs(svar) && fvar_1 > fvar_2) {
+        bvar = 1;
+    }
+    return bvar;
 }
 
 /* 00000B3C-00000BC0       .text eventOrder__11daNpc_Kg2_cFv */
