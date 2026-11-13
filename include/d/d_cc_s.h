@@ -55,7 +55,9 @@ public:
     u32 GetMassResultCam() { return mMass_Mng.GetResultCam(); }
     void OffMassAllTimer() {}
     void OnMassAllTimer() {}
-    void SetMassAreaChk(cCcD_Obj*, u8, dCcMassS_ObjCallback) {}
+    void SetMassAreaChk(cCcD_Obj* i_obj, u8 i_priority, dCcMassS_ObjCallback callback) {
+        mMass_Mng.SetAreaChk(i_obj, i_priority, callback);
+    }
     void SetMassCam(cM3dGCps& i_cps) { mMass_Mng.SetCam(i_cps); }
 
     // /* 0x0000 */ cCcS mCCcS;
