@@ -151,7 +151,7 @@ public:
     /* 0x6DC */ s8 field_0x6DC;
     /* 0x6DD */ s8 field_0x6DD;
     /* 0x6DE */ u8 padding_0x6DE[0x6E0 - 0x6DE];
-    /* 0x6E0 */ int field_0x6E0;
+    /* 0x6E0 */ u32 field_0x6E0;
     /* 0x6E4 */ mDoExt_McaMorf* mpPrpMorf;
     /* 0x6E8 */ s8 m_prp_jnt_num;
     /* 0x6E9 */ s8 field_0x6E9;

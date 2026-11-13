@@ -1632,11 +1632,11 @@ f32 daNpc_Bj1_c::eInit_prmFloat(f32* i_param1, f32 i_param2) {
 }
 
 /* 00003B20-00003D3C       .text eInit_ATTENTION___11daNpc_Bj1_cFPiPiPiP4cXyzPiPiPi */
-void daNpc_Bj1_c::eInit_ATTENTION_(int* i_param1, int* i_param2, int* i_param3, cXyz* i_param4, int* i_param5, int* i_param6, int* i_param7) {
-    if (i_param1 != NULL) {
+void daNpc_Bj1_c::eInit_ATTENTION_(int* i_prm0, int* i_prm1, int* i_prm2, cXyz* i_offst, int* i_angle, int* i_idx, int* i_timer) {
+    if (i_prm0 != NULL) {
         s16 angle;
         u8 idx;
-        switch (*i_param1) {
+        switch (*i_prm0) {
             case 0:
                 break;
             case 1:
@@ -1644,31 +1644,31 @@ void daNpc_Bj1_c::eInit_ATTENTION_(int* i_param1, int* i_param2, int* i_param3, 
                 angle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
                 break;
             case 2:
-                if (i_param4 == NULL) {
+                if (i_offst == NULL) {
                     return;
                 }
                 mLookBackState = 2;
-                angle = cLib_targetAngleY(&current.pos, i_param4);
+                angle = cLib_targetAngleY(&current.pos, i_offst);
                 break;
             case 3:
                 mLookBackState = 2;
-                field_0x7CC = eInit_calcRelativPos(i_param4, i_param5);
+                field_0x7CC = eInit_calcRelativPos(i_offst, i_angle);
                 angle = cLib_targetAngleY(&current.pos, &field_0x7CC);
                 break;
             case 4:
-                if (i_param5 == NULL) {
+                if (i_angle == NULL) {
                     return;
                 }
                 mLookBackState = 3;
-                angle = *i_param5;
+                angle = *i_angle;
                 break;
             case 5:
                 if (!mPathRun.isPath()) {
                     return;
                 }
                 idx = mPathRun.getIdx();
-                if (i_param6 != NULL) {
-                    idx = *i_param6;
+                if (i_idx != NULL) {
+                    idx = *i_idx;
                 }
                 field_0x7CC = mPathRun.getPoint(idx);
                 mLookBackState = 2;
@@ -1693,9 +1693,9 @@ void daNpc_Bj1_c::eInit_ATTENTION_(int* i_param1, int* i_param2, int* i_param3, 
             default:
                 mLookBackState = 0;
         }
-        eInit_setLocFlag(i_param2);
-        eInit_setShapeAngleY(i_param3, angle);
-        eInit_setEvTimer(i_param7);
+        eInit_setLocFlag(i_prm1);
+        eInit_setShapeAngleY(i_prm2, angle);
+        eInit_setEvTimer(i_timer);
     }
 }
 
@@ -1730,24 +1730,24 @@ BOOL daNpc_Bj1_c::eInit_MOV_(f32* i_dist, f32* i_speed, f32* i_accel, int* i_tim
 }
 
 /* 00003F04-00003F74       .text eInit_JMP___11daNpc_Bj1_cFPfPf */
-void daNpc_Bj1_c::eInit_JMP_(f32* i_param1, f32* i_param2) {
+void daNpc_Bj1_c::eInit_JMP_(f32* i_speed, f32* i_gravity) {
     mJumpMode = 1;
-    speed.y = eInit_prmFloat(i_param1, 0.0f);
-    gravity = eInit_prmFloat(i_param2, 0.0f);
+    speed.y = eInit_prmFloat(i_speed, 0.0f);
+    gravity = eInit_prmFloat(i_gravity, 0.0f);
     setAnm_NUM(4);
 }
 
 /* 00003F74-0000406C       .text eInit_CHG_PTH___11daNpc_Bj1_cFPiPi */
-void daNpc_Bj1_c::eInit_CHG_PTH_(int* i_count, int* i_idx) {
-    int count;
+void daNpc_Bj1_c::eInit_CHG_PTH_(int* i_pathNo, int* i_idx) {
+    int pathNo;
     u8 idx;
     mPathRun.setInf(mPathIdx, fopAcM_GetRoomNo(this), true);
-    if (mPathRun.isPath() && i_count != NULL) {
-        count = *i_count;
-        if (count > 0) {
+    if (mPathRun.isPath() && i_pathNo != NULL) {
+        pathNo = *i_pathNo;
+        if (pathNo > 0) {
             dPath* path = mPathRun.nextPath(fopAcM_GetRoomNo(this));
             int i = 0;
-            int limit = count - 1;
+            int limit = pathNo - 1;
             for (; i < limit; i++) {
                 if (path == NULL) {
                     break;
@@ -1789,21 +1789,85 @@ void daNpc_Bj1_c::eInit_DEL_TNE_() {
 }
 
 /* 00004114-0000417C       .text eInit_SET_ANM___11daNpc_Bj1_cFPiPf */
-void daNpc_Bj1_c::eInit_SET_ANM_(int* i_param1, f32* i_param2) {
-    if (i_param1 != NULL) {
-        s8 anm = *i_param1;
+void daNpc_Bj1_c::eInit_SET_ANM_(int* i_anmNo, f32* i_morf) {
+    if (i_anmNo != NULL) {
+        s8 anm = *i_anmNo;
         if (anm >= 0 && anm < 11) {
             setAnm_NUM(anm);
-            if (i_param2 != NULL) {
-                mpMorf->setMorf(*i_param2);
+            if (i_morf != NULL) {
+                mpMorf->setMorf(*i_morf);
             }
         }
     }
 }
 
 /* 0000417C-000044E4       .text event_actionInit__11daNpc_Bj1_cFi */
-void daNpc_Bj1_c::event_actionInit(int) {
-    /* Nonmatching */
+void daNpc_Bj1_c::event_actionInit(int i_param1) {
+    int* actNo = dComIfGp_evmng_getMyIntegerP(i_param1, "ActNo");
+    if (actNo != NULL) {
+        field_0x8AC = *actNo;
+        mbSetEyePos = FALSE;
+        switch (field_0x8AC) {
+            case 0:
+                {
+                    int* prm0 = dComIfGp_evmng_getMyIntegerP(i_param1, "prm_0");
+                    int* prm1 = dComIfGp_evmng_getMyIntegerP(i_param1, "prm_1");
+                    int* prm2 = dComIfGp_evmng_getMyIntegerP(i_param1, "prm_2");
+                    cXyz* offst = dComIfGp_evmng_getMyXyzP(i_param1, "Offst");
+                    int* angle = dComIfGp_evmng_getMyIntegerP(i_param1, "Angle");
+                    int* index = dComIfGp_evmng_getMyIntegerP(i_param1, "Index");
+                    int* timer = dComIfGp_evmng_getMyIntegerP(i_param1, "Timer");
+                    mbSetEyePos = TRUE;
+                    eInit_ATTENTION_(prm0, prm1, prm2, offst, angle, index, timer);
+                    break;
+                }
+            case 1:
+                eInit_PLYER_MOV_1_();
+                break;
+            case 2:
+            case 8:
+                {
+                    f32* goalR = dComIfGp_evmng_getMyFloatP(i_param1, "GoalR");
+                    f32* speed = dComIfGp_evmng_getMyFloatP(i_param1, "Speed");
+                    f32* accel = dComIfGp_evmng_getMyFloatP(i_param1, "Accel");
+                    int* timer = dComIfGp_evmng_getMyIntegerP(i_param1, "Timer");
+                    mbSetEyePos = TRUE;
+                    eInit_MOV_(goalR, speed, accel, timer);
+                    break;
+                }
+            case 3:
+                {
+                    f32* speed = dComIfGp_evmng_getMyFloatP(i_param1, "Speed");
+                    f32* gravity = dComIfGp_evmng_getMyFloatP(i_param1, "Grvty");
+                    mbSetEyePos = TRUE;
+                    eInit_JMP_(speed, gravity);
+                    break;
+                }
+            case 4:
+                {
+                    int* pathNo = dComIfGp_evmng_getMyIntegerP(i_param1, "PthNo");
+                    int* idx = dComIfGp_evmng_getMyIntegerP(i_param1, "Index");
+                    eInit_CHG_PTH_(pathNo, idx);
+                    break;
+                }
+            case 5:
+                eInit_END_MOV_();
+                break;
+            case 6:
+                eInit_SET_TNE_();
+                break;
+            case 7:
+                eInit_DEL_TNE_();
+                break;
+            case 9:
+                {
+                    int* anmNo = dComIfGp_evmng_getMyIntegerP(i_param1, "AnmNo");
+                    f32* morf = dComIfGp_evmng_getMyFloatP(i_param1, "Morfc");
+                    eInit_SET_ANM_(anmNo, morf);
+                    break;
+                }
+        }
+    }
 }
 
 /* 000044E4-00004530       .text eMove_ATTENTION___11daNpc_Bj1_cFv */
@@ -2396,7 +2460,33 @@ bool daNpc_Bj1_c::demo() {
 
 /* 000059C4-00005AC4       .text shadowDraw__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::shadowDraw() {
-    /* Nonmatching */
+    cXyz pos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
+    field_0x6E0 = dComIfGd_setShadow(
+        field_0x6E0,
+        1,
+        mpMorf->getModel(),
+        &pos,
+        800.0f,
+        40.0f,
+        current.pos.y,
+        mObjAcch.GetGroundH(),
+        mObjAcch.m_gnd,
+        &tevStr,
+        0,
+        1.0f,
+        &dDlst_shadowControl_c::mSimpleTexObj
+    );
+    if (field_0x6E0) {
+        if (mpArmLModel != NULL) {
+            dComIfGd_addRealShadow(field_0x6E0, mpArmLModel);
+        }
+        if (mpArmRModel != NULL) {
+            dComIfGd_addRealShadow(field_0x6E0, mpArmRModel);
+        }
+        if (field_0x84C != NULL) {
+            dComIfGd_addRealShadow(field_0x6E0, mpPrpMorf->getModel());
+        }
+    }
 }
 
 /* 00005AC4-00005E38       .text _draw__11daNpc_Bj1_cFv */
