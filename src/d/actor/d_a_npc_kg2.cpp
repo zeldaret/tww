@@ -103,8 +103,16 @@ void daNpc_Kg2_c::set_mtx() {
 }
 
 /* 0000048C-000005A0       .text initTexPatternAnm__11daNpc_Kg2_cFb */
-void daNpc_Kg2_c::initTexPatternAnm(bool) {
-    /* Nonmatching */
+bool daNpc_Kg2_c::initTexPatternAnm(bool i_modify) {
+    J3DModelData* modelData = mpMorf->getModel()->getModelData();
+    m_btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Kg", l_btp_ix_tbl[field_0x748]));
+    JUT_ASSERT(0x12B, m_btp != 0);
+    if (!mBtpAnm.init(modelData, m_btp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, FALSE)) {
+        return FALSE;
+    }
+    field_0x704 = 0;
+    field_0x706 = 0;
+    return TRUE;
 }
 
 /* 000005A0-000006EC       .text playTexPatternAnm__11daNpc_Kg2_cFv */
@@ -307,68 +315,68 @@ void daNpc_Kg2_c::anmAtr(u16 i_msgStatus) {
         switch (temp) {
             case 0:
                 setAnm(0, -1.0f);
-                field_0x748[0] = 0;
+                field_0x748 = 0;
                 initTexPatternAnm(true);
                 break;
             case 1:
                 setAnm(1, -1.0f);
-                field_0x748[0] = 0;
+                field_0x748 = 0;
                 initTexPatternAnm(true);
                 break;
             case 2:
                 setAnm(2, -1.0f);
-                field_0x748[0] = 1;
+                field_0x748 = 1;
                 initTexPatternAnm(true);
                 break;
             case 3:
                 setAnm(3, -1.0f);
-                field_0x748[0] = 0;
+                field_0x748 = 0;
                 initTexPatternAnm(true);
                 break;
             case 4:
                 setAnm(5, -1.0f);
-                field_0x748[0] = 1;
+                field_0x748 = 1;
                 initTexPatternAnm(true);
                 break;
             case 5:
                 setAnm(6, -1.0f);
-                field_0x748[0] = 1;
+                field_0x748 = 1;
                 initTexPatternAnm(true);
                 break;
             case 6:
                 setAnm(7, -1.0f);
-                field_0x748[0] = 2;
+                field_0x748 = 2;
                 initTexPatternAnm(true);
                 break;
             case 7:
                 setAnm(8, -1.0f);
-                field_0x748[0] = 3;
+                field_0x748 = 3;
                 initTexPatternAnm(true);
                 break;
             case 8:
                 setAnm(9, -1.0f);
-                field_0x748[0] = 0;
+                field_0x748 = 0;
                 initTexPatternAnm(true);
                 break;
             case 9:
                 setAnm(10, -1.0f);
-                field_0x748[0] = 1;
+                field_0x748 = 1;
                 initTexPatternAnm(true);
                 break;
             case 10:
                 setAnm(11, -1.0f);
-                field_0x748[0] = 2;
+                field_0x748 = 2;
                 initTexPatternAnm(true);
                 break;
             case 11:
                 setAnm(14, -1.0f);
-                field_0x748[0] = 2;
+                field_0x748 = 2;
                 initTexPatternAnm(true);
         }
 
         if (field_0x749 == 3 && mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
             setAnm(4, -1.0f);
-            field_0x748[0] = 0;
+            field_0x748 = 0;
             initTexPatternAnm(true);
         }
 
@@ -504,13 +512,13 @@ void daNpc_Kg2_c::wait01() {
         if (field_0x738[0] == 1) {
             field_0x738[0] = 0;
             setAnm(12, -1.0f);
-            field_0x748[0] = 0;
+            field_0x748 = 0;
             initTexPatternAnm(true);
         }
     } else if (field_0x738[0] == 0) {
         field_0x738[0] = 1;
         setAnm(13, -1.0f);
-        field_0x748[0] = 0;
+        field_0x748 = 0;
         initTexPatternAnm(true);
     }
 
@@ -540,7 +548,7 @@ void daNpc_Kg2_c::talk01() {
             mEventIdx = 0;
         } else if (field_0x738[0] == 0) {
             setAnm(1, -1.0f);
-            field_0x748[0] = 0;
+            field_0x748 = 0;
             initTexPatternAnm(true);
         } else {
             setAnm(4, -1.0f);

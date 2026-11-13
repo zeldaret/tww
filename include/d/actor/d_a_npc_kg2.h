@@ -31,7 +31,7 @@ public:
     static void setCanonGameResult(u8 result) { canon_game_result = result; }
 
     void set_mtx();
-    void initTexPatternAnm(bool);
+    bool initTexPatternAnm(bool);
     void playTexPatternAnm();
     void setAnm(s8, f32);
     void subAnm();
@@ -75,10 +75,11 @@ public:
     /* 0x6D0 */ u32 mShadowId;
     /* 0x6D4 */ J3DModel* field_0x6D4;
     /* 0x6D8 */ mDoExt_btpAnm field_0x6D8;
-    /* 0x6EC */ u8 field_0x6EC[0x6F0 - 0x6EC];
+    /* 0x6EC */ J3DAnmTexPattern* m_btp;
     /* 0x6F0 */ mDoExt_btpAnm mBtpAnm;
     /* 0x704 */ u8 field_0x704;
-    /* 0x705 */ u8 field_0x705[0x708 - 0x705];
+    /* 0x705 */ u8 field_0x705[0x706 - 0x705];
+    /* 0x706 */ u16 field_0x706;
     /* 0x708 */ cXyz mAttPos;
     /* 0x714 */ u8 field_0x714[0x720 - 0x714];
     /* 0x720 */ s16 field_0x720;
@@ -90,7 +91,7 @@ public:
     /* 0x737 */ u8 field_0x737;
     /* 0x738 */ u8 field_0x738[0x73C - 0x738];
     /* 0x73C */ ActionFunc mCurrActionFunc;
-    /* 0x748 */ u8 field_0x748[0x749 - 0x748];
+    /* 0x748 */ s8 field_0x748;
     /* 0x749 */ s8 field_0x749;
     /* 0x74A */ u8 field_0x74A[0x74C - 0x74A];
     /* 0x74C */ int field_0x74C;
