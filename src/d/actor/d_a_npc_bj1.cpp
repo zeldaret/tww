@@ -1632,8 +1632,71 @@ f32 daNpc_Bj1_c::eInit_prmFloat(f32* i_param1, f32 i_param2) {
 }
 
 /* 00003B20-00003D3C       .text eInit_ATTENTION___11daNpc_Bj1_cFPiPiPiP4cXyzPiPiPi */
-void daNpc_Bj1_c::eInit_ATTENTION_(int*, int*, int*, cXyz*, int*, int*, int*) {
-    /* Nonmatching */
+void daNpc_Bj1_c::eInit_ATTENTION_(int* i_param1, int* i_param2, int* i_param3, cXyz* i_param4, int* i_param5, int* i_param6, int* i_param7) {
+    if (i_param1 != NULL) {
+        s16 angle;
+        u8 idx;
+        switch (*i_param1) {
+            case 0:
+                break;
+            case 1:
+                mLookBackState = 1;
+                angle = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
+                break;
+            case 2:
+                if (i_param4 == NULL) {
+                    return;
+                }
+                mLookBackState = 2;
+                angle = cLib_targetAngleY(&current.pos, i_param4);
+                break;
+            case 3:
+                mLookBackState = 2;
+                field_0x7CC = eInit_calcRelativPos(i_param4, i_param5);
+                angle = cLib_targetAngleY(&current.pos, &field_0x7CC);
+                break;
+            case 4:
+                if (i_param5 == NULL) {
+                    return;
+                }
+                mLookBackState = 3;
+                angle = *i_param5;
+                break;
+            case 5:
+                if (!mPathRun.isPath()) {
+                    return;
+                }
+                idx = mPathRun.getIdx();
+                if (i_param6 != NULL) {
+                    idx = *i_param6;
+                }
+                field_0x7CC = mPathRun.getPoint(idx);
+                mLookBackState = 2;
+                break;
+            case 6:
+                {
+                    fopAc_ac_c* partner = searchByID(mPartnerProcID);
+                    if (partner == NULL) {
+                        return;
+                    }
+                    mLookBackState = 2;
+                    field_0x7CC = partner->eyePos;
+                    angle = cLib_targetAngleY(&current.pos, &field_0x7CC);
+                    break;
+                }
+            case 7:
+                mLookBackState = 2;
+                field_0x7CC = mDrugPotPos;
+                field_0x7CC.y = eyePos.y;
+                angle = cLib_targetAngleY(&current.pos, &field_0x7CC);
+                break;
+            default:
+                mLookBackState = 0;
+        }
+        eInit_setLocFlag(i_param2);
+        eInit_setShapeAngleY(i_param3, angle);
+        eInit_setEvTimer(i_param7);
+    }
 }
 
 /* 00003D3C-00003E24       .text eInit_PLYER_MOV_1___11daNpc_Bj1_cFv */
