@@ -86,7 +86,7 @@ public:
     void checkOrder();
     bool chk_talk();
     bool chk_drct(f32);
-    bool chk_partsNotMove();
+    BOOL chk_partsNotMove();
     void lookBack();
     bool getMaskInf(u8*);
     bool chkReg(u16);

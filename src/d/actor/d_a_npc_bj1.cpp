@@ -484,7 +484,7 @@ void daNpc_Bj1_c::nodePrpControl(J3DNode* i_node, J3DModel* i_model) {
     s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
 
     if (jntNo == m_stalk_jnt_num) {
-        cMtx_copy(mHandMtx, mDoMtx_stack_c::get());
+        mDoMtx_stack_c::copy(mHandMtx);
         mDoMtx_stack_c::transM(-1.5f, 4.5f, -4.2f);
         mDoMtx_stack_c::XYZrotM(-0x4000, -0x5555, 0);
         cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
@@ -776,8 +776,9 @@ BOOL daNpc_Bj1_c::setAnm_anm(anm_prm_c* i_anm_prm) {
 /* 00001188-000011B8       .text setAnm_NUM__11daNpc_Bj1_cFi */
 void daNpc_Bj1_c::setAnm_NUM(int i_idx) {
     static anm_prm_c a_anm_prm_tbl[] = {
-        { 0, 8.0f, 1.0f, 2 }, { 1, 8.0f, 1.0f, 0 }, { 2, 8.0f, 1.0f, 2 }, { 3, 8.0f, 1.0f, 2 }, { 4, 8.0f, 1.0f, 2 },  { 5, 8.0f, 1.0f, 0 },
-        { 6, 8.0f, 1.0f, 0 }, { 7, 8.0f, 1.0f, 0 }, { 8, 8.0f, 1.0f, 2 }, { 9, 8.0f, 1.0f, 0 }, { 10, 8.0f, 1.0f, 2 }, { 0, 0.0f, 0.0f, 0 },
+        { 0, 8.0f, 1.0f, 2 }, { 1, 8.0f, 1.0f, 0 }, { 2, 8.0f, 1.0f, 2 },  { 3, 8.0f, DEMO_SELECT(1.8f, 1.0f), 2 },
+        { 4, 8.0f, 1.0f, 2 }, { 5, 8.0f, 1.0f, 0 }, { 6, 8.0f, 1.0f, 0 },  { 7, 8.0f, 1.0f, 0 },
+        { 8, 8.0f, 1.0f, 2 }, { 9, 8.0f, 1.0f, 0 }, { 10, 8.0f, 1.0f, 2 }, { 0, 0.0f, 0.0f, 0 },
     };
     setAnm_anm(&a_anm_prm_tbl[i_idx]);
 }
@@ -950,8 +951,8 @@ bool daNpc_Bj1_c::chk_drct(f32 i_param1) {
 }
 
 /* 000017C0-000017F0       .text chk_partsNotMove__11daNpc_Bj1_cFv */
-bool daNpc_Bj1_c::chk_partsNotMove() {
-    bool ret = FALSE;
+BOOL daNpc_Bj1_c::chk_partsNotMove() {
+    BOOL ret = FALSE;
     if (mPrevBackboneY != m_jnt.getBackbone_y() || mPrevHeadY != m_jnt.getHead_y()) {
         ret = TRUE;
     }
@@ -1341,12 +1342,21 @@ u32 daNpc_Bj1_c::getMsg_BJ9_0() {
 /* 00002294-0000242C       .text getMsg_Corog__11daNpc_Bj1_cFv */
 u32 daNpc_Bj1_c::getMsg_Corog() {
     if (chkReg(dSv_event_flag_c::UNK_9AFF)) {
+#if VERSION == VERSION_DEMO
+        if (!chkReg(dSv_event_flag_c::UNK_9EFF)) {
+            return chkReg(dSv_event_flag_c::UNK_98FF) ? 0x149E : 0x1487;
+        }
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102)) {
+            return chkReg(dSv_event_flag_c::UNK_99FF) ? 0x1486 : 0x1485;
+        }
+#else
         if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102)) {
             return chkReg(dSv_event_flag_c::UNK_99FF) ? 0x1486 : 0x1485;
         }
         if (!chkReg(dSv_event_flag_c::UNK_9EFF)) {
             return chkReg(dSv_event_flag_c::UNK_98FF) ? 0x149E : 0x1487;
         }
+#endif
         if (chkReg(dSv_event_flag_c::UNK_96FF)) {
             return 0x1484;
         }
@@ -2024,7 +2034,7 @@ void daNpc_Bj1_c::eInit_ATTENTION_(int* i_prm0, int* i_prm1, int* i_prm2, cXyz* 
                 angle = *i_angle;
                 break;
             case 5:
-                if (!mPathRun.isPath()) {
+                if (mPathRun.isPath() == false) {
                     return;
                 }
                 idx = mPathRun.getIdx();
@@ -2972,7 +2982,7 @@ BOOL daNpc_Bj1_c::_execute() {
     checkOrder();
     if (!demo()) {
         int eventIdx = -1;
-        if (dComIfGp_event_getMode() != 0 && !eventInfo.checkCommandTalk()) {
+        if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == 0) {
             eventIdx = isEventEntry();
         }
         if (eventIdx >= 0) {
@@ -3016,7 +3026,10 @@ BOOL daNpc_Bj1_c::_execute() {
 /* 00006128-000061A4       .text _delete__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::_delete() {
     dComIfG_resDelete(&mPhase, "Bj");
-    if (heap != NULL) {
+#if VERSION > VERSION_DEMO
+    if (heap != NULL)
+#endif
+    {
         if (mpMorf != NULL) {
             mpMorf->stopZelAnime();
         }
@@ -3026,6 +3039,9 @@ BOOL daNpc_Bj1_c::_delete() {
     }
     delPrtcl_drugPot();
     delPrtcl_danceLR();
+#if VERSION == VERSION_DEMO
+    l_HIO.removeHIO();
+#endif
     return TRUE;
 }
 
@@ -3043,9 +3059,14 @@ cPhs_State daNpc_Bj1_c::_create() {
     if (state != cPhs_COMPLEATE_e) {
         return state;
     }
-    if (!charDecide(fopAcM_GetParam(this) & 0xFF)) {
+    u32 param = fopAcM_GetParam(this) & 0xFF;
+    if (!charDecide(param)) {
         return cPhs_ERROR_e;
     }
+#if VERSION == VERSION_DEMO
+    l_HIO.entryHIO("コログ族");
+    fopAcM_ct(this, daNpc_Bj1_c);
+#endif
 
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_size_tbl[mType])) {
         return cPhs_ERROR_e;
