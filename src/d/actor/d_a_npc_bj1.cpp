@@ -215,24 +215,24 @@ bool daNpc_Bj1_c::createInit() {
     attention_info.flags = fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
 
     switch (mType) {
-        case 4:
+        case TYPE_BJ5_e:
             attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA7;
             attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAB;
             break;
-        case 0:
-        case 1:
-        case 7:
+        case TYPE_BJ1_e:
+        case TYPE_BJ2_e:
+        case TYPE_BJ8_e:
             attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAB;
             attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAB;
             break;
-        case 2:
-        case 3:
-        case 5:
-        case 8:
+        case TYPE_BJ3_e:
+        case TYPE_BJ4_e:
+        case TYPE_BJ6_e:
+        case TYPE_BJ9_e:
             attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAA;
             attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAA;
             break;
-        case 6:
+        case TYPE_BJ7_e:
             attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x5A;
             attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x5A;
             break;
@@ -1442,7 +1442,7 @@ BOOL daNpc_Bj1_c::createSeed() {
         cXyz scale(0.2f, 0.2f, 0.2f);
         angle.y = current.angle.y + a_ang_tbl[i];
         s8 roomNo = fopAcM_GetRoomNo(this);
-        actors[i] = fopAcM_createItemForKP2(&pos, dItemNo_BOKOBABA_SEED_e, roomNo, &angle, &scale, 10.0f + cM_rndFX(1.0f), 14.0f + cM_rndFX(8.0f), -2.0f, 1);
+        actors[i] = fopAcM_createItemForKP2(&pos, dItemNo_BOKOBABA_SEED_e, roomNo, &angle, &scale, 10.0f + cM_rndFX(1.0f), 14.0f + cM_rndFX(4.0f), -2.0f, 1);
         if (actors[i] == NULL) {
             break;
         }
@@ -1466,11 +1466,11 @@ BOOL daNpc_Bj1_c::deleteSeed() {
 
 /* 000037E4-00003998       .text charDecide__11daNpc_Bj1_cFi */
 bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
-    mType = -1;
+    mType = TYPE_Invalid_e;
     mSpecificType = -1;
     switch (fpcM_GetName(this)) {
         case fpcNm_NPC_BJ1_e:
-            mType = 0;
+            mType = TYPE_BJ1_e;
             switch (i_param1) {
                 case TRUE:
                     mSpecificType = 1;
@@ -1481,7 +1481,7 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             }
             break;
         case fpcNm_NPC_BJ2_e:
-            mType = 1;
+            mType = TYPE_BJ2_e;
             switch (i_param1) {
                 case TRUE:
                     mSpecificType = 3;
@@ -1492,7 +1492,7 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             }
             break;
         case fpcNm_NPC_BJ3_e:
-            mType = 2;
+            mType = TYPE_BJ3_e;
             switch (i_param1) {
                 case TRUE:
                     mSpecificType = 5;
@@ -1503,7 +1503,7 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             }
             break;
         case fpcNm_NPC_BJ4_e:
-            mType = 3;
+            mType = TYPE_BJ4_e;
             switch (i_param1) {
                 case TRUE:
                     mSpecificType = 7;
@@ -1514,7 +1514,7 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             }
             break;
         case fpcNm_NPC_BJ5_e:
-            mType = 4;
+            mType = TYPE_BJ5_e;
             switch (i_param1) {
                 case TRUE:
                     mSpecificType = 9;
@@ -1525,7 +1525,7 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             }
             break;
         case fpcNm_NPC_BJ6_e:
-            mType = 5;
+            mType = TYPE_BJ6_e;
             switch (i_param1) {
                 case TRUE:
                     mSpecificType = 11;
@@ -1536,11 +1536,11 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             }
             break;
         case fpcNm_NPC_BJ7_e:
-            mType = 6;
+            mType = TYPE_BJ7_e;
             mSpecificType = 12;
             break;
         case fpcNm_NPC_BJ8_e:
-            mType = 7;
+            mType = TYPE_BJ8_e;
             switch (i_param1) {
                 case TRUE:
                     mSpecificType = 14;
@@ -1551,7 +1551,7 @@ bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
             }
             break;
         case fpcNm_NPC_BJ9_e:
-            mType = 8;
+            mType = TYPE_BJ9_e;
             switch (i_param1) {
                 case TRUE:
                     mSpecificType = 16;
@@ -1974,7 +1974,7 @@ void daNpc_Bj1_c::endEvent() {
 }
 
 /* 000047F4-0000482C       .text isEventEntry__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::isEventEntry() {
+int daNpc_Bj1_c::isEventEntry() {
     dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), NULL, 0);
 }
 
@@ -2501,19 +2501,19 @@ BOOL daNpc_Bj1_c::_draw() {
     g_env_light.setLightTevColorType(model, &tevStr);
 
     switch (mType) {
-        case 1:
-        case 3:
-        case 8:
+        case TYPE_BJ2_e:
+        case TYPE_BJ4_e:
+        case TYPE_BJ9_e:
             mpMorf->entryDL((J3DMaterialTable*)dComIfG_getObjectIDRes("Bj", dRes_ID_BJ_BMT_BJ2_e));
             break;
-        case 2:
-        case 6:
-        case 7:
+        case TYPE_BJ3_e:
+        case TYPE_BJ7_e:
+        case TYPE_BJ8_e:
             mpMorf->entryDL((J3DMaterialTable*)dComIfG_getObjectIDRes("Bj", dRes_ID_BJ_BMT_BJ3_e));
             break;
-        case 0:
-        case 4:
-        case 5:
+        case TYPE_BJ1_e:
+        case TYPE_BJ5_e:
+        case TYPE_BJ6_e:
         default:
             mpMorf->entryDL();
             break;
@@ -2537,31 +2537,31 @@ BOOL daNpc_Bj1_c::_draw() {
     shadowDraw();
 
     switch (mType) {
-        case 0:
+        case TYPE_BJ1_e:
             dSnap_RegistFig(DSNAP_TYPE_NPC_BJ1, this, 1.0f, 1.0f, 1.0f);
             break;
-        case 1:
+        case TYPE_BJ2_e:
             dSnap_RegistFig(DSNAP_TYPE_NPC_BJ2, this, 1.0f, 1.0f, 1.0f);
             break;
-        case 2:
+        case TYPE_BJ3_e:
             dSnap_RegistFig(DSNAP_TYPE_NPC_BJ3, this, 1.0f, 1.0f, 1.0f);
             break;
-        case 3:
+        case TYPE_BJ4_e:
             dSnap_RegistFig(DSNAP_TYPE_NPC_BJ4, this, 1.0f, 1.0f, 1.0f);
             break;
-        case 4:
+        case TYPE_BJ5_e:
             dSnap_RegistFig(DSNAP_TYPE_NPC_BJ5, this, 1.0f, 1.0f, 1.0f);
             break;
-        case 5:
+        case TYPE_BJ6_e:
             dSnap_RegistFig(DSNAP_TYPE_NPC_BJ6, this, 1.0f, 1.0f, 1.0f);
             break;
-        case 6:
+        case TYPE_BJ7_e:
             dSnap_RegistFig(DSNAP_TYPE_NPC_BJ7, this, 1.0f, 1.0f, 1.0f);
             break;
-        case 7:
+        case TYPE_BJ8_e:
             dSnap_RegistFig(DSNAP_TYPE_NPC_BJ8, this, 1.0f, 1.0f, 1.0f);
             break;
-        case 8:
+        case TYPE_BJ9_e:
             dSnap_RegistFig(DSNAP_TYPE_NPC_BJ9, this, 1.0f, 1.0f, 1.0f);
             break;
     }
@@ -2579,7 +2579,71 @@ BOOL daNpc_Bj1_c::_draw() {
 
 /* 00005E38-00006128       .text _execute__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::_execute() {
-    /* Nonmatching */
+    if (!field_0x84E) {
+        mInitialPos = current.pos;
+        mInitialAngle = current.angle;
+        field_0x84E = 1;
+    }
+    m_jnt.setParam(
+        l_HIO.children[mType].hio_prm.mMaxBackboneX,
+        l_HIO.children[mType].hio_prm.mMaxBackboneY,
+        l_HIO.children[mType].hio_prm.mMinBackboneX,
+        l_HIO.children[mType].hio_prm.mMinBackboneY,
+        l_HIO.children[mType].hio_prm.mMaxHeadX,
+        l_HIO.children[mType].hio_prm.mMaxHeadY,
+        l_HIO.children[mType].hio_prm.mMinHeadX,
+        l_HIO.children[mType].hio_prm.mMinHeadY,
+        l_HIO.children[mType].hio_prm.mMaxTurnStep
+    );
+
+    if (field_0x844 && !demoActorID) {
+        return TRUE;
+    }
+    field_0x847 = 0;
+    field_0x844 = 0;
+    partner_srch();
+    checkOrder();
+    if (!demo()) {
+        int eventIdx = -1;
+        if (dComIfGp_event_getMode() != 0 && !eventInfo.checkCommandTalk()) {
+            eventIdx = isEventEntry();
+        }
+        if (eventIdx >= 0) {
+            event_proc(eventIdx);
+        } else {
+            (this->*mCurrActionFunc)(NULL);
+        }
+
+        if (!bj_flyMove()) {
+            bj_nMove();
+        }
+        if (!field_0x847) {
+            fopAcM_posMoveF(this, mStts.GetCCMoveP());
+        }
+        if (!field_0x846) {
+            shape_angle = current.angle;
+        }
+    }
+    eventOrder();
+    if (mpDrawPrp) {
+        field_0x6F0 += mPrpSpin;
+        f32 prpVol = 0.0f;
+        s16 prpSpinMax = l_HIO.children[mType].hio_prm.field_0x40;
+        if (prpSpinMax) {
+            f32 lim = 100.0f;
+            prpVol = lim * (mPrpSpin / (f32)prpSpinMax);
+            prpVol = cLib_maxLimit(prpVol, lim);
+            lim = 0.0f;
+            prpVol = cLib_minLimit(prpVol, lim);
+        }
+        s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
+        mDoAud_seStart(JA_SE_CM_PRAPELLO_ROLLING, &current.pos, prpVol, reverb);
+    }
+    setMtx(false);
+    if (!mbInDemo) {
+        setCollision_SP_();
+    }
+    return TRUE;
 }
 
 /* 00006128-000061A4       .text _delete__11daNpc_Bj1_cFv */

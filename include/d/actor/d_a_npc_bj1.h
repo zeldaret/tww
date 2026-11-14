@@ -10,6 +10,20 @@ class J3DNode;
 
 class daNpc_Bj1_c : public fopNpc_npc_c {
 public:
+    typedef s8 Type;
+    enum {
+        TYPE_BJ1_e,
+        TYPE_BJ2_e,
+        TYPE_BJ3_e,
+        TYPE_BJ4_e,
+        TYPE_BJ5_e,
+        TYPE_BJ6_e,
+        TYPE_BJ7_e,
+        TYPE_BJ8_e,
+        TYPE_BJ9_e,
+        TYPE_Invalid_e = -1,
+    };
+
     struct anm_prm_c {
         /* 0x00 */ s8 anmNum;
         /* 0x04 */ f32 morf;
@@ -112,7 +126,7 @@ public:
     bool event_action();
     void privateCut(int);
     void endEvent();
-    void isEventEntry();
+    int isEventEntry();
     void event_proc(int);
     BOOL set_action(ActionFunc, void*);
     void setStt(s8);
@@ -251,7 +265,15 @@ public:
 class daNpc_Bj1_childHIO_c : public mDoHIO_entry_c {
 public:
     struct hio_prm_c {
-        /* 0x00 */ u8 field_0x00[0x12];
+        /* 0x00 */ s16 mMaxHeadX;
+        /* 0x02 */ s16 mMaxHeadY;
+        /* 0x04 */ s16 mMinHeadX;
+        /* 0x06 */ s16 mMinHeadY;
+        /* 0x08 */ s16 mMaxBackboneX;
+        /* 0x0A */ s16 mMaxBackboneY;
+        /* 0x0C */ s16 mMinBackboneX;
+        /* 0x0E */ s16 mMinBackboneY;
+        /* 0x10 */ s16 mMaxTurnStep;
         /* 0x12 */ s16 mCalcAngleTarget;
         /* 0x14 */ f32 mAttPosOffsetY;
         /* 0x18 */ u8 field_0x18;
