@@ -24,6 +24,28 @@ public:
         TYPE_Invalid_e = -1,
     };
 
+    typedef s8 SpecificType;
+    enum {
+        SPECIFIC_TYPE_BJ1_0_e,
+        SPECIFIC_TYPE_BJ1_1_e,
+        SPECIFIC_TYPE_BJ2_0_e,
+        SPECIFIC_TYPE_BJ2_1_e,
+        SPECIFIC_TYPE_BJ3_0_e,
+        SPECIFIC_TYPE_BJ3_1_e,
+        SPECIFIC_TYPE_BJ4_0_e,
+        SPECIFIC_TYPE_BJ4_1_e,
+        SPECIFIC_TYPE_BJ5_0_e,
+        SPECIFIC_TYPE_BJ5_1_e,
+        SPECIFIC_TYPE_BJ6_0_e,
+        SPECIFIC_TYPE_BJ6_1_e,
+        SPECIFIC_TYPE_BJ7_e,
+        SPECIFIC_TYPE_BJ8_0_e,
+        SPECIFIC_TYPE_BJ8_1_e,
+        SPECIFIC_TYPE_BJ9_0_e,
+        SPECIFIC_TYPE_BJ9_1_e,
+        SPECIFIC_TYPE_Invalid_e = -1,
+    };
+
     struct anm_prm_c {
         /* 0x00 */ s8 anmNum;
         /* 0x04 */ f32 morf;
@@ -153,7 +175,7 @@ public:
     bool create_itm_Mdl();
     BOOL CreateHeap();
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhase;
     /* 0x6CC */ s8 m_hed_jnt_num;
     /* 0x6CD */ s8 m_bbone_jnt_num;
@@ -170,7 +192,7 @@ public:
     /* 0x6E8 */ s8 m_cen_jnt_num;
     /* 0x6E9 */ s8 m_stalk_jnt_num;
     /* 0x6EA */ u8 padding_0x6EA[0x6F0 - 0x6EA];
-    /* 0x6F0 */ s16 field_0x6F0;
+    /* 0x6F0 */ s16 mPrpAngle;
     /* 0x6F2 */ s16 mPrpSpin;
     /* 0x6F4 */ u8 padding_0x6F4[0x6F8 - 0x6F4];
     /* 0x6F8 */ ActionFunc mCurrActionFunc;
@@ -182,7 +204,7 @@ public:
     /* 0x7B8 */ csXyz mInitialAngle;
     /* 0x7BE */ u8 padding_0x7BE[0x7C0 - 0x7BE];
     /* 0x7C0 */ cXyz mEyePos;
-    /* 0x7CC */ cXyz field_0x7CC;
+    /* 0x7CC */ cXyz mLookTargetPos;
     /* 0x7D8 */ cXyz mTargetPos;
     /* 0x7E4 */ cXyz mEyeOffset;
     /* 0x7F0 */ cXyz mHeadScale;
@@ -193,11 +215,11 @@ public:
     /* 0x814 */ f32 mTargetFlyStep;
     /* 0x818 */ u8 padding_0x818[0x81C - 0x818];
     /* 0x81C */ f32 mArrivalDist;
-    /* 0x820 */ s16 field_0x820;
-    /* 0x822 */ s16 field_0x822;
-    /* 0x824 */ s16 field_0x824;
-    /* 0x826 */ s16 field_0x826[3];
-    /* 0x82C */ s16 field_0x82C;
+    /* 0x820 */ s16 mPrevHeadY;
+    /* 0x822 */ s16 mPrevBackboneY;
+    /* 0x824 */ s16 mPrevAngleY;
+    /* 0x826 */ s16 mEventIdTable[3];
+    /* 0x82C */ s16 mEventIdx;
     /* 0x82E */ s16 mFlyDelayTimer;
     /* 0x830 */ s16 mEvTimer;
     /* 0x832 */ s16 mAttTimer;
@@ -207,7 +229,7 @@ public:
     /* 0x83A */ s16 mLookTargetAngleY;
     /* 0x83C */ s8 mbMorfAnimStopped;
     /* 0x83D */ u8 field_0x83D;
-    /* 0x83E */ u8 field_0x83E;
+    /* 0x83E */ u8 mItemNo;
     /* 0x83F */ u8 mPathIdx;
     /* 0x840 */ u8 field_0x840;
     /* 0x841 */ u8 field_0x841;
@@ -215,19 +237,19 @@ public:
     /* 0x843 */ u8 field_0x843;
     /* 0x844 */ u8 field_0x844;
     /* 0x845 */ u8 field_0x845;
-    /* 0x846 */ bool field_0x846;
-    /* 0x847 */ u8 field_0x847;
-    /* 0x848 */ u8 mbAscending;
+    /* 0x846 */ bool mbFreezeShapeAngle;
+    /* 0x847 */ bool mbStopPosMove;
+    /* 0x848 */ bool mbAscending;
     /* 0x849 */ bool mbFlyMoveEnd;
     /* 0x84A */ bool mbMoveEnd;
     /* 0x84B */ bool field_0x84B;
-    /* 0x84C */ u8 mpDrawPrp;
-    /* 0x84D */ u8 mbSetPeraPrtcl;
-    /* 0x84E */ u8 field_0x84E;
+    /* 0x84C */ bool mbDrawPrp;
+    /* 0x84D */ bool mbSetPeraPrtcl;
+    /* 0x84E */ bool mbSavedInitial;
     /* 0x84F */ u8 padding_0x84F[0x850 - 0x84F];
     /* 0x850 */ BOOL mbSetEyePos;
-    /* 0x854 */ u8 mbAttention;
-    /* 0x855 */ u8 field_0x855;
+    /* 0x854 */ bool mbAttention;
+    /* 0x855 */ bool mbTalking;
     /* 0x856 */ bool mHeadOnlyFollow;
     /* 0x857 */ bool mbInDemo;
     /* 0x858 */ csXyz mDrugPotAngle;
@@ -248,11 +270,11 @@ public:
     /* 0x8A9 */ s8 mJumpMode;
     /* 0x8AA */ s8 mMoveMode;
     /* 0x8AB */ s8 mActionIndex;
-    /* 0x8AC */ s8 field_0x8AC;
-    /* 0x8AD */ u8 field_0x8AD;
-    /* 0x8AE */ u8 field_0x8AE;
+    /* 0x8AC */ s8 mActNo;
+    /* 0x8AD */ u8 mAnmAtr;
+    /* 0x8AE */ u8 mMesgAnimeTag;
     /* 0x8AF */ s8 mAnmNum;
-    /* 0x8B0 */ s8 field_0x8B0;
+    /* 0x8B0 */ s8 mEventOrder;
     /* 0x8B1 */ s8 mStatus;
     /* 0x8B2 */ s8 mPrevStatus;
     /* 0x8B3 */ s8 mLookBackState;
@@ -261,69 +283,5 @@ public:
     /* 0x8B6 */ s8 field_0x8B6;
     /* 0x8B7 */ s8 field_0x8B7;
 }; // size 0x8B8;
-
-class daNpc_Bj1_childHIO_c : public mDoHIO_entry_c {
-public:
-    struct hio_prm_c {
-        /* 0x00 */ s16 mMaxHeadX;
-        /* 0x02 */ s16 mMaxHeadY;
-        /* 0x04 */ s16 mMinHeadX;
-        /* 0x06 */ s16 mMinHeadY;
-        /* 0x08 */ s16 mMaxBackboneX;
-        /* 0x0A */ s16 mMaxBackboneY;
-        /* 0x0C */ s16 mMinBackboneX;
-        /* 0x0E */ s16 mMinBackboneY;
-        /* 0x10 */ s16 mMaxTurnStep;
-        /* 0x12 */ s16 mCalcAngleTarget;
-        /* 0x14 */ f32 mAttPosOffsetY;
-        /* 0x18 */ u8 field_0x18;
-        /* 0x19 */ u8 field_0x19[0x20 - 0x19];
-        /* 0x20 */ s16 field_0x20;
-        /* 0x22 */ s16 mFlyScale;
-        /* 0x24 */ s16 mFlyMaxStep;
-        /* 0x26 */ u8 field_0x26[0x28 - 0x26];
-        /* 0x28 */ f32 field_0x28;
-        /* 0x2C */ f32 field_0x2C;
-        /* 0x30 */ f32 field_0x30;
-        /* 0x34 */ f32 field_0x34;
-        /* 0x38 */ f32 field_0x38;
-        /* 0x3C */ f32 field_0x3C;
-        /* 0x40 */ s16 field_0x40;
-        /* 0x42 */ s16 field_0x42;
-        /* 0x44 */ u8 field_0x44[0x46 - 0x44];
-        /* 0x46 */ s16 field_0x46;
-        /* 0x48 */ f32 field_0x48;
-        /* 0x4C */ s16 field_0x4C;
-        /* 0x4E */ s16 field_0x4E;
-        /* 0x50 */ s16 field_0x50;
-        /* 0x52 */ u8 field_0x52[0x54 - 0x52];
-        /* 0x54 */ f32 field_0x54;
-        /* 0x58 */ f32 field_0x58;
-        /* 0x5C */ f32 field_0x5C;
-        /* 0x60 */ f32 field_0x60;
-    }; // Size: 0x64
-
-    daNpc_Bj1_childHIO_c();
-    void genMessage(JORMContext* ctx) {
-        UNUSED(ctx);
-    };
-
-    /* 0x04 */ hio_prm_c hio_prm;
-    /* 0x68 */ u32 field_0x68;
-}; // Size: 0x6C
-
-class daNpc_Bj1_HIO_c : public mDoHIO_entry_c {
-public:
-    daNpc_Bj1_HIO_c();
-    virtual ~daNpc_Bj1_HIO_c() {
-    }
-    void genMessage(JORMContext* ctx) {
-        UNUSED(ctx);
-    }
-
-    /* 0x04 */ s8 field_0x04;
-    /* 0x08 */ s32 field_0x08;
-    /* 0x0C */ daNpc_Bj1_childHIO_c children[9];
-}; // Size: 0x3D8
 
 #endif /* D_A_NPC_BJ1_H */
