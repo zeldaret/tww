@@ -89,20 +89,20 @@ void daNpc_Bj1_c::nodeBj1Control(J3DNode* i_node, J3DModel* i_model) {
     int jntNo = ((J3DJoint*)i_node)->getJntNo();
     mDoMtx_stack_c::copy(i_model->getAnmMtx(jntNo));
 
-    if (jntNo == m_head_jnt_num) {
+    if (jntNo == m_hed_jnt_num) {
         mDoMtx_stack_c::XrotM(m_jnt.getHead_y());
         mDoMtx_stack_c::ZrotM(-m_jnt.getHead_x());
         mDoMtx_stack_c::scaleM(mHeadScale.x, mHeadScale.y, mHeadScale.z);
         mDoMtx_stack_c::multVec(&mEyeOffset, &mEyePos);
     }
 
-    if (jntNo == m_backbone_jnt_num) {
+    if (jntNo == m_bbone_jnt_num) {
         mDoMtx_stack_c::XrotM(m_jnt.getBackbone_y());
         mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
         mDoMtx_stack_c::scaleM(mBackboneScale.x, mBackboneScale.y, mBackboneScale.z);
     }
 
-    if (jntNo == m_armR_jnt_num) {
+    if (jntNo == m_armR2_jnt_num) {
         cMtx_copy(mDoMtx_stack_c::get(), mHandMtx);
     }
 
@@ -124,14 +124,14 @@ static BOOL nodeCallBack_Prp(J3DNode* i_node, int i_calcTiming) {
 void daNpc_Bj1_c::nodePrpControl(J3DNode* i_node, J3DModel* i_model) {
     s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
 
-    if (jntNo == field_0x6E9) {
+    if (jntNo == m_stalk_jnt_num) {
         cMtx_copy(mHandMtx, mDoMtx_stack_c::get());
         mDoMtx_stack_c::transM(-1.5f, 4.5f, -4.2f);
         mDoMtx_stack_c::XYZrotM(-0x4000, -0x5555, 0);
         cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
         i_model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
     }
-    if (jntNo == m_prp_jnt_num) {
+    if (jntNo == m_cen_jnt_num) {
         mDoMtx_stack_c::YrotS(field_0x6F0);
         mDoMtx_stack_c::revConcat(i_model->getAnmMtx(jntNo));
         cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
@@ -364,18 +364,18 @@ void daNpc_Bj1_c::setMtx(bool i_param1) {
     mpPrpMorf->calc();
 
     if (mpArmLModel) {
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_armL_jnt_num));
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_armL2_jnt_num));
         mpArmLModel->setBaseTRMtx(mDoMtx_stack_c::get());
         mpArmLModel->calc();
     }
 
     if (mpArmRModel) {
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_armR_jnt_num));
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_armR2_jnt_num));
         mpArmRModel->setBaseTRMtx(mDoMtx_stack_c::get());
         mpArmRModel->calc();
     }
 
-    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_head_jnt_num));
+    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_hed_jnt_num));
     mpFaceModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpFaceModel->calc();
     flwPrtcl_danceLR();
@@ -1395,10 +1395,10 @@ void daNpc_Bj1_c::setPrtcl_danceLR() {
 /* 000033F4-00003484       .text flwPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::flwPrtcl_danceLR() {
     if (mpDanceEmitterL != NULL) {
-        mpDanceEmitterL->setGlobalRTMatrix(mpMorf->getModel()->getAnmMtx(m_armL_jnt_num));
+        mpDanceEmitterL->setGlobalRTMatrix(mpMorf->getModel()->getAnmMtx(m_armL2_jnt_num));
     }
     if (mpDanceEmitterR != NULL) {
-        mpDanceEmitterR->setGlobalRTMatrix(mpMorf->getModel()->getAnmMtx(m_armR_jnt_num));
+        mpDanceEmitterR->setGlobalRTMatrix(mpMorf->getModel()->getAnmMtx(m_armR2_jnt_num));
     }
 }
 
@@ -1420,7 +1420,7 @@ void daNpc_Bj1_c::delPrtcl_danceLR() {
 
 /* 000034D8-00003594       .text setPrtcl_peraProOpen__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_peraProOpen() {
-    mDoMtx_stack_c::copy(mpPrpMorf->getModel()->getAnmMtx(m_prp_jnt_num));
+    mDoMtx_stack_c::copy(mpPrpMorf->getModel()->getAnmMtx(m_cen_jnt_num));
     mDoMtx_stack_c::multVecZero(&mPeraProPos);
     mpPeraProEmitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_PERAPROOPEN00, &mPeraProPos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
 }
@@ -1434,7 +1434,7 @@ BOOL daNpc_Bj1_c::createSeed() {
         mSeedProcID[i] = fpcM_ERROR_PROCESS_ID_e;
         actors[i] = NULL;
     }
-    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_armR_jnt_num));
+    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_armR2_jnt_num));
     mDoMtx_stack_c::multVecZero(&pos);
     for (i = 0; i < 4; i++) {
         s16 a_ang_tbl[] = { -0x1000, -0xA00, 0xA00, 0x1000 };
@@ -2693,13 +2693,71 @@ cPhs_State daNpc_Bj1_c::_create() {
 }
 
 /* 00006734-00006A00       .text create_Anm__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::create_Anm() {
-    /* Nonmatching */
+J3DModelData* daNpc_Bj1_c::create_Anm() {
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Bj", dRes_ID_BJ_BDL_BJ_e);
+    JUT_ASSERT(0x10CA, a_mdl_dat != NULL);
+    mpMorf = new mDoExt_McaMorf(
+        a_mdl_dat,
+        NULL,
+        NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("Bj", dRes_ID_BJ_BCK_WAIT01_e),
+        J3DFrameCtrl::EMode_LOOP,
+        1.0f,
+        0,
+        -1,
+        TRUE,
+        NULL,
+        0x80000,
+        0x15021222
+    );
+    if (mpMorf == NULL) {
+        return NULL;
+    } else if (mpMorf->getModel() == NULL) {
+        mpMorf = NULL;
+        return NULL;
+    }
+
+    m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
+    JUT_ASSERT(0x10DE, m_hed_jnt_num >= 0);
+    m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone");
+    JUT_ASSERT(0x10E1, m_bbone_jnt_num >= 0);
+    m_armL2_jnt_num = a_mdl_dat->getJointName()->getIndex("armL2");
+    JUT_ASSERT(0x10E4, m_armL2_jnt_num >= 0);
+    m_armR2_jnt_num = a_mdl_dat->getJointName()->getIndex("armR2");
+    JUT_ASSERT(0x10E7, m_armR2_jnt_num >= 0);
+    return a_mdl_dat;
 }
 
 /* 00006A00-00006C14       .text create_prp_Anm__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::create_prp_Anm() {
-    /* Nonmatching */
+J3DModelData* daNpc_Bj1_c::create_prp_Anm() {
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Bj", dRes_ID_BJ_BDL_PP_e);
+    JUT_ASSERT(0x10F6, a_mdl_dat != NULL);
+    mpPrpMorf = new mDoExt_McaMorf(
+        a_mdl_dat,
+        NULL,
+        NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("Bj", dRes_ID_BJ_BCK_OPEN_e),
+        J3DFrameCtrl::EMode_LOOP,
+        1.0f,
+        0,
+        -1,
+        TRUE,
+        NULL,
+        0x80000,
+        0x11000022
+    );
+    if (mpPrpMorf == NULL) {
+        return NULL;
+    } else if (mpPrpMorf->getModel() == NULL) {
+        mpPrpMorf = NULL;
+        return NULL;
+    }
+
+    m_cen_jnt_num = a_mdl_dat->getJointName()->getIndex("center");
+    JUT_ASSERT(0x110A, m_cen_jnt_num >= 0);
+    m_stalk_jnt_num = a_mdl_dat->getJointName()->getIndex("stalk");
+    JUT_ASSERT(0x110D, m_stalk_jnt_num >= 0);
+    return a_mdl_dat;
 }
 
 /* 00006C14-00006F54       .text create_itm_Mdl__11daNpc_Bj1_cFv */
@@ -2707,12 +2765,80 @@ bool daNpc_Bj1_c::create_itm_Mdl() {
     static int l_arm_L_bmd_tbl[] = { -1, -1, -1, -1, -1, -1, 25, -1, -1 };
     static int l_arm_R_bmd_tbl[] = { -1, -1, -1, -1, -1, -1, 26, -1, -1 };
     static int l_bmd_tbl[] = { 29, 30, 31, 32, 33, 34, 35, 36, 37 };
-    /* Nonmatching */
+
+    J3DModelData* a_mdl_dat;
+    mpArmLModel = NULL;
+    mpArmRModel = NULL;
+    mpFaceModel = NULL;
+    if (l_arm_L_bmd_tbl[mType] >= 0) {
+        a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Bj", l_arm_L_bmd_tbl[mType]);
+        JUT_ASSERT(0x1145, a_mdl_dat != NULL);
+        mpArmLModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
+        bool ret = mpArmLModel != NULL;
+        if (!ret) {
+            return ret;
+        }
+        if (l_arm_L_bmd_tbl[mType] == 25) {
+            m_plant_l_jnt_num = a_mdl_dat->getJointName()->getIndex("plant_al");
+            JUT_ASSERT(0x114F, m_plant_l_jnt_num >= 0);
+        }
+    }
+
+    if (l_arm_R_bmd_tbl[mType] >= 0) {
+        a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Bj", l_arm_R_bmd_tbl[mType]);
+        JUT_ASSERT(0x1156, a_mdl_dat != NULL);
+        mpArmRModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
+        bool ret = mpArmRModel != NULL;
+        if (!ret) {
+            return ret;
+        }
+        if (l_arm_R_bmd_tbl[mType] == 26) {
+            m_plant_r_jnt_num = a_mdl_dat->getJointName()->getIndex("plant_ar");
+            JUT_ASSERT(0x1160, m_plant_r_jnt_num >= 0);
+        }
+    }
+    a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Bj", l_bmd_tbl[mType]);
+    JUT_ASSERT(0x1166, a_mdl_dat != NULL);
+    mpFaceModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
+
+    return mpFaceModel != NULL;
 }
 
 /* 00006F54-00007114       .text CreateHeap__11daNpc_Bj1_cFv */
 BOOL daNpc_Bj1_c::CreateHeap() {
-    /* Nonmatching */
+
+    J3DModelData* modeldat;
+    J3DModelData* anm_model = create_Anm();
+    if (!anm_model) {
+        return FALSE;
+    }
+    J3DModelData* prp_modelDat = create_prp_Anm();
+    if (!prp_modelDat) {
+        mpMorf = NULL;
+        return FALSE;
+    }
+    bool itemMdl = create_itm_Mdl();
+    if (itemMdl) {
+        for (u16 i = 0; i < prp_modelDat->getJointNum(); i++) {
+            if ((i == m_cen_jnt_num) || (i == m_stalk_jnt_num)) {
+                mpPrpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Prp);
+            }
+        }
+        mpPrpMorf->getModel()->setUserArea((uintptr_t)this);
+        for (u16 i = 0; i < anm_model->getJointNum(); i++) {
+            if ((i == m_hed_jnt_num) || (i == m_bbone_jnt_num) || (i == m_armR2_jnt_num)) {
+                mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Bj1);
+            }
+        }
+        mpMorf->getModel()->setUserArea((uintptr_t)this);
+        mAcchCir.SetWall(30.0f, 40.0f);
+        mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), NULL, NULL);
+        return TRUE;
+    } else {
+        mpMorf = NULL;
+        mpPrpMorf = NULL;
+        return FALSE;
+    }
 }
 
 /* 00007114-00007134       .text daNpc_Bj1_Create__FP10fopAc_ac_c */

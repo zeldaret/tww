@@ -148,27 +148,27 @@ public:
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void create_Anm();
-    void create_prp_Anm();
+    J3DModelData* create_Anm();
+    J3DModelData* create_prp_Anm();
     bool create_itm_Mdl();
     BOOL CreateHeap();
 
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhase;
-    /* 0x6CC */ s8 m_head_jnt_num;
-    /* 0x6CD */ s8 m_backbone_jnt_num;
-    /* 0x6CE */ s8 m_armL_jnt_num;
-    /* 0x6CF */ s8 m_armR_jnt_num;
+    /* 0x6CC */ s8 m_hed_jnt_num;
+    /* 0x6CD */ s8 m_bbone_jnt_num;
+    /* 0x6CE */ s8 m_armL2_jnt_num;
+    /* 0x6CF */ s8 m_armR2_jnt_num;
     /* 0x6D0 */ J3DModel* mpFaceModel;
     /* 0x6D4 */ J3DModel* mpArmLModel;
     /* 0x6D8 */ J3DModel* mpArmRModel;
-    /* 0x6DC */ s8 field_0x6DC;
-    /* 0x6DD */ s8 field_0x6DD;
+    /* 0x6DC */ s8 m_plant_l_jnt_num;
+    /* 0x6DD */ s8 m_plant_r_jnt_num;
     /* 0x6DE */ u8 padding_0x6DE[0x6E0 - 0x6DE];
     /* 0x6E0 */ u32 mShadowId;
     /* 0x6E4 */ mDoExt_McaMorf* mpPrpMorf;
-    /* 0x6E8 */ s8 m_prp_jnt_num;
-    /* 0x6E9 */ s8 field_0x6E9;
+    /* 0x6E8 */ s8 m_cen_jnt_num;
+    /* 0x6E9 */ s8 m_stalk_jnt_num;
     /* 0x6EA */ u8 padding_0x6EA[0x6F0 - 0x6EA];
     /* 0x6F0 */ s16 field_0x6F0;
     /* 0x6F2 */ s16 mPrpSpin;
