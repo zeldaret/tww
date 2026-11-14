@@ -1,68 +1,118 @@
 #ifndef D_A_NPC_BJ1_H
 #define D_A_NPC_BJ1_H
 
+#include "JSystem/JParticle/JPAEmitter.h"
+#include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class J3DNode;
 
-class daNpc_Bj1_c : public fopAc_ac_c {
+class daNpc_Bj1_c : public fopNpc_npc_c {
 public:
-    struct anm_prm_c {
-        
+    typedef s8 Type;
+    enum {
+        TYPE_BJ1_e,
+        TYPE_BJ2_e,
+        TYPE_BJ3_e,
+        TYPE_BJ4_e,
+        TYPE_BJ5_e,
+        TYPE_BJ6_e,
+        TYPE_BJ7_e,
+        TYPE_BJ8_e,
+        TYPE_BJ9_e,
+        TYPE_Invalid_e = -1,
     };
+
+    typedef s8 SpecificType;
+    enum {
+        SPECIFIC_TYPE_BJ1_0_e,
+        SPECIFIC_TYPE_BJ1_1_e,
+        SPECIFIC_TYPE_BJ2_0_e,
+        SPECIFIC_TYPE_BJ2_1_e,
+        SPECIFIC_TYPE_BJ3_0_e,
+        SPECIFIC_TYPE_BJ3_1_e,
+        SPECIFIC_TYPE_BJ4_0_e,
+        SPECIFIC_TYPE_BJ4_1_e,
+        SPECIFIC_TYPE_BJ5_0_e,
+        SPECIFIC_TYPE_BJ5_1_e,
+        SPECIFIC_TYPE_BJ6_0_e,
+        SPECIFIC_TYPE_BJ6_1_e,
+        SPECIFIC_TYPE_BJ7_e,
+        SPECIFIC_TYPE_BJ8_0_e,
+        SPECIFIC_TYPE_BJ8_1_e,
+        SPECIFIC_TYPE_BJ9_0_e,
+        SPECIFIC_TYPE_BJ9_1_e,
+        SPECIFIC_TYPE_Invalid_e = -1,
+    };
+
+    struct anm_prm_c {
+        /* 0x00 */ s8 anmNum;
+        /* 0x04 */ f32 morf;
+        /* 0x08 */ f32 speed;
+        /* 0x0C */ int loopMode;
+    }; // Size: 0x10
+
+    struct bj1_prm_c {
+        /* 0x00 */ Vec head_scale;
+        /* 0x0C */ Vec backbone_scale;
+        /* 0x18 */ Vec eye_offset;
+    }; // Size: 0x24
+
+    typedef BOOL (daNpc_Bj1_c::*ActionFunc)(void*);
 
     void nodeBj1Control(J3DNode*, J3DModel*);
     void nodePrpControl(J3DNode*, J3DModel*);
-    void init_BJ4_0();
-    void init_BJ6_0();
-    void init_BJ7_0();
-    void init_BJX_0();
-    void init_BJX_1();
-    void createInit();
+    bool init_BJ4_0();
+    bool init_BJ6_0();
+    bool init_BJ7_0();
+    bool init_BJX_0();
+    bool init_BJX_1();
+    bool createInit();
     void setMtx_anmProc();
     void setMtx(bool);
-    void anmNum_toResID(int);
-    void setAnm_anm(anm_prm_c*);
+    u32 anmNum_toResID(int);
+    BOOL setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int);
-    void setAnm();
-    void setAnm_prp(signed char);
+    BOOL setAnm();
+    void setAnm_prp(s8);
     void chg_anmTag();
     void control_anmTag();
-    void chg_anmAtr(unsigned char);
+    void chg_anmAtr(u8);
     void control_anmAtr();
     void setAnm_ATR();
-    void anmAtr(unsigned short);
+    void anmAtr(u16);
     void eventOrder();
     void checkOrder();
-    void chk_talk();
-    void chk_drct(float);
-    void chk_partsNotMove();
+    bool chk_talk();
+    bool chk_drct(f32);
+    BOOL chk_partsNotMove();
     void lookBack();
-    void getMaskInf(unsigned char*);
-    void chkReg(unsigned short);
-    void setReg(unsigned short);
-    void next_msgStatus(unsigned long*);
-    void getMsg_BJ1_0();
-    void getMsg_BJ2_0();
-    void getMsg_BJ3_0();
-    void getMsg_BJ4_0();
-    void getMsg_BJ5_0();
-    void getMsg_BJ6_0();
-    void getMsg_BJ7_0();
-    void getMsg_BJ8_0();
-    void getMsg_BJ9_0();
-    void getMsg_Corog();
-    void getMsg();
-    void chkAttention();
+    bool getMaskInf(u8*);
+    bool chkReg(u16);
+    void setReg(u16);
+    u16 next_msgStatus(u32*);
+    u32 getMsg_BJ1_0();
+    u32 getMsg_BJ2_0();
+    u32 getMsg_BJ3_0();
+    u32 getMsg_BJ4_0();
+    u32 getMsg_BJ5_0();
+    u32 getMsg_BJ6_0();
+    u32 getMsg_BJ7_0();
+    u32 getMsg_BJ8_0();
+    u32 getMsg_BJ9_0();
+    u32 getMsg_Corog();
+    u32 getMsg();
+    bool chkAttention();
     void setAttention(bool);
-    void searchByID(fpc_ProcID);
-    void partner_srch_sub(void* (*)(void*, void*));
+    fopAc_ac_c* searchByID(fpc_ProcID);
+    bool partner_srch_sub(fpcLyIt_JudgeFunc);
     void partner_srch();
     void setCollision_SP_();
-    void set_pthPoint(unsigned char);
+    void set_pthPoint(u8);
     void bj_clcFlySpd();
-    void bj_movPass(bool);
-    void bj_flyMove();
+    u32 bj_movPass(bool);
+    bool bj_flyMove();
     void bj_clcMovSpd();
     void bj_nMove();
     void setPrtcl_drugPot_1();
@@ -72,77 +122,166 @@ public:
     void flwPrtcl_danceLR();
     void delPrtcl_danceLR();
     void setPrtcl_peraProOpen();
-    void createSeed();
-    void deleteSeed();
-    void charDecide(int);
+    BOOL createSeed();
+    BOOL deleteSeed();
+    bool charDecide(BOOL);
     void eInit_setLocFlag(int*);
-    void eInit_setShapeAngleY(int*, short);
+    void eInit_setShapeAngleY(int*, s16);
     void eInit_setEvTimer(int*);
-    void eInit_calcRelativPos(cXyz*, int*);
-    void eInit_prmFloat(float*, float);
+    cXyz eInit_calcRelativPos(cXyz*, int*);
+    f32 eInit_prmFloat(f32*, f32);
     void eInit_ATTENTION_(int*, int*, int*, cXyz*, int*, int*, int*);
     void eInit_PLYER_MOV_1_();
-    void eInit_MOV_(float*, float*, float*, int*);
-    void eInit_JMP_(float*, float*);
+    BOOL eInit_MOV_(f32*, f32*, f32*, int*);
+    void eInit_JMP_(f32*, f32*);
     void eInit_CHG_PTH_(int*, int*);
     void eInit_END_MOV_();
     void eInit_SET_TNE_();
     void eInit_DEL_TNE_();
-    void eInit_SET_ANM_(int*, float*);
+    void eInit_SET_ANM_(int*, f32*);
     void event_actionInit(int);
-    void eMove_ATTENTION_();
-    void eMove_MOV_();
-    void eMove_JMP_();
-    void eMove_SET_TNE_();
-    void eMove_PTH_MOV_();
-    void event_action();
+    bool eMove_ATTENTION_();
+    bool eMove_MOV_();
+    bool eMove_JMP_();
+    bool eMove_SET_TNE_();
+    bool eMove_PTH_MOV_();
+    bool event_action();
     void privateCut(int);
     void endEvent();
-    void isEventEntry();
+    int isEventEntry();
     void event_proc(int);
-    void set_action(int (daNpc_Bj1_c::*)(void*), void*);
-    void setStt(signed char);
-    void wait_1();
-    void wait_2();
-    void wait_3();
-    void wait_4();
-    void flyMov();
-    void fall01();
-    void talk_1();
-    void walk_1();
-    void wait_action1(void*);
-    void wait_action2(void*);
-    void wait_action3(void*);
-    void wait_action4(void*);
-    void demo();
+    BOOL set_action(ActionFunc, void*);
+    void setStt(s8);
+    BOOL wait_1();
+    BOOL wait_2();
+    BOOL wait_3();
+    BOOL wait_4();
+    BOOL flyMov();
+    BOOL fall01();
+    BOOL talk_1();
+    BOOL walk_1();
+    BOOL wait_action1(void*);
+    BOOL wait_action2(void*);
+    BOOL wait_action3(void*);
+    BOOL wait_action4(void*);
+    bool demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void create_Anm();
-    void create_prp_Anm();
-    void create_itm_Mdl();
-    void CreateHeap();
+    J3DModelData* create_Anm();
+    J3DModelData* create_prp_Anm();
+    bool create_itm_Mdl();
+    BOOL CreateHeap();
 
-public:
-    /* Place member variables here */
-};
-
-class daNpc_Bj1_childHIO_c {
-public:
-    daNpc_Bj1_childHIO_c();
-
-public:
-    /* Place member variables here */
-};
-
-class daNpc_Bj1_HIO_c {
-public:
-    daNpc_Bj1_HIO_c();
-
-public:
-    /* Place member variables here */
-};
+private:
+    /* 0x6C4 */ request_of_phase_process_class mPhase;
+    /* 0x6CC */ s8 m_hed_jnt_num;
+    /* 0x6CD */ s8 m_bbone_jnt_num;
+    /* 0x6CE */ s8 m_armL2_jnt_num;
+    /* 0x6CF */ s8 m_armR2_jnt_num;
+    /* 0x6D0 */ J3DModel* mpFaceModel;
+    /* 0x6D4 */ J3DModel* mpArmLModel;
+    /* 0x6D8 */ J3DModel* mpArmRModel;
+    /* 0x6DC */ s8 m_plant_l_jnt_num;
+    /* 0x6DD */ s8 m_plant_r_jnt_num;
+    /* 0x6DE */ u8 padding_0x6DE[0x6E0 - 0x6DE];
+    /* 0x6E0 */ u32 mShadowId;
+    /* 0x6E4 */ mDoExt_McaMorf* mpPrpMorf;
+    /* 0x6E8 */ s8 m_cen_jnt_num;
+    /* 0x6E9 */ s8 m_stalk_jnt_num;
+    /* 0x6EA */ u8 padding_0x6EA[0x6F0 - 0x6EA];
+    /* 0x6F0 */ s16 mPrpAngle;
+    /* 0x6F2 */ s16 mPrpSpin;
+    /* 0x6F4 */ u8 padding_0x6F4[0x6F8 - 0x6F4];
+    /* 0x6F8 */ ActionFunc mCurrActionFunc;
+    /* 0x704 */ Mtx mHandMtx;
+    /* 0x734 */ dNpc_PathRun_c mPathRun;
+    /* 0x73C */ dNpc_EventCut_c mEventCut;
+    /* 0x7A8 */ u32 mPartnerProcID;
+    /* 0x7AC */ cXyz mInitialPos;
+    /* 0x7B8 */ csXyz mInitialAngle;
+    /* 0x7BE */ u8 padding_0x7BE[0x7C0 - 0x7BE];
+    /* 0x7C0 */ cXyz mEyePos;
+    /* 0x7CC */ cXyz mLookTargetPos;
+    /* 0x7D8 */ cXyz mTargetPos;
+    /* 0x7E4 */ cXyz mEyeOffset;
+    /* 0x7F0 */ cXyz mHeadScale;
+    /* 0x7FC */ cXyz mBackboneScale;
+    /* 0x808 */ f32 mFrame;
+    /* 0x80C */ f32 mTargetFlySpeed;
+    /* 0x810 */ u8 padding_0x810[0x814 - 0x810];
+    /* 0x814 */ f32 mTargetFlyStep;
+    /* 0x818 */ u8 padding_0x818[0x81C - 0x818];
+    /* 0x81C */ f32 mArrivalDist;
+    /* 0x820 */ s16 mPrevHeadY;
+    /* 0x822 */ s16 mPrevBackboneY;
+    /* 0x824 */ s16 mPrevAngleY;
+    /* 0x826 */ s16 mEventIdTable[3];
+    /* 0x82C */ s16 mEventIdx;
+    /* 0x82E */ s16 mFlyDelayTimer;
+    /* 0x830 */ s16 mEvTimer;
+    /* 0x832 */ s16 mAttTimer;
+    /* 0x834 */ s16 mFlyWaitTimer;
+    /* 0x836 */ u8 padding_0x836[0x838 - 0x836];
+    /* 0x838 */ s16 mHeadLookAtMaxVel;
+    /* 0x83A */ s16 mLookTargetAngleY;
+    /* 0x83C */ s8 mbMorfAnimStopped;
+    /* 0x83D */ u8 field_0x83D;
+    /* 0x83E */ u8 mItemNo;
+    /* 0x83F */ u8 mPathIdx;
+    /* 0x840 */ u8 field_0x840;
+    /* 0x841 */ u8 field_0x841;
+    /* 0x842 */ u8 field_0x842;
+    /* 0x843 */ u8 field_0x843;
+    /* 0x844 */ u8 field_0x844;
+    /* 0x845 */ u8 field_0x845;
+    /* 0x846 */ bool mbFreezeShapeAngle;
+    /* 0x847 */ bool mbStopPosMove;
+    /* 0x848 */ bool mbAscending;
+    /* 0x849 */ bool mbFlyMoveEnd;
+    /* 0x84A */ bool mbMoveEnd;
+    /* 0x84B */ bool field_0x84B;
+    /* 0x84C */ bool mbDrawPrp;
+    /* 0x84D */ bool mbSetPeraPrtcl;
+    /* 0x84E */ bool mbSavedInitial;
+    /* 0x84F */ u8 padding_0x84F[0x850 - 0x84F];
+    /* 0x850 */ BOOL mbSetEyePos;
+    /* 0x854 */ bool mbAttention;
+    /* 0x855 */ bool mbTalking;
+    /* 0x856 */ bool mHeadOnlyFollow;
+    /* 0x857 */ bool mbInDemo;
+    /* 0x858 */ csXyz mDrugPotAngle;
+    /* 0x85E */ u8 padding_0x85E[0x860 - 0x85E];
+    /* 0x860 */ cXyz mDrugPotPos;
+    /* 0x86C */ cXyz mPeraProPos;
+    /* 0x878 */ JPABaseEmitter* mpPeraProEmitter;
+    /* 0x87C */ JPABaseEmitter* mpDrugPotEmitter0;
+    /* 0x880 */ JPABaseEmitter* mpDrugPotEmitter1;
+    /* 0x884 */ JPABaseEmitter* mpDrugPotEmitter2;
+    /* 0x888 */ JPABaseEmitter* mpDrugPotEmitter3;
+    /* 0x88C */ JPABaseEmitter* mpDanceEmitterL;
+    /* 0x890 */ JPABaseEmitter* mpDanceEmitterR;
+    /* 0x894 */ s16 mDrugPotTimer;
+    /* 0x896 */ u8 padding_0x896[0x898 - 0x896];
+    /* 0x898 */ fpc_ProcID mSeedProcID[4];
+    /* 0x8A8 */ s8 mFlyMode;
+    /* 0x8A9 */ s8 mJumpMode;
+    /* 0x8AA */ s8 mMoveMode;
+    /* 0x8AB */ s8 mActionIndex;
+    /* 0x8AC */ s8 mActNo;
+    /* 0x8AD */ u8 mAnmAtr;
+    /* 0x8AE */ u8 mMesgAnimeTag;
+    /* 0x8AF */ s8 mAnmNum;
+    /* 0x8B0 */ s8 mEventOrder;
+    /* 0x8B1 */ s8 mStatus;
+    /* 0x8B2 */ s8 mPrevStatus;
+    /* 0x8B3 */ s8 mLookBackState;
+    /* 0x8B4 */ s8 mType;
+    /* 0x8B5 */ s8 mSpecificType;
+    /* 0x8B6 */ s8 field_0x8B6;
+    /* 0x8B7 */ s8 field_0x8B7;
+}; // size 0x8B8;
 
 #endif /* D_A_NPC_BJ1_H */
