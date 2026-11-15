@@ -147,9 +147,12 @@ public:
 class daNpc_Ac1_HIO_c : public mDoHIO_entry_c {
 public:
     daNpc_Ac1_HIO_c();
+    void genMessage(JORMContext* ctx) {
+        UNUSED(ctx);
+    };
 
 public:
-    /* 0x04 */ u8 field_0x04;
+    /* 0x04 */ s8 field_0x04;
     /* 0x05 */ u8 field_0x05[0x08 - 0x05];
     /* 0x08 */ s32 field_0x08;
     /* 0x0C */ s16 field_0x0C;

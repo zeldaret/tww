@@ -8,22 +8,45 @@
 
 /* 000000EC-00000150       .text __ct__15daNpc_Ac1_HIO_cFv */
 daNpc_Ac1_HIO_c::daNpc_Ac1_HIO_c() {
-    /* Nonmatching */
+    static u32 a_prm_tbl[] = { 0x20002710, 0xF000D8F0, 0x00001770, 0x0000E890, 0x07080578, 0x43160000,
+                               0x00000006, 0x04000000, 0x3F000000, 0x40400000, 0x3DCCCCCD, 0x42200000 };
+    memcpy(&field_0x0C, a_prm_tbl, 0x30);
+    field_0x04 = -1;
+    field_0x08 = -1;
 }
 
 /* 00000198-000001E4       .text nodeCallBack_Wng__FP7J3DNodei */
-static BOOL nodeCallBack_Wng(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_Wng(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In) {
+        if (j3dSys.getModel()->getUserArea() != NULL) {
+            reinterpret_cast<daNpc_Ac1_c*>(j3dSys.getModel()->getUserArea())->nodeWngControl(i_node, j3dSys.getModel());
+        }
+    }
+    return TRUE;
 }
 
 /* 000001E4-00000294       .text nodeWngControl__11daNpc_Ac1_cFP7J3DNodeP8J3DModel */
-void daNpc_Ac1_c::nodeWngControl(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daNpc_Ac1_c::nodeWngControl(J3DNode* i_node, J3DModel* i_model) {
+    s32 uVar1 = ((J3DJoint*)i_node)->getJntNo();
+    mDoMtx_stack_c::copy(i_model->getAnmMtx(uVar1));
+    if (uVar1 == m_wngL1_jnt_num) {
+        cMtx_copy(field_0x71C, j3dSys.mCurrentMtx);
+        i_model->setAnmMtx(uVar1, field_0x71C);
+    }
+    if (uVar1 == m_wngR1_jnt_num) {
+        cMtx_copy(field_0x74C, j3dSys.mCurrentMtx);
+        i_model->setAnmMtx(uVar1, field_0x74C);
+    }
 }
 
 /* 00000294-000002E0       .text nodeCallBack_Arm__FP7J3DNodei */
-static BOOL nodeCallBack_Arm(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_Arm(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == 0) {
+        if (j3dSys.getModel()->getUserArea() != NULL) {
+            reinterpret_cast<daNpc_Ac1_c*>(j3dSys.getModel()->getUserArea())->nodeArmControl(i_node, j3dSys.getModel());
+        }
+    }
+    return TRUE;
 }
 
 /* 000002E0-00000390       .text nodeArmControl__11daNpc_Ac1_cFP7J3DNodeP8J3DModel */
@@ -32,8 +55,13 @@ void daNpc_Ac1_c::nodeArmControl(J3DNode*, J3DModel*) {
 }
 
 /* 00000390-000003DC       .text nodeCallBack_Ac1__FP7J3DNodei */
-static BOOL nodeCallBack_Ac1(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_Ac1(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In) {
+        if (j3dSys.getModel()->getUserArea() != NULL) {
+            reinterpret_cast<daNpc_Ac1_c*>(j3dSys.getModel()->getUserArea())->nodeAc1Control(i_node, j3dSys.getModel());
+        }
+    }
+    return TRUE;
 }
 
 /* 000003DC-0000056C       .text nodeAc1Control__11daNpc_Ac1_cFP7J3DNodeP8J3DModel */
