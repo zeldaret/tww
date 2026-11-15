@@ -157,7 +157,7 @@ void daNpc_Ac1_c::lookBack() {
 }
 
 /* 0000121C-0000128C       .text next_msgStatus__11daNpc_Ac1_cFPUl */
-void daNpc_Ac1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Ac1_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
@@ -172,7 +172,7 @@ void daNpc_Ac1_c::getMsg_AC1_0() {
 }
 
 /* 00001380-000013BC       .text getMsg__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::getMsg() {
+u32 daNpc_Ac1_c::getMsg() {
     /* Nonmatching */
 }
 
