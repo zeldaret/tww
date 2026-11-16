@@ -30,12 +30,12 @@ void daNpc_Ac1_c::nodeWngControl(J3DNode* i_node, J3DModel* i_model) {
     s32 uVar1 = ((J3DJoint*)i_node)->getJntNo();
     mDoMtx_stack_c::copy(i_model->getAnmMtx(uVar1));
     if (uVar1 == m_wngL1_jnt_num) {
-        cMtx_copy(field_0x71C, j3dSys.mCurrentMtx);
-        i_model->setAnmMtx(uVar1, field_0x71C);
+        cMtx_copy(mLeftArmMtx, j3dSys.mCurrentMtx);
+        i_model->setAnmMtx(uVar1, mLeftArmMtx);
     }
     if (uVar1 == m_wngR1_jnt_num) {
-        cMtx_copy(field_0x74C, j3dSys.mCurrentMtx);
-        i_model->setAnmMtx(uVar1, field_0x74C);
+        cMtx_copy(mRightArmMtx, j3dSys.mCurrentMtx);
+        i_model->setAnmMtx(uVar1, mRightArmMtx);
     }
 }
 
@@ -50,8 +50,17 @@ static BOOL nodeCallBack_Arm(J3DNode* i_node, int i_calcTiming) {
 }
 
 /* 000002E0-00000390       .text nodeArmControl__11daNpc_Ac1_cFP7J3DNodeP8J3DModel */
-void daNpc_Ac1_c::nodeArmControl(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daNpc_Ac1_c::nodeArmControl(J3DNode* i_node, J3DModel* i_model) {
+    s32 uVar1 = ((J3DJoint*)i_node)->getJntNo();
+    mDoMtx_stack_c::copy(i_model->getAnmMtx(uVar1));
+    if (uVar1 == m_armL1_jnt_num) {
+        cMtx_copy(mLeftArmMtx, j3dSys.mCurrentMtx);
+        i_model->setAnmMtx(uVar1, mLeftArmMtx);
+    }
+    if (uVar1 == m_armR1_jnt_num) {
+        cMtx_copy(mRightArmMtx, j3dSys.mCurrentMtx);
+        i_model->setAnmMtx(uVar1, mRightArmMtx);
+    }
 }
 
 /* 00000390-000003DC       .text nodeCallBack_Ac1__FP7J3DNodei */
@@ -65,13 +74,37 @@ static BOOL nodeCallBack_Ac1(J3DNode* i_node, int i_calcTiming) {
 }
 
 /* 000003DC-0000056C       .text nodeAc1Control__11daNpc_Ac1_cFP7J3DNodeP8J3DModel */
-void daNpc_Ac1_c::nodeAc1Control(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daNpc_Ac1_c::nodeAc1Control(J3DNode* i_node, J3DModel* i_model) {
+    static cXyz a_eye_pos_off(20.0f, 18.0f, 0.0f);
+    s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
+    mDoMtx_stack_c::copy(i_model->getAnmMtx(jntNo));
+    if (jntNo == m_hed_jnt_num) {
+        mDoMtx_stack_c::XrotM(m_jnt.getHead_y());
+        mDoMtx_stack_c::ZrotM(-m_jnt.getHead_x());
+        mDoMtx_stack_c::multVec(&a_eye_pos_off, &mEyePos);
+    }
+    if (jntNo == m_bbone_jnt_num) {
+        mDoMtx_stack_c::XrotM(m_jnt.getBackbone_y());
+        mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
+    }
+    if (jntNo == m_arm_L_jnt_num) {
+        cMtx_copy(mDoMtx_stack_c::get(), mLeftArmMtx);
+    }
+    if (jntNo == m_arm_R_jnt_num) {
+        cMtx_copy(mDoMtx_stack_c::get(), mRightArmMtx);
+    }
+    cMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
+    i_model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
 }
 
 /* 000005A8-00000640       .text init_AC1_0__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::init_AC1_0() {
-    /* Nonmatching */
+bool daNpc_Ac1_c::init_AC1_0() {
+    bool res = dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04) != FALSE;
+    if (res) {
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_1580);
+        set_action(&daNpc_Ac1_c::wait_action1, NULL);
+    }
+    return res;
 }
 
 /* 00000640-000007C8       .text createInit__11daNpc_Ac1_cFv */
@@ -85,18 +118,22 @@ void daNpc_Ac1_c::setMtx(bool) {
 }
 
 /* 00000988-0000099C       .text anmNum_toResID__11daNpc_Ac1_cFi */
-void daNpc_Ac1_c::anmNum_toResID(int) {
-    /* Nonmatching */
+u32 daNpc_Ac1_c::anmNum_toResID(int i_idx) {
+    static const u32 a_bck_resID_tbl[] = { 1, 12, 13, 14 };
+    return a_bck_resID_tbl[i_idx];
 }
 
 /* 0000099C-000009B0       .text wingAnmNum_toResID__11daNpc_Ac1_cFi */
-void daNpc_Ac1_c::wingAnmNum_toResID(int) {
-    /* Nonmatching */
+u32 daNpc_Ac1_c::wingAnmNum_toResID(int i_idx) {
+
+    static const u32 a_bck_resID_tbl[] = { 0, 9, 10, 11 };
+    return a_bck_resID_tbl[i_idx];
 }
 
 /* 000009B0-000009C4       .text btpNum_toResID__11daNpc_Ac1_cFi */
-void daNpc_Ac1_c::btpNum_toResID(int) {
-    /* Nonmatching */
+u32 daNpc_Ac1_c::btpNum_toResID(int i_idx) {
+    static const u32 a_btp_resID_tbl[] = { 7, 6, 8 };
+    return a_btp_resID_tbl[i_idx];
 }
 
 /* 000009C4-00000AD4       .text setBtp__11daNpc_Ac1_cFbi */
@@ -105,8 +142,8 @@ void daNpc_Ac1_c::setBtp(bool, int) {
 }
 
 /* 00000AD4-00000AFC       .text iniTexPttrnAnm__11daNpc_Ac1_cFb */
-void daNpc_Ac1_c::iniTexPttrnAnm(bool) {
-    /* Nonmatching */
+void daNpc_Ac1_c::iniTexPttrnAnm(bool i_param1) {
+    return setBtp(i_param1, mBtpNum);
 }
 
 /* 00000AFC-00000BA8       .text plyTexPttrnAnm__11daNpc_Ac1_cFv */
@@ -126,7 +163,7 @@ void daNpc_Ac1_c::setAnm_anm(daNpc_Ac1_c::anm_prm_c*) {
 
 /* 00000D0C-00000D8C       .text setAnm__11daNpc_Ac1_cFv */
 void daNpc_Ac1_c::setAnm() {
-    /* Nonmatching */
+    static anm_prm_c a_anm_prm_tbl[] = { { -1, -1, 0.0f, 0.0f, -1, -1 }, { 0, 0, 8.0f, 1.0f, 2, 1 }, { -1, -1, 0.0f, 0.0f, -1, -1 } };
 }
 
 /* 00000D8C-00000D90       .text chg_anmTag__11daNpc_Ac1_cFv */
@@ -151,6 +188,9 @@ void daNpc_Ac1_c::control_anmAtr() {
 
 /* 00000DE4-00000E4C       .text setAnm_ATR__11daNpc_Ac1_cFi */
 void daNpc_Ac1_c::setAnm_ATR(int) {
+    static anm_prm_c a_anm_prm_tbl[] = { { 0, 0, 8.0f, 1.0f, 2, 1 }, { 1, 0, 8.0f, 1.0f, 2, 1 },
+
+                                         { 2, 1, 8.0f, 1.0f, 2, 1 }, { 3, 0, 8.0f, 1.0f, 2, 1 }, { 1, 2, 8.0f, 1.0f, 2, 1 }, { 1, 1, 8.0f, 1.0f, 2, 1 } };
     /* Nonmatching */
 }
 
@@ -231,12 +271,14 @@ void daNpc_Ac1_c::event_action() {
 
 /* 00001528-00001614       .text privateCut__11daNpc_Ac1_cFi */
 void daNpc_Ac1_c::privateCut(int) {
+    static char* a_cut_tbl[] = { "ACTION" };
     /* Nonmatching */
 }
 
 /* 00001614-00001634       .text endEvent__11daNpc_Ac1_cFv */
 void daNpc_Ac1_c::endEvent() {
-    /* Nonmatching */
+    dComIfGp_event_reset();
+    field_0x86E = -1;
 }
 
 /* 00001634-0000166C       .text isEventEntry__11daNpc_Ac1_cFv */
@@ -270,7 +312,7 @@ void daNpc_Ac1_c::talk_1() {
 }
 
 /* 00001978-00001A34       .text wait_action1__11daNpc_Ac1_cFPv */
-void daNpc_Ac1_c::wait_action1(void*) {
+BOOL daNpc_Ac1_c::wait_action1(void*) {
     /* Nonmatching */
 }
 
@@ -300,12 +342,13 @@ BOOL daNpc_Ac1_c::_delete() {
 }
 
 /* 00001FFC-0000201C       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daNpc_Ac1_c*>(i_this)->CreateHeap();
 }
 
 /* 0000201C-0000213C       .text _create__11daNpc_Ac1_cFv */
 cPhs_State daNpc_Ac1_c::_create() {
+    static u32 a_size_tbl[] = { 0x272E0 };
     /* Nonmatching */
 }
 
@@ -330,7 +373,7 @@ void daNpc_Ac1_c::create_itm_Mdl() {
 }
 
 /* 00002DC8-00003044       .text CreateHeap__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::CreateHeap() {
+BOOL daNpc_Ac1_c::CreateHeap() {
     /* Nonmatching */
 }
 

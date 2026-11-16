@@ -8,17 +8,24 @@
 
 class daNpc_Ac1_c : public fopNpc_npc_c {
 public:
-    struct anm_prm_c {};
+    struct anm_prm_c {
+        /* 0x00 */ s8 anmNum;
+        /* 0x01 */ s8 field_0x01;
+        /* 0x04 */ f32 morf;
+        /* 0x08 */ f32 speed;
+        /* 0x0C */ int loopMode;
+        /* 0x10 */ int field_0x10;
+    }; // Size: 0x14
 
     void nodeWngControl(J3DNode*, J3DModel*);
     void nodeArmControl(J3DNode*, J3DModel*);
     void nodeAc1Control(J3DNode*, J3DModel*);
-    void init_AC1_0();
+    bool init_AC1_0();
     void createInit();
     void setMtx(bool);
-    void anmNum_toResID(int);
-    void wingAnmNum_toResID(int);
-    void btpNum_toResID(int);
+    u32 anmNum_toResID(int);
+    u32 wingAnmNum_toResID(int);
+    u32 btpNum_toResID(int);
     void setBtp(bool, int);
     void iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
@@ -53,7 +60,7 @@ public:
     void setStt(signed char);
     void wait_1();
     void talk_1();
-    void wait_action1(void*);
+    BOOL wait_action1(void*);
     void demo();
     void shadowDraw();
     BOOL _draw();
@@ -64,7 +71,7 @@ public:
     void create_wng_Anm();
     void create_arm_Anm();
     void create_itm_Mdl();
-    void CreateHeap();
+    BOOL CreateHeap();
 
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhase;
@@ -93,15 +100,15 @@ public:
     /* 0x710 */ u32 field_0x710;
     /* 0x714 */ u32 field_0x714;
     /* 0x718 */ int field_0x718;
-    /* 0x71C */ Mtx field_0x71C;
-    /* 0x74C */ Mtx field_0x74C;
+    /* 0x71C */ Mtx mLeftArmMtx;
+    /* 0x74C */ Mtx mRightArmMtx;
     /* 0x77C */ dNpc_PathRun_c mPathRun;
     /* 0x784 */ dNpc_EventCut_c mEventCut;
     /* 0x7F0 */ u8 field_0x7F0[0x7F4 - 0x7F0];
     /* 0x7F4 */ cXyz field_0x7F4;
     /* 0x800 */ csXyz field_0x800;
     /* 0x806 */ u8 field_0x806[0x808 - 0x806];
-    /* 0x808 */ cXyz field_0x808;
+    /* 0x808 */ cXyz mEyePos;
     /* 0x814 */ cXyz field_0x814;
     /* 0x820 */ u8 field_0x820[0x82C - 0x820];
     /* 0x82C */ f32 field_0x82C;
@@ -130,9 +137,9 @@ public:
     /* 0x86A */ bool field_0x86A;
     /* 0x86B */ u8 field_0x86B;
     /* 0x86C */ u8 field_0x86C[0x86E - 0x86C];
-    /* 0x86E */ u8 field_0x86E;
+    /* 0x86E */ s8 field_0x86E;
     /* 0x86F */ u8 field_0x86F;
-    /* 0x870 */ s8 field_0x870;
+    /* 0x870 */ s8 mBtpNum;
     /* 0x871 */ s8 field_0x871;
     /* 0x872 */ u8 field_0x872[0x874 - 0x872];
     /* 0x874 */ s8 field_0x874;
