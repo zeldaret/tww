@@ -107,7 +107,7 @@ void daNpc_Kg2_c::set_mtx() {
     model->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
     if (field_0x736) {
-        mDoMtx_stack_c::copy(model->getAnmMtx(field_0x6C4));
+        mDoMtx_stack_c::copy(model->getAnmMtx(m_handL_num));
         mDoMtx_stack_c::transM(23.46f, -22.26f, -47.05f);
         mDoMtx_stack_c::XYZrotM(0x1F4B, -0x4F00, 0x1F4B);
         field_0x6D4->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -116,7 +116,7 @@ void daNpc_Kg2_c::set_mtx() {
 }
 
 /* 0000048C-000005A0       .text initTexPatternAnm__11daNpc_Kg2_cFb */
-bool daNpc_Kg2_c::initTexPatternAnm(bool i_modify) {
+BOOL daNpc_Kg2_c::initTexPatternAnm(bool i_modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Kg", l_btp_ix_tbl[field_0x748]));
     JUT_ASSERT(0x12B, m_btp != 0);
@@ -574,13 +574,88 @@ void daNpc_Kg2_c::lookBack() {
 }
 
 /* 00001448-00001468       .text CallbackCreateHeap__FP10fopAc_ac_c */
-static BOOL CallbackCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daNpc_Kg2_c*>(i_this)->CreateHeap();
 }
 
 /* 00001468-0000180C       .text CreateHeap__11daNpc_Kg2_cFv */
-void daNpc_Kg2_c::CreateHeap() {
+BOOL daNpc_Kg2_c::CreateHeap() {
     /* Nonmatching */
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kg", 5));
+    JUT_ASSERT(0x391, modelData != 0);
+
+    mDoExt_McaMorf* morfVar = new mDoExt_McaMorf(
+        modelData,
+        NULL,
+        NULL,
+        static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Kg", 26)),
+        J3DFrameCtrl::EMode_LOOP,
+        1.0f,
+        0,
+        -1,
+        TRUE,
+        NULL,
+        0,
+        0x11020203
+    );
+    mpMorf = morfVar;
+
+    morfVar = mpMorf;
+    if (morfVar == NULL || mpMorf->getModel() == NULL) {
+        return FALSE;
+    } else {
+        m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
+        JUT_ASSERT(0x3A1, m_jnt.getHeadJntNum() >= 0);
+
+        m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone2"));
+        JUT_ASSERT(0x3A6, m_jnt.getBackboneJntNum() >= 0);
+
+        m_handL_num = modelData->getJointName()->getIndex("handL");
+        JUT_ASSERT(0x3AA, m_handL_num >= 0);
+
+        field_0x748 = 0;
+        if (initTexPatternAnm(false) == FALSE) {
+            return FALSE;
+        } else {
+            modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kg", 6));
+            field_0x6D4 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020002);
+            if (field_0x6D4 == NULL) {
+                return FALSE;
+            } else {
+                int tmp = field_0x6D8.init(
+                    modelData,
+                    static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Kg", 10)),
+                    TRUE,
+                    2,
+                    0.0f,
+                    0,
+                    -1,
+                    false,
+                    FALSE
+                );
+                if (tmp == 0) {
+                    return FALSE;
+                } else {
+                    modelData = mpMorf->getModel()->getModelData();
+                    modelData->getJointNodePointer(m_jnt.mHeadJntNum)->setCallBack(nodeCallBack);
+                    modelData->getJointNodePointer(m_jnt.mBackboneJntNum)->setCallBack(nodeCallBack);
+                    mpMorf->getModel()->setUserArea((uintptr_t)this);
+                    mAcchCir.SetWall(30.0f, 0.0f);
+                    mObjAcch.Set(
+                        fopAcM_GetPosition_p(this),
+                        fopAcM_GetOldPosition_p(this),
+                        this,
+                        1,
+                        &mAcchCir,
+                        fopAcM_GetSpeed_p(this),
+                        NULL,
+                        NULL
+                    );
+                }
+            }
+        }
+    }
+    return TRUE;
 }
 
 /* 0000180C-00001A9C       .text CreateInit__11daNpc_Kg2_cFv */
