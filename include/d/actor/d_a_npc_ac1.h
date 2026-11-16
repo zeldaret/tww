@@ -10,7 +10,7 @@ class daNpc_Ac1_c : public fopNpc_npc_c {
 public:
     struct anm_prm_c {
         /* 0x00 */ s8 anmNum;
-        /* 0x01 */ s8 field_0x01;
+        /* 0x01 */ s8 btpNum;
         /* 0x04 */ f32 morf;
         /* 0x08 */ f32 speed;
         /* 0x0C */ int loopMode;
@@ -21,7 +21,7 @@ public:
     void nodeArmControl(J3DNode*, J3DModel*);
     void nodeAc1Control(J3DNode*, J3DModel*);
     bool init_AC1_0();
-    void createInit();
+    bool createInit();
     void setMtx(bool);
     u32 anmNum_toResID(int);
     u32 wingAnmNum_toResID(int);
@@ -31,7 +31,7 @@ public:
     void plyTexPttrnAnm();
     void setAnm_tex(signed char);
     void setAnm_anm(anm_prm_c*);
-    void setAnm();
+    bool setAnm();
     void chg_anmTag();
     void control_anmTag();
     void chg_anmAtr(unsigned char);
@@ -49,7 +49,7 @@ public:
     u32 getMsg();
     void chkAttention();
     void setAttention(bool);
-    void charDecide(int);
+    BOOL charDecide(int);
     void event_actionInit(int);
     void event_action();
     void privateCut(int);
@@ -85,9 +85,9 @@ public:
     /* 0x6D8 */ u32 field_0x6D8;
     /* 0x6DC */ J3DAnmTexPattern* field_0x6DC;
     /* 0x6E0 */ mDoExt_btpAnm mBtpAnim;
-    /* 0x6F4 */ u8 field_0x6F4;
+    /* 0x6F4 */ u8 mBlinkFrame;
     /* 0x6F5 */ u8 field_0x6F5[0x6F6 - 0x6F5];
-    /* 0x6F6 */ u16 field_0x6F6;
+    /* 0x6F6 */ s16 mBlinkTimer;
     /* 0x6F8 */ u8 field_0x6F8[0x6FC - 0x6F8];
     /* 0x6FC */ mDoExt_McaMorf* field_0x6FC;
     /* 0x700 */ s8 m_wngL1_jnt_num;
@@ -137,17 +137,17 @@ public:
     /* 0x86A */ bool field_0x86A;
     /* 0x86B */ u8 field_0x86B;
     /* 0x86C */ u8 field_0x86C[0x86E - 0x86C];
-    /* 0x86E */ s8 field_0x86E;
+    /* 0x86E */ u8 field_0x86E;
     /* 0x86F */ u8 field_0x86F;
     /* 0x870 */ s8 mBtpNum;
     /* 0x871 */ s8 field_0x871;
     /* 0x872 */ u8 field_0x872[0x874 - 0x872];
     /* 0x874 */ s8 field_0x874;
-    /* 0x875 */ s8 field_0x875;
+    /* 0x875 */ s8 mStatus;
     /* 0x876 */ u8 field_0x876;
     /* 0x877 */ u8 field_0x877;
     /* 0x878 */ s8 field_0x878;
-    /* 0x879 */ u8 field_0x879;
+    /* 0x879 */ s8 field_0x879;
     /* 0x87A */ u8 field_0x87A[0x87C - 0x87A];
 };
 
