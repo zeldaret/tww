@@ -916,7 +916,20 @@ cPhs_State daNpc_Kg2_c::_create() {
 
 /* 00002B6C-00002BFC       .text _delete__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhase, "Kg");
+    if (this->heap) {
+        if (mpMorf) {
+            mpMorf->stopZelAnime();
+        }
+    }
+
+    l_kg2_pointer = 0;
+
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+    return TRUE;
 }
 
 /* 00002BFC-00002D14       .text _execute__11daNpc_Kg2_cFv */
@@ -946,7 +959,7 @@ BOOL daNpc_Kg2_c::_execute() {
     tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
     set_mtx();
     setCollision(60.0f, 150.0f);
-    return 1;
+    return TRUE;
 }
 
 /* 00002D14-00002E74       .text _draw__11daNpc_Kg2_cFv */
@@ -989,7 +1002,7 @@ BOOL daNpc_Kg2_c::_draw() {
     );
 
     dSnap_RegistFig(DSNAP_TYPE_NPC_KG2, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
-    return true;
+    return TRUE;
 }
 
 /* 00002E74-00002E94       .text daNpc_Kg2_Create__FP10fopAc_ac_c */
