@@ -189,7 +189,7 @@ void daNpc_Kg2_c::setAnm(s8 param_1, f32 param_2) {
             a_play_speed_tbl[field_0x749],
             l_bck_ix_tbl[field_0x749],
             -1,
-            "Kg2"
+            "Kg"
         );
         if (field_0x749 == 0xC) {
             mpMorf->setFrame(mpMorf->getEndFrame() - 1.0f);
