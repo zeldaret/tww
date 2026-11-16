@@ -243,7 +243,16 @@ void daNpc_Kg2_c::eventOrder() {
 
 /* 00000BC0-00000CC4       .text checkOrder__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        setAction(&daNpc_Kg2_c::wait_action, NULL);
+        field_0x750 = 0;
+    } else if (eventInfo.checkCommandTalk()) {
+        if (field_0x750 == 1 || field_0x750 == 2) {
+            field_0x750 = 0;
+            field_0x72D[0] = 1;
+        }
+    }
+    return;
 }
 
 /* 00000CC4-00000E38       .text getMsg__11daNpc_Kg2_cFv */
@@ -510,7 +519,7 @@ int daNpc_Kg2_c::CreateInit() {
     m_jnt.mbHeadLock = true;
     m_jnt.mbBackBoneLock = true;
 
-    field_0x750[0] = 0;
+    field_0x750 = 0;
     mEventIdx = 4;
 
     mEventIdTable[0] = dComIfGp_evmng_getEventIdx("KG2_START_DEMO");
@@ -557,7 +566,7 @@ void daNpc_Kg2_c::wait01() {
     f32 delta = std::fabsf(current.pos.y - player->current.pos.y);
     if (field_0x72C != 0 && delta < 50.0f) {
         if (field_0x749 != 13 && field_0x749 != 12) {
-            field_0x750[0] = 2;
+            field_0x750 = 2;
         }
     }
     return;
@@ -570,7 +579,7 @@ void daNpc_Kg2_c::talk01() {
         dComIfGp_event_reset();
         field_0x72D[0] = 0;
         if (mCurrMsgNo == 0x3144) {
-            field_0x750[0] = 3;
+            field_0x750 = 3;
             mEventIdx = 0;
         } else if (field_0x738[0] == 0) {
             setAnm(1, -1.0f);
@@ -631,7 +640,7 @@ int daNpc_Kg2_c::wait_action(void*) {
     } else if (mActionStatus != -1) {
         s16 local_1 = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
         field_0x72C = chkAttention(current.pos, local_1);
-        field_0x750[0] = 0;
+        field_0x750 = 0;
         switch(field_0x760) {
             case 1:
                 wait01();
@@ -659,23 +668,23 @@ u32 daNpc_Kg2_c::event_wait_action(void*) {
 
         if (dComIfGp_evmng_endCheck(mEventIdTable[mEventIdx])) {
             if (mEventIdx == 0) {
-                field_0x750[0] = 3;
+                field_0x750 = 3;
                 mEventIdx = 3;
             } else if (mEventIdx == 3) {
                 if (canon_game_result == 1) {
-                    field_0x750[0] = 3;
+                    field_0x750 = 3;
                     mEventIdx = 1;
                 } else {
-                    field_0x750[0] = 1;
+                    field_0x750 = 1;
                     field_0x74C = 0x314E;
                 }
             } else if (mEventIdx == 1) {
-                field_0x750[0] = 3;
+                field_0x750 = 3;
                 mEventIdx = 2;
                 u8 local_2 = cLib_maxLimit(dComIfGs_getEventReg(dSv_event_flag_c::UNK_B703) + 1, 3);
                 dComIfGs_setEventReg(dSv_event_flag_c::UNK_B703, local_2);
             } else if (mEventIdx == 2) {
-                field_0x750[0] = 1;
+                field_0x750 = 1;
                 field_0x74C = 0x315A;
             } else {
                 mEventIdx = 4;
