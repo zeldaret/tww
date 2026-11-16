@@ -912,6 +912,26 @@ u32 daNpc_Kg2_c::event_wait_action(void*) {
 /* 00002590-000027BC       .text _create__11daNpc_Kg2_cFv */
 cPhs_State daNpc_Kg2_c::_create() {
     /* Nonmatching */
+    if (fopAcM_CheckCondition(this, fopAcCnd_INIT_e) == 0) {
+        fopAcM_ct(this, daNpc_Kg2_c);
+    }
+
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Kg");
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, CallbackCreateHeap, 0x2d00) == 0) {
+            return cPhs_ERROR_e;
+        } else {
+            fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+            if (l_HIO.mNo < 0) {
+                l_HIO.mNo = mDoHIO_createChild("海戦ゲーム親父２", &l_HIO);
+            }
+
+            if (CreateInit() == 0) {
+                return cPhs_ERROR_e;
+            }
+        }
+    }
+    return phase_state;
 }
 
 /* 00002B6C-00002BFC       .text _delete__11daNpc_Kg2_cFv */
