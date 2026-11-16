@@ -210,6 +210,42 @@ void daNpc_Kg2_c::setAnm(s8 param_1, f32 param_2) {
 /* 00000838-000009E8       .text subAnm__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::subAnm() {
     /* Nonmatching */
+    if (field_0x748 == 4) {
+        fopAcM_seStart(this, 0x4114, 0);
+    }
+
+    if (field_0x749 == 3 || field_0x749 == 0xD) {
+        if (mpMorf->checkFrame(1.0f)) {
+            field_0x736 = 1;
+            if (field_0x749 == 3) {
+                field_0x737 = 3;
+                return;
+            } else {
+                field_0x737 = 4;
+                return;
+            }
+        }
+    }
+    if (field_0x749 == 9) {
+        if (mpMorf->checkFrame(30.0f)) {
+            field_0x736 = 1;
+            field_0x737 = 2;
+            return;
+        }
+    }
+    if (field_0x749 == 0xC) {
+        if (mpMorf->checkFrame(1.0f)) {
+            field_0x736 = 0;
+            setAnm(1, -1.0f);
+            return;
+        }
+    }
+    if (field_0x749 == 0xD) {
+        if (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
+            setAnm(4, -1.0f);
+            return;
+        }
+    }
 }
 
 /* 000009E8-00000B3C       .text chkAttention__11daNpc_Kg2_cF4cXyzs */
