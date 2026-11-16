@@ -47,12 +47,12 @@ public:
     int CreateInit();
     void wait01();
     void talk01();
-    void evn_setAnm_init(int);
+    u32 evn_setAnm_init(int);
     BOOL evn_setAnm();
-    void evn_jnt_lock_init(int);
-    void evn_talk_init(int);
+    u32 evn_jnt_lock_init(int);
+    u32 evn_talk_init(int);
     BOOL evn_talk();
-    void evn_createItem_init(int);
+    u32 evn_createItem_init(int);
     s32 privateCut();
     u32 processMove();
     int wait_action(void*);
@@ -89,7 +89,9 @@ public:
     /* 0x72C */ u8 field_0x72C;
     /* 0x72D */ u8 field_0x72D[0x737 - 0x72D];
     /* 0x737 */ u8 field_0x737;
-    /* 0x738 */ u8 field_0x738[0x73C - 0x738];
+    /* 0x738 */ u8 field_0x738[0x739 - 0x738];
+    /* 0x739 */ s8 field_0x739;
+    /* 0x73A */ u8 field_0x73A[0x73C - 0x73A];
     /* 0x73C */ ActionFunc mCurrActionFunc;
     /* 0x748 */ s8 field_0x748;
     /* 0x749 */ s8 field_0x749;
