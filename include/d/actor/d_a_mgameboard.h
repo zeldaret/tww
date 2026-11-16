@@ -11,11 +11,18 @@ class dDlst_2DObject_c;
 
 class daMgBoard_c : public fopAc_ac_c {
 public:
+    daMgBoard_c() {}
     inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();
     void reqClearGame() {}
-    void set_mtx(); // weak but not inlined?
+    void set_mtx();
+
+    static char m_arcname[9];
+    static u8 m_bullet_num;
+    static cXyz m_cur_table[8][8];
+    static cXyz m_sink_table[3];
+    static cXyz m_bullet_table[24];
 
     bool checkClearGame();
     u8 getScore();
@@ -23,14 +30,14 @@ public:
     bool checkEndGame();
     void setGInfoDraw();
     void clrGInfoDraw();
-    void CreateHeap();
+    BOOL CreateHeap();
     void set_2dposition();
     void CreateInit();
     void MiniGameInit();
     bool _execute();
-    void execGameMain();
+    bool execGameMain();
     void execEndGame();
-    void MinigameMain();
+    BOOL MinigameMain();
     void CursorMove();
 
     /* 0x290 */ request_of_phase_process_class mPhase;
@@ -40,14 +47,15 @@ public:
     /* 0x2F0 */ J3DModel* mpMissModel[32];
     /* 0x370 */ J3DModel* mpShip2Model[2];
     /* 0x378 */ J3DModel* mpShip3Model[2];
-    /* 0x380 */ J3DModel* mpShip4Model;
-    /* 0x384 */ u8 field_0x384[0x468 - 0x384];
-    /* 0x468 */ u8 mBoardPosX;
-    /* 0x469 */ u8 mBoardPosY;
+    /* 0x380 */ J3DModel* mpShip4Model[2];
+    /* 0x388 */ u8 field_0x388[0x468 - 0x388];
+    /* 0x468 */ s8 mBoardPosX;
+    /* 0x469 */ s8 mBoardPosY;
     /* 0x46A */ u8 field_0x46A[0x46C - 0x46A];
     /* 0x46C */ int mLastFirePosX;
     /* 0x470 */ int mLastFirePosY;
-    /* 0x474 */ u8 field_0x474[0x47C - 0x474];
+    /* 0x474 */ s16 field_0x474;
+    /* 0x478 */ int field_0x478;
     /* 0x47C */ dSeaFightGame_info_c mSeaFightGame;
     /* 0x57C */ u8 field_0x57C[0x580 - 0x57C];
     /* 0x580 */ int mMissModelCount;
@@ -60,8 +68,7 @@ public:
     /* 0x5C4 */ dDlst_2DNumber_c* mpNumber1;
     /* 0x5C8 */ dDlst_2DMinigame_c* mpMinigameDList;
     /* 0x5CC */ dDlst_2DObject_c* mpSquidIcon[3];
-    /* 0x5D8 */ u8 mBombIcons;
-    /* 0x5D9 */ u8 field_0x5D9[0x638 - 0x5D9];
+    /* 0x5D8 */ dDlst_2DObject_c* mpBombIcon[24];
     /* 0x638 */ int mState;
     /* 0x63C */ u8 mbDraw;
     /* 0x63D */ u8 mbStartGame;
