@@ -14,8 +14,8 @@ public:
         ACTION_ENDING   = -1,
     };
 
-    void getAttentionBasePos() {}
-    void getEyePos() {}
+    cXyz* getAttentionBasePos() { return &mAttPos; }
+    cXyz* getEyePos() { return &mEyePos; }
     void seStart(u32) {}
     void setAction(ActionFunc func, void* arg) {
         if (mCurrActionFunc != func) {
@@ -82,7 +82,7 @@ public:
     /* 0x705 */ u8 field_0x705[0x706 - 0x705];
     /* 0x706 */ s16 field_0x706;
     /* 0x708 */ cXyz mAttPos;
-    /* 0x714 */ u8 field_0x714[0x720 - 0x714];
+    /* 0x714 */ cXyz mEyePos;
     /* 0x720 */ s16 field_0x720;
     /* 0x722 */ u8 field_0x722[0x724 - 0x722];
     /* 0x724 */ csXyz mActorAngle;

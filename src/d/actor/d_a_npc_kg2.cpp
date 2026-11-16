@@ -10,6 +10,7 @@
 #include "d/d_lib.h"
 #include "d/d_snap.h"
 #include "res/Object/Kg.h"
+#include "d/d_s_play.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -93,8 +94,39 @@ static const int l_btp_ix_tbl[] = {
 };
 
 /* 00000194-00000368       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     /* Nonmatching */
+    if (calcTiming == 0) {
+        J3DModel* model = j3dSys.getModel();
+        daNpc_Kg2_c* i_this = (daNpc_Kg2_c*)model->getUserArea();
+        if (i_this != NULL) {
+            J3DJoint* joint = (J3DJoint*)node;
+            int jntNo = joint->getJntNo();
+            MTXCopy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
+            if (jntNo == (i_this->m_jnt).getHeadJntNum()) {
+                cXyz tmp(
+                    REG10_F(0) + 24.0f,
+                    REG10_F(1) + 5.0f,
+                    REG10_F(2)
+                );
+
+                static cXyz l_offsetEyePos(24.0f, -16.0f, 0.0f);
+
+                mDoMtx_stack_c::multVec(&tmp, i_this->getEyePos());
+                mDoMtx_stack_c::XrotM(i_this->m_jnt.mAngles[0][1]);
+                mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getHead_x());
+                mDoMtx_stack_c::multVec(&l_offsetEyePos, i_this->getAttentionBasePos());
+                mDoMtx_stack_c::multVec(&tmp, &i_this->attention_info.position);
+                i_this->attention_info.position.z += l_HIO.mNpc.mAttnYOffset;
+            } else if (jntNo == (i_this->m_jnt).getBackboneJntNum()) {
+                mDoMtx_stack_c::XrotM(i_this->m_jnt.mAngles[1][1]);
+                mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getBackbone_x());
+            }
+            cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+            model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+        }
+    }
+    return TRUE;
 }
 
 /* 000003A4-0000048C       .text set_mtx__11daNpc_Kg2_cFv */
