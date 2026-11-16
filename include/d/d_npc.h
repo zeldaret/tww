@@ -261,9 +261,11 @@ public:
     /* 0x6A8 */ u32 mEndMsgNo;
     /* 0x6AC */ fpc_ProcID mCurrMsgBsPcId;
     /* 0x6B0 */ msg_class* mpCurrMsg;
-    /* 0x6B4 */ u8 field_0x6b4[6];
+    /* 0x6B4 */ fpc_ProcID mManzaiPartnerID;
+    /* 0x6B8 */ u16 mManzaiMsgStatus;
     /* 0x6BA */ u16 field_0x6ba;
-    /* 0x6BC */ u8 field_0x6bc[4];
+    /* 0x6BC */ u8 mManzaiState;
+    /* 0x6BD */ u8 field_0x6bd[3];
     /* 0x6C0 */ /* vtable */
 
     virtual u16 next_msgStatus(u32* pMsgNo) { return fopMsgStts_MSG_ENDS_e; }
