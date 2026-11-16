@@ -238,7 +238,15 @@ BOOL daNpc_Kg2_c::chkAttention(cXyz param_1, s16 param_2) {
 
 /* 00000B3C-00000BC0       .text eventOrder__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::eventOrder() {
-    /* Nonmatching */
+    if (field_0x750 == 1 || field_0x750 == 2) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if (field_0x750 == 1) {
+            fopAcM_orderSpeakEvent(this);
+        }
+    } else if (field_0x750 == 3) {
+        fopAcM_orderOtherEventId(this, mEventIdTable[mEventIdx], 0xFF, 0xFFFF, 0, 1);
+    }
+    return;
 }
 
 /* 00000BC0-00000CC4       .text checkOrder__11daNpc_Kg2_cFv */
