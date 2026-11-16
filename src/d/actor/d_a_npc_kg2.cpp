@@ -598,8 +598,9 @@ void daNpc_Kg2_c::evn_setAnm_init(int) {
 }
 
 /* 00001D88-00001E4C       .text evn_setAnm__11daNpc_Kg2_cFv */
-void daNpc_Kg2_c::evn_setAnm() {
+u32 daNpc_Kg2_c::evn_setAnm() {
     /* Nonmatching */
+
 }
 
 /* 00001E4C-00001F14       .text evn_jnt_lock_init__11daNpc_Kg2_cFi */
@@ -613,7 +614,7 @@ void daNpc_Kg2_c::evn_talk_init(int) {
 }
 
 /* 00001F88-00001FBC       .text evn_talk__11daNpc_Kg2_cFv */
-void daNpc_Kg2_c::evn_talk() {
+BOOL daNpc_Kg2_c::evn_talk() {
     /* Nonmatching */
 }
 
@@ -623,13 +624,72 @@ void daNpc_Kg2_c::evn_createItem_init(int) {
 }
 
 /* 00002070-000021EC       .text privateCut__11daNpc_Kg2_cFv */
-void daNpc_Kg2_c::privateCut() {
-    /* Nonmatching */
+s32 daNpc_Kg2_c::privateCut() {
+    static char* cut_name_tbl[] = {
+        "SETANM",
+        "JNTLOCK",
+        "SHOWITEM",
+        "KGTALK",
+        "CREATEITEM",
+    };
+
+    int staffIdx = dComIfGp_evmng_getMyStaffId(mEventCut.getActorName());
+    if (staffIdx == -1) {
+        return 0;
+    }
+
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
+    if (actIdx == -1) {
+        dComIfGp_evmng_cutEnd(staffIdx);
+    } else {
+        if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+            switch (actIdx) {
+                case 0:
+                    evn_setAnm_init(staffIdx);
+                    break;
+                case 1:
+                    evn_jnt_lock_init(staffIdx);
+                    break;
+                case 3:
+                    evn_talk_init(staffIdx);
+                    break;
+                case 4:
+                    evn_createItem_init(staffIdx);
+                    break;
+                case 2:
+                    break;
+            }
+        }
+
+        BOOL tmp;
+        switch (actIdx) {
+            case 0:
+                tmp = evn_setAnm();
+                break;
+            case 2:
+                tmp = TRUE;
+                break;
+            case 3:
+                tmp = evn_talk();
+                break;
+            default:
+                tmp = TRUE;
+                break;
+        }
+        if (tmp) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        }
+    }
+    return 1;
 }
 
 /* 000021EC-00002250       .text processMove__11daNpc_Kg2_cFv */
-void daNpc_Kg2_c::processMove() {
-    /* Nonmatching */
+u32 daNpc_Kg2_c::processMove() {
+    (this->*mCurrActionFunc)(NULL);
+    if (mEventCut.cutProc() || privateCut()) {
+        return 1;
+    }
+    return 0;
 }
 
 /* 00002250-00002334       .text wait_action__11daNpc_Kg2_cFPv */

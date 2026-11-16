@@ -48,13 +48,13 @@ public:
     void wait01();
     void talk01();
     void evn_setAnm_init(int);
-    void evn_setAnm();
+    BOOL evn_setAnm();
     void evn_jnt_lock_init(int);
     void evn_talk_init(int);
-    void evn_talk();
+    BOOL evn_talk();
     void evn_createItem_init(int);
-    void privateCut();
-    void processMove();
+    s32 privateCut();
+    u32 processMove();
     int wait_action(void*);
     u32 event_wait_action(void*);
     cPhs_State _create();
