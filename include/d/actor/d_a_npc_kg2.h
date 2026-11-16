@@ -70,7 +70,8 @@ public:
     static daNpc_Kg2_c* l_kg2_pointer;
 
 public:
-    /* 0x6C4 */ u8 field_0x6C4[0x6C8 - 0x6C4];
+    /* 0x6C4 */ s8 field_0x6C4;
+    /* 0x6C5 */ u8 field_0x6C5[0x6C8 - 0x6C5];
     /* 0x6C8 */ request_of_phase_process_class mPhase;
     /* 0x6D0 */ u32 mShadowId;
     /* 0x6D4 */ J3DModel* field_0x6D4;

@@ -100,6 +100,19 @@ static BOOL nodeCallBack(J3DNode*, int) {
 /* 000003A4-0000048C       .text set_mtx__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::set_mtx() {
     /* Nonmatching */
+    J3DModel* model = mpMorf->getModel();
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpMorf->calc();
+    if (field_0x736) {
+        mDoMtx_stack_c::copy(model->getAnmMtx(field_0x6C4));
+        mDoMtx_stack_c::transM(23.46f, -22.26f, -47.05f);
+        mDoMtx_stack_c::XYZrotM(0x1F4B, -0x4F00, 0x1F4B);
+        field_0x6D4->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+    return;
 }
 
 /* 0000048C-000005A0       .text initTexPatternAnm__11daNpc_Kg2_cFb */
