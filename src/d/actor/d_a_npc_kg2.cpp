@@ -891,8 +891,7 @@ BOOL daNpc_Kg2_c::evn_talk() {
 }
 
 /* 00001FBC-00002070       .text evn_createItem_init__11daNpc_Kg2_cFi */
-u32 daNpc_Kg2_c::evn_createItem_init(int) {
-    /* Nonmatching */
+u32 daNpc_Kg2_c::evn_createItem_init(int param) {
     u8 iVar = dComIfGs_getEventReg(dSv_event_flag_c::UNK_B703);
     switch (iVar) {
         case 0:
@@ -902,6 +901,7 @@ u32 daNpc_Kg2_c::evn_createItem_init(int) {
         case 2:
             iVar = 0xD7;
             break;
+        case 3:
         default:
             iVar = 6;
             break;
@@ -916,7 +916,7 @@ u32 daNpc_Kg2_c::evn_createItem_init(int) {
         NULL,
         NULL
     );
-    if (tmp != 0xFFFFFFFF) {
+    if (tmp != fpcM_ERROR_PROCESS_ID_e) {
         dComIfGp_event_setItemPartnerId(tmp);
     }
     return 1;
