@@ -435,18 +435,29 @@ s8 daNpc_Ac1_c::getBitMask() {
 }
 
 /* 000012AC-00001380       .text getMsg_AC1_0__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::getMsg_AC1_0() {
+u32 daNpc_Ac1_c::getMsg_AC1_0() {
     /* Nonmatching */
 }
 
 /* 00001380-000013BC       .text getMsg__11daNpc_Ac1_cFv */
 u32 daNpc_Ac1_c::getMsg() {
-    /* Nonmatching */
+    u32 o_retval = 0;
+    switch (field_0x879) {
+        case 0:
+            o_retval = getMsg_AC1_0();
+            break;
+    }
+    return o_retval;
 }
 
 /* 000013BC-0000143C       .text chkAttention__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::chkAttention() {
-    /* Nonmatching */
+bool daNpc_Ac1_c::chkAttention() {
+    dAttention_c& attention = dComIfGp_getAttention();
+    if (attention.LockonTruth()) {
+        return this == attention.LockonTarget(0);
+    } else {
+        return this == attention.ActionTarget(0);
+    }
 }
 
 /* 0000143C-00001494       .text setAttention__11daNpc_Ac1_cFb */
@@ -468,13 +479,21 @@ BOOL daNpc_Ac1_c::charDecide(int) {
 }
 
 /* 000014B0-00001508       .text event_actionInit__11daNpc_Ac1_cFi */
-void daNpc_Ac1_c::event_actionInit(int) {
-    /* Nonmatching */
+void daNpc_Ac1_c::event_actionInit(int i_param1) {
+    int* actNo = dComIfGp_evmng_getMyIntegerP(i_param1, "ActNo");
+    if (actNo != NULL) {
+        field_0x86D = *actNo;
+    }
 }
 
 /* 00001508-00001528       .text event_action__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::event_action() {
-    /* Nonmatching */
+bool daNpc_Ac1_c::event_action() {
+    switch (field_0x86D) {
+        case 0:
+            return true;
+        default:
+            return true;
+    }
 }
 
 /* 00001528-00001614       .text privateCut__11daNpc_Ac1_cFi */

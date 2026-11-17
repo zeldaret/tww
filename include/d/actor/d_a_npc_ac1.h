@@ -14,7 +14,7 @@ public:
         /* 0x04 */ f32 morf;
         /* 0x08 */ f32 speed;
         /* 0x0C */ int loopMode;
-        /* 0x10 */ int field_0x10;
+        /* 0x10 */ BOOL field_0x10;
     }; // Size: 0x14
 
     void nodeWngControl(J3DNode*, J3DModel*);
@@ -45,13 +45,13 @@ public:
     void lookBack();
     u16 next_msgStatus(unsigned long*);
     s8 getBitMask();
-    void getMsg_AC1_0();
+    u32 getMsg_AC1_0();
     u32 getMsg();
-    void chkAttention();
+    bool chkAttention();
     void setAttention(bool);
     BOOL charDecide(int);
     void event_actionInit(int);
-    void event_action();
+    bool event_action();
     void privateCut(int);
     void endEvent();
     void isEventEntry();
@@ -139,7 +139,8 @@ public:
     /* 0x869 */ u8 field_0x869;
     /* 0x86A */ bool field_0x86A;
     /* 0x86B */ u8 field_0x86B;
-    /* 0x86C */ u8 field_0x86C[0x86E - 0x86C];
+    /* 0x86C */ u8 field_0x86C;
+    /* 0x86D */ u8 field_0x86D;
     /* 0x86E */ u8 field_0x86E;
     /* 0x86F */ u8 field_0x86F;
     /* 0x870 */ s8 mBtpNum;
