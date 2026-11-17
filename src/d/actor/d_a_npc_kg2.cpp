@@ -1058,10 +1058,7 @@ u32 daNpc_Kg2_c::event_wait_action(void*) {
 
 /* 00002590-000027BC       .text _create__11daNpc_Kg2_cFv */
 cPhs_State daNpc_Kg2_c::_create() {
-    /* Nonmatching */
-    if (fopAcM_CheckCondition(this, fopAcCnd_INIT_e) == 0) {
-        fopAcM_ct(this, daNpc_Kg2_c);
-    }
+    fopAcM_ct(this, daNpc_Kg2_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Kg");
     if (phase_state == cPhs_COMPLEATE_e) {
