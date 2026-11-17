@@ -26,8 +26,8 @@ public:
     u32 anmNum_toResID(int);
     u32 wingAnmNum_toResID(int);
     u32 btpNum_toResID(int);
-    void setBtp(bool, int);
-    void iniTexPttrnAnm(bool);
+    bool setBtp(bool, int);
+    bool iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
     void setAnm_tex(signed char);
     void setAnm_anm(anm_prm_c*);
@@ -83,7 +83,7 @@ public:
     /* 0x6D1 */ u8 field_0x6D1[0x6D4 - 0x6D1];
     /* 0x6D4 */ J3DModel* field_0x6D4;
     /* 0x6D8 */ u32 field_0x6D8;
-    /* 0x6DC */ J3DAnmTexPattern* field_0x6DC;
+    /* 0x6DC */ J3DAnmTexPattern* m_hed_tex_pttrn;
     /* 0x6E0 */ mDoExt_btpAnm mBtpAnim;
     /* 0x6F4 */ u8 mBlinkFrame;
     /* 0x6F5 */ u8 field_0x6F5[0x6F6 - 0x6F5];
@@ -111,7 +111,7 @@ public:
     /* 0x808 */ cXyz mEyePos;
     /* 0x814 */ cXyz field_0x814;
     /* 0x820 */ u8 field_0x820[0x82C - 0x820];
-    /* 0x82C */ f32 field_0x82C;
+    /* 0x82C */ f32 mFrame;
     /* 0x830 */ u8 field_0x830[0x844 - 0x830];
     /* 0x844 */ s16 field_0x844;
     /* 0x846 */ s16 field_0x846;
@@ -122,7 +122,7 @@ public:
     /* 0x852 */ s16 field_0x852;
     /* 0x854 */ s16 field_0x854;
     /* 0x856 */ s16 field_0x856;
-    /* 0x858 */ u8 field_0x858;
+    /* 0x858 */ u8 mbMorfAnimStopped;
     /* 0x859 */ u8 field_0x859[0x85D - 0x859];
     /* 0x85D */ u8 field_0x85D;
     /* 0x85E */ u8 field_0x85E;
