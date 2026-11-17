@@ -40,8 +40,8 @@ public:
     void anmAtr(unsigned short);
     void eventOrder();
     void checkOrder();
-    void chk_talk();
-    void chk_partsNotMove();
+    bool chk_talk();
+    bool chk_partsNotMove();
     void lookBack();
     u16 next_msgStatus(unsigned long*);
     s8 getBitMask();
@@ -124,7 +124,9 @@ public:
     /* 0x856 */ s16 field_0x856;
     /* 0x858 */ u8 mbMorfAnimStopped;
     /* 0x859 */ u8 field_0x859;
-    /* 0x85A */ u8 field_0x85A[0x85D - 0x85A];
+    /* 0x85A */ u8 field_0x85A;
+    /* 0x85B */ u8 field_0x85B;
+    /* 0x85C */ u8 field_0x85C[0x85D - 0x85C];
     /* 0x85D */ u8 field_0x85D;
     /* 0x85E */ bool field_0x85E;
     /* 0x85F */ u8 field_0x85F;
@@ -132,7 +134,7 @@ public:
     /* 0x861 */ u8 field_0x861;
     /* 0x862 */ u8 field_0x862;
     /* 0x863 */ u8 field_0x863;
-    /* 0x864 */ int field_0x864;
+    /* 0x864 */ int mbSetEyePos;
     /* 0x868 */ u8 field_0x868[0x869 - 0x868];
     /* 0x869 */ u8 field_0x869;
     /* 0x86A */ bool field_0x86A;
@@ -149,7 +151,8 @@ public:
     /* 0x877 */ u8 field_0x877;
     /* 0x878 */ s8 field_0x878;
     /* 0x879 */ s8 field_0x879;
-    /* 0x87A */ u8 field_0x87A[0x87C - 0x87A];
+    /* 0x87A */ u8 field_0x87A;
+    /* 0x87B */ s8 field_0x87B;
 };
 
 class daNpc_Ac1_HIO_c : public mDoHIO_entry_c {
@@ -173,7 +176,7 @@ public:
     /* 0x1A */ s16 field_0x1A;
     /* 0x1C */ s16 field_0x1C;
     /* 0x1E */ s16 field_0x1E;
-    /* 0x20 */ s32 field_0x20;
+    /* 0x20 */ f32 field_0x20;
     /* 0x24 */ u8 field_0x24[0x3C - 0x24];
 }; // Size: 0x3C
 
