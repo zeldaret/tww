@@ -30,7 +30,7 @@ public:
     bool iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
     void setAnm_tex(signed char);
-    void setAnm_anm(anm_prm_c*);
+    BOOL setAnm_anm(anm_prm_c*);
     bool setAnm();
     void chg_anmTag();
     void control_anmTag();
@@ -44,7 +44,7 @@ public:
     void chk_partsNotMove();
     void lookBack();
     u16 next_msgStatus(unsigned long*);
-    void getBitMask();
+    s8 getBitMask();
     void getMsg_AC1_0();
     u32 getMsg();
     void chkAttention();
@@ -123,9 +123,10 @@ public:
     /* 0x854 */ s16 field_0x854;
     /* 0x856 */ s16 field_0x856;
     /* 0x858 */ u8 mbMorfAnimStopped;
-    /* 0x859 */ u8 field_0x859[0x85D - 0x859];
+    /* 0x859 */ u8 field_0x859;
+    /* 0x85A */ u8 field_0x85A[0x85D - 0x85A];
     /* 0x85D */ u8 field_0x85D;
-    /* 0x85E */ u8 field_0x85E;
+    /* 0x85E */ bool field_0x85E;
     /* 0x85F */ u8 field_0x85F;
     /* 0x860 */ u8 field_0x860;
     /* 0x861 */ u8 field_0x861;
@@ -140,7 +141,7 @@ public:
     /* 0x86E */ u8 field_0x86E;
     /* 0x86F */ u8 field_0x86F;
     /* 0x870 */ s8 mBtpNum;
-    /* 0x871 */ s8 field_0x871;
+    /* 0x871 */ s8 mAnmNum;
     /* 0x872 */ u8 field_0x872[0x874 - 0x872];
     /* 0x874 */ s8 field_0x874;
     /* 0x875 */ s8 mStatus;

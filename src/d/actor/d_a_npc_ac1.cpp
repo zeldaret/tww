@@ -124,7 +124,7 @@ bool daNpc_Ac1_c::createInit() {
         }
     }
     mEventCut.setActorInfo2("Ac1", this);
-    field_0x871 = 4;
+    mAnmNum = 4;
 
     bool init_success;
     switch (field_0x879) {
@@ -254,8 +254,23 @@ void daNpc_Ac1_c::setAnm_tex(s8 i_param1) {
 }
 
 /* 00000BE4-00000D0C       .text setAnm_anm__11daNpc_Ac1_cFPQ211daNpc_Ac1_c9anm_prm_c */
-void daNpc_Ac1_c::setAnm_anm(daNpc_Ac1_c::anm_prm_c*) {
-    /* Nonmatching */
+BOOL daNpc_Ac1_c::setAnm_anm(daNpc_Ac1_c::anm_prm_c* i_anmPrmP) {
+    if (mAnmNum == i_anmPrmP->anmNum) {
+        return TRUE;
+    }
+    mAnmNum = i_anmPrmP->anmNum;
+    dNpc_setAnmIDRes(mpMorf, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, anmNum_toResID(mAnmNum), -1, "Ac");
+    u32 wingAnmNum = wingAnmNum_toResID(mAnmNum);
+    field_0x85E = i_anmPrmP->field_0x10 == 1;
+    if (field_0x85E) {
+        dNpc_setAnmIDRes(field_0x708, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, wingAnmNum, -1, "Ac");
+    } else {
+        dNpc_setAnmIDRes(field_0x6FC, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, wingAnmNum, -1, "Ac");
+    }
+    mFrame = 0.0f;
+    field_0x859 = 0;
+    mbMorfAnimStopped = false;
+    return TRUE;
 }
 
 /* 00000D0C-00000D8C       .text setAnm__11daNpc_Ac1_cFv */
@@ -298,11 +313,13 @@ void daNpc_Ac1_c::control_anmAtr() {
 }
 
 /* 00000DE4-00000E4C       .text setAnm_ATR__11daNpc_Ac1_cFi */
-void daNpc_Ac1_c::setAnm_ATR(int) {
-    static anm_prm_c a_anm_prm_tbl[] = { { 0, 0, 8.0f, 1.0f, 2, 1 }, { 1, 0, 8.0f, 1.0f, 2, 1 },
-
-                                         { 2, 1, 8.0f, 1.0f, 2, 1 }, { 3, 0, 8.0f, 1.0f, 2, 1 }, { 1, 2, 8.0f, 1.0f, 2, 1 }, { 1, 1, 8.0f, 1.0f, 2, 1 } };
-    /* Nonmatching */
+void daNpc_Ac1_c::setAnm_ATR(int i_param1) {
+    static anm_prm_c a_anm_prm_tbl[] = { { 0, 0, 8.0f, 1.0f, 2, 1 }, { 1, 0, 8.0f, 1.0f, 2, 1 }, { 2, 1, 8.0f, 1.0f, 2, 1 },
+                                         { 3, 0, 8.0f, 1.0f, 2, 1 }, { 1, 2, 8.0f, 1.0f, 2, 1 }, { 1, 1, 8.0f, 1.0f, 2, 1 } };
+    if (i_param1) {
+        setAnm_tex(a_anm_prm_tbl[field_0x86E].btpNum);
+    }
+    setAnm_anm(&a_anm_prm_tbl[field_0x86E]);
 }
 
 /* 00000E4C-00000F10       .text anmAtr__11daNpc_Ac1_cFUs */
@@ -341,8 +358,14 @@ u16 daNpc_Ac1_c::next_msgStatus(unsigned long*) {
 }
 
 /* 0000128C-000012AC       .text getBitMask__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::getBitMask() {
-    /* Nonmatching */
+s8 daNpc_Ac1_c::getBitMask() {
+    s8 ret = 0;
+    switch (field_0x879) {
+        case 0:
+            ret = 0x10;
+            break;
+    }
+    return ret;
 }
 
 /* 000012AC-00001380       .text getMsg_AC1_0__11daNpc_Ac1_cFv */
