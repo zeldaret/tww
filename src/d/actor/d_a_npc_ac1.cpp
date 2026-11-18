@@ -477,7 +477,28 @@ s8 daNpc_Ac1_c::getBitMask() {
 
 /* 000012AC-00001380       .text getMsg_AC1_0__11daNpc_Ac1_cFv */
 u32 daNpc_Ac1_c::getMsg_AC1_0() {
-    /* Nonmatching */
+    s8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_B8FF);
+    s8 mask = getBitMask();
+    u16 i_no;
+    u32 ret;
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1580)) {
+        if (mask & reg) {
+            ret = 0x1853;
+        } else {
+            i_no = reg | mask;
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, i_no);
+            ret = 0x1850;
+        }
+    } else {
+        if (mask & reg) {
+            ret = 0x184F;
+        } else {
+            i_no = reg | mask;
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, i_no);
+            ret = 0x184C;
+        }
+    }
+    return ret;
 }
 
 /* 00001380-000013BC       .text getMsg__11daNpc_Ac1_cFv */
@@ -621,12 +642,32 @@ void daNpc_Ac1_c::setStt(s8 i_status) {
 }
 
 /* 000017D4-0000189C       .text wait_1__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::wait_1() {
-    /* Nonmatching */
+BOOL daNpc_Ac1_c::wait_1() {
+    if (field_0x874 == 1 || field_0x874 >= 3) {
+        return TRUE;
+    }
+    if (field_0x869) {
+        if (chk_talk()) {
+            setStt(2);
+        }
+        return TRUE;
+    }
+    field_0x874 = 2;
+    if (field_0x868 != 0) {
+        field_0x84C = 0x3C;
+    }
+    if (cLib_calcTimer(&field_0x84C)) {
+        mLookBackState = 1;
+    } else {
+        mLookBackState = 3;
+        field_0x854 = field_0x800.y;
+        m_jnt.setTrn();
+    }
+    return TRUE;
 }
 
 /* 0000189C-00001978       .text talk_1__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::talk_1() {
+BOOL daNpc_Ac1_c::talk_1() {
     /* Nonmatching */
 }
 

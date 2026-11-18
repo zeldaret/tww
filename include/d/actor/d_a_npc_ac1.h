@@ -60,8 +60,8 @@ public:
     void event_proc(int);
     BOOL set_action(ActionFunc, void*);
     void setStt(signed char);
-    void wait_1();
-    void talk_1();
+    BOOL wait_1();
+    BOOL talk_1();
     BOOL wait_action1(void*);
     void demo();
     void shadowDraw();
@@ -135,7 +135,7 @@ public:
     /* 0x862 */ u8 field_0x862;
     /* 0x863 */ u8 field_0x863;
     /* 0x864 */ int mbSetEyePos;
-    /* 0x868 */ u8 field_0x868[0x869 - 0x868];
+    /* 0x868 */ u8 field_0x868;
     /* 0x869 */ u8 field_0x869;
     /* 0x86A */ bool field_0x86A;
     /* 0x86B */ u8 field_0x86B;
