@@ -1128,7 +1128,6 @@ BOOL daNpc_Kg2_c::_execute() {
 
 /* 00002D14-00002E74       .text _draw__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::_draw() {
-    /* Nonmatching */
     J3DModel* morf_model = mpMorf->getModel();
     J3DModelData* model_data = morf_model->getModelData();
 
@@ -1136,22 +1135,21 @@ BOOL daNpc_Kg2_c::_draw() {
     g_env_light.setLightTevColorType(morf_model, &tevStr);
     mBtpAnm.entry(model_data, field_0x704);
     mpMorf->entryDL();
-    model_data->getMaterialTable().removeTexNoAnimator(mBtpAnm.getBtpAnm());
+    mBtpAnm.remove(model_data);
 
-    if (field_0x72A[0xB] != NULL) {
+    if (field_0x72A[0xC] != NULL) {  // field_0x736 != NULL
         model_data = field_0x6D4->getModelData();
         g_env_light.setLightTevColorType(field_0x6D4, &tevStr);
         field_0x6D8.entry(model_data, field_0x737);
         mDoExt_modelUpdateDL(field_0x6D4);
-        model_data->getMaterialTable().removeTexNoAnimator(mBtpAnm.getBtpAnm());
+        field_0x6D8.remove(model_data);
     }
 
     cXyz shadow_pos(
-        current.pos.z,
+        current.pos.x,
         current.pos.y + 150.0f,
-        current.pos.x
+        current.pos.z
     );
-
     mShadowId = dComIfGd_setShadow(
         mShadowId,
         1,
@@ -1162,7 +1160,10 @@ BOOL daNpc_Kg2_c::_draw() {
         current.pos.y,
         mObjAcch.GetGroundH(),
         mObjAcch.m_gnd,
-        &tevStr
+        &tevStr,
+        0,
+        1.0f,
+        dDlst_shadowControl_c::getSimpleTex()
     );
 
     dSnap_RegistFig(DSNAP_TYPE_NPC_KG2, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
