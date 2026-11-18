@@ -174,14 +174,15 @@ void daObjTnTrap_c::particle_set(int idx, float offsetY) {
 
 /* 0000058C-00000614       .text particle_delete__13daObjTnTrap_cFi */
 void daObjTnTrap_c::particle_delete(int idx) {
+    int i;
     if (mParticleOn[idx] == 1) {
-        for (int i = 0; i < 2; i++) {
+        for (i = 0; i < 2; i++) {
             if (mpBallEmitter[idx][i] != NULL) {
                 mpBallEmitter[idx][i]->becomeInvalidEmitter();
                 mpBallEmitter[idx][i] = NULL;
             }
         }
-        for (int i = 0; i < 3; i++) {
+        for (i = 0; i < 3; i++) {
             if (mpThunderEmitter[idx][i] != NULL) {
                 mpThunderEmitter[idx][i]->becomeInvalidEmitter();
                 mpThunderEmitter[idx][i] = NULL;
