@@ -693,7 +693,6 @@ BOOL daNpc_Kg2_c::CreateHeap() {
 
 /* 0000180C-00001A9C       .text CreateInit__11daNpc_Kg2_cFv */
 int daNpc_Kg2_c::CreateInit() {
-    /* Nonmatching */
     mActorAngle = current.angle;
 
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
@@ -734,10 +733,10 @@ int daNpc_Kg2_c::CreateInit() {
     set_mtx();
 
     if (dComIfGs_getTime() >= 105.0f && dComIfGs_getTime() < 300.0f) {
-        field_0x72A[0xC] = 0;  // field_0x738 = 0
+        field_0x72A[0xE] = 0;  // field_0x738 = 0
         setAnm(1, -1.0f);
     } else {
-        field_0x72A[0xC] = 1;  // field_0x738 = 1
+        field_0x72A[0xE] = 1;  // field_0x738 = 1
         setAnm(13, 0.0f);
     }
 
