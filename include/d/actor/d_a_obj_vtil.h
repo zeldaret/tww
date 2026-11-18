@@ -1,17 +1,30 @@
 #ifndef D_A_OBJ_VTIL_H
 #define D_A_OBJ_VTIL_H
 
-#include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
+#include "d/d_a_obj.h"
+#include "d/d_bg_s_acch.h"
+#include "d/d_cc_d.h"
+#include "d/d_kankyo.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_camera.h"
+#include "SSystem/SComponent/c_phase.h"
 
 class daObjVtil_c : public fopAc_ac_c {
 public:
-    void camera_off() {}
-    void check_ev_bit() const; // weak but not inlined?
-    void prm_get_type() const {}
+    enum Prm_e {
+        PRM_TYPE_W = 4,
+        PRM_TYPE_S = 0,
+    };
 
-    void solidHeapCB(fopAc_ac_c*);
-    void create_heap();
+    typedef void (daObjVtil_c::*ModeFunc)();
+
+    void camera_off() { dComIfGp_getCamera(0)->mCamera.ForceLockOff(base.base.mBsPcId); }
+    BOOL check_ev_bit() const;
+    int prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
+
+    static BOOL solidHeapCB(fopAc_ac_c*);
+    BOOL create_heap();
     cPhs_State _create();
     bool _delete();
     void tell_agb_attack();
@@ -35,18 +48,33 @@ public:
     void to_sink_mode();
     void mode_sink();
     void hit_co();
-    void check_sink();
-    void check_sink_end();
+    bool check_sink();
+    bool check_sink_end();
     void hit_bg();
     void make_vib();
-    void check_circle();
+    BOOL check_circle();
     bool _execute();
     bool _draw();
 
+    static const int l_daObjVtil_bdl_idx_table[];
+    static const int l_daObjVtil_scene_no_table[];
     static const dCcD_SrcCyl M_co_cyl_data;
+    static const char M_arcname[];
 
 public:
-    /* Place member variables here */
-};
+    /* 0x290 */ J3DModel* mpModel;
+    /* 0x294 */ request_of_phase_process_class mPhase;
+    /* 0x29C */ dBgS_ObjAcch mAcch;
+    /* 0x460 */ dBgS_AcchCir mAcchCir;
+    /* 0x4A0 */ dCcD_Stts mStts;
+    /* 0x4DC */ dCcD_Cyl mCyl;
+    /* 0x60C */ int mType;
+    /* 0x610 */ f32 mSpeedY;
+    /* 0x614 */ u8 mMode;
+    /* 0x615 */ u8 mDeleteState;
+    /* 0x616 */ u8 mFirstLand;
+    /* 0x617 */ u8 field_0x617[0x61C - 0x617];
+    /* 0x61C */ LIGHT_INFLUENCE mLight;
+}; // Size: 0x63C
 
 #endif /* D_A_OBJ_VTIL_H */
