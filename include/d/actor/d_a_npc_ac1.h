@@ -17,6 +17,8 @@ public:
         /* 0x10 */ BOOL field_0x10;
     }; // Size: 0x14
 
+    typedef BOOL (daNpc_Ac1_c::*ActionFunc)(void*);
+
     void nodeWngControl(J3DNode*, J3DModel*);
     void nodeArmControl(J3DNode*, J3DModel*);
     void nodeAc1Control(J3DNode*, J3DModel*);
@@ -54,9 +56,9 @@ public:
     bool event_action();
     void privateCut(int);
     void endEvent();
-    void isEventEntry();
+    BOOL isEventEntry();
     void event_proc(int);
-    void set_action(int (daNpc_Ac1_c::*)(void*), void*);
+    BOOL set_action(ActionFunc, void*);
     void setStt(signed char);
     void wait_1();
     void talk_1();
@@ -97,9 +99,7 @@ public:
     /* 0x70C */ s8 m_armL1_jnt_num;
     /* 0x70D */ s8 m_armR1_jnt_num;
     /* 0x70E */ u8 field_0x70E[0x710 - 0x70E];
-    /* 0x710 */ u32 field_0x710;
-    /* 0x714 */ u32 field_0x714;
-    /* 0x718 */ int field_0x718;
+    /* 0x710 */ ActionFunc mCurrActionFunc;
     /* 0x71C */ Mtx mLeftArmMtx;
     /* 0x74C */ Mtx mRightArmMtx;
     /* 0x77C */ dNpc_PathRun_c mPathRun;
@@ -119,7 +119,7 @@ public:
     /* 0x84A */ u8 field_0x84A[0x84C - 0x84A];
     /* 0x84C */ s16 field_0x84C;
     /* 0x84E */ u8 field_0x84E[0x852 - 0x84E];
-    /* 0x852 */ s16 field_0x852;
+    /* 0x852 */ s16 mHeadLookAtMaxVel;
     /* 0x854 */ s16 field_0x854;
     /* 0x856 */ s16 field_0x856;
     /* 0x858 */ u8 mbMorfAnimStopped;
@@ -139,7 +139,7 @@ public:
     /* 0x869 */ u8 field_0x869;
     /* 0x86A */ bool field_0x86A;
     /* 0x86B */ u8 field_0x86B;
-    /* 0x86C */ u8 field_0x86C;
+    /* 0x86C */ s8 mActionIndex;
     /* 0x86D */ u8 field_0x86D;
     /* 0x86E */ u8 field_0x86E;
     /* 0x86F */ u8 field_0x86F;
@@ -149,7 +149,7 @@ public:
     /* 0x874 */ s8 field_0x874;
     /* 0x875 */ s8 mStatus;
     /* 0x876 */ u8 field_0x876;
-    /* 0x877 */ u8 field_0x877;
+    /* 0x877 */ s8 mLookBackState;
     /* 0x878 */ s8 field_0x878;
     /* 0x879 */ s8 field_0x879;
     /* 0x87A */ u8 field_0x87A;

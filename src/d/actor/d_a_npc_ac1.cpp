@@ -397,7 +397,48 @@ bool daNpc_Ac1_c::chk_partsNotMove() {
 
 /* 0000107C-0000121C       .text lookBack__11daNpc_Ac1_cFv */
 void daNpc_Ac1_c::lookBack() {
-    /* Nonmatching */
+    cXyz dstPos;
+    cXyz* dstPos_p;
+    cXyz src_pos;
+    s16 desiredYrot;
+    field_0x844 = m_jnt.getHead_y();
+    field_0x846 = m_jnt.getBackbone_y();
+    field_0x848 = current.angle.y;
+    src_pos.x = current.pos.x;
+    src_pos.y = current.pos.y;
+    src_pos.z = current.pos.z;
+    src_pos.y = eyePos.y;
+    dstPos.set(0.0f, 0.0f, 0.0f);
+    dstPos_p = NULL;
+    desiredYrot = current.angle.y;
+    bool headOnlyFollow = field_0x86A;
+
+    switch (mLookBackState) {
+        case 1:
+            dstPos = dNpc_playerEyePos(-20.0f);
+            dstPos_p = &dstPos;
+            src_pos.x = current.pos.x;
+            src_pos.y = current.pos.y;
+            src_pos.z = current.pos.z;
+            src_pos.y = eyePos.y;
+            break;
+        case 2:
+            dstPos = field_0x814;
+            dstPos_p = &dstPos;
+            src_pos.x = current.pos.x;
+            src_pos.y = current.pos.y;
+            src_pos.z = current.pos.z;
+            src_pos.y = eyePos.y;
+            break;
+        case 3:
+            desiredYrot = field_0x854;
+            break;
+    }
+    cLib_addCalcAngleS2(&mHeadLookAtMaxVel, l_HIO.field_0x1E, 4, 0x800);
+    if (!m_jnt.trnChk()) {
+        mHeadLookAtMaxVel = 0;
+    }
+    m_jnt.lookAtTarget(&current.angle.y, dstPos_p, src_pos, desiredYrot, mHeadLookAtMaxVel, headOnlyFollow);
 }
 
 /* 0000121C-0000128C       .text next_msgStatus__11daNpc_Ac1_cFPUl */
@@ -497,9 +538,34 @@ bool daNpc_Ac1_c::event_action() {
 }
 
 /* 00001528-00001614       .text privateCut__11daNpc_Ac1_cFi */
-void daNpc_Ac1_c::privateCut(int) {
+void daNpc_Ac1_c::privateCut(int i_staffIdx) {
     static char* a_cut_tbl[] = { "ACTION" };
-    /* Nonmatching */
+    if (i_staffIdx != -1) {
+        mActionIndex = dComIfGp_evmng_getMyActIdx(i_staffIdx, a_cut_tbl, 1, TRUE, 0);
+        if (mActionIndex == -1) {
+            dComIfGp_evmng_cutEnd(i_staffIdx);
+        } else {
+            if (dComIfGp_evmng_getIsAddvance(i_staffIdx)) {
+                switch (mActionIndex) {
+                    case 0:
+                        event_actionInit(i_staffIdx);
+                        break;
+                }
+            }
+            bool action;
+            switch (mActionIndex) {
+                case 0:
+                    action = event_action();
+                    break;
+                default:
+                    action = 1;
+                    break;
+            }
+            if (action) {
+                dComIfGp_evmng_cutEnd(i_staffIdx);
+            }
+        }
+    }
 }
 
 /* 00001614-00001634       .text endEvent__11daNpc_Ac1_cFv */
@@ -509,23 +575,49 @@ void daNpc_Ac1_c::endEvent() {
 }
 
 /* 00001634-0000166C       .text isEventEntry__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::isEventEntry() {
-    /* Nonmatching */
+BOOL daNpc_Ac1_c::isEventEntry() {
+    return dComIfGp_evmng_getMyStaffId(mEventCut.getActorName(), NULL);
 }
 
 /* 0000166C-000016C4       .text event_proc__11daNpc_Ac1_cFi */
-void daNpc_Ac1_c::event_proc(int) {
-    /* Nonmatching */
+void daNpc_Ac1_c::event_proc(int i_staffIdx) {
+    if (!mEventCut.cutProc()) {
+        privateCut(i_staffIdx);
+    }
+    lookBack();
 }
 
 /* 000016C4-00001770       .text set_action__11daNpc_Ac1_cFM11daNpc_Ac1_cFPCvPvPv_iPv */
-void daNpc_Ac1_c::set_action(int (daNpc_Ac1_c::*)(void*), void*) {
-    /* Nonmatching */
+BOOL daNpc_Ac1_c::set_action(ActionFunc i_action, void* i_param2) {
+    if (mCurrActionFunc != i_action) {
+        if (mCurrActionFunc) {
+            field_0x87A = 9;
+            (this->*mCurrActionFunc)(i_param2);
+        }
+        mCurrActionFunc = i_action;
+        field_0x87A = 0;
+        (this->*mCurrActionFunc)(i_param2);
+    }
+    return TRUE;
 }
 
 /* 00001770-000017D4       .text setStt__11daNpc_Ac1_cFSc */
-void daNpc_Ac1_c::setStt(signed char) {
-    /* Nonmatching */
+void daNpc_Ac1_c::setStt(s8 i_status) {
+    s8 previous_status = mStatus;
+    field_0x84C = 0;
+    mStatus = i_status;
+    switch (mStatus) {
+        case 2:
+            field_0x86E = -1;
+            mLookBackState = 1;
+            field_0x876 = previous_status;
+            m_jnt.setTrn();
+            break;
+        case 1:
+        default:
+            setAnm();
+            break;
+    }
 }
 
 /* 000017D4-0000189C       .text wait_1__11daNpc_Ac1_cFv */
