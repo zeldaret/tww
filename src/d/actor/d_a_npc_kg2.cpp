@@ -568,7 +568,7 @@ void daNpc_Kg2_c::setAttention() {
 
 /* 00001308-00001448       .text lookBack__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::lookBack() {
-    /* Nonmatching */
+    cXyz tmp;
     cXyz pos_1;
     pos_1.x = 0.0f;
     pos_1.y = 0.0f;
@@ -582,7 +582,7 @@ void daNpc_Kg2_c::lookBack() {
                 m_jnt.setTrn();
             }
             if (field_0x72C) {
-                cXyz tmp = dNpc_playerEyePos(l_HIO.mNpc.m04);
+                tmp = dNpc_playerEyePos(l_HIO.mNpc.m04);
                 pos_p = &tmp;
                 pos_1 = current.pos;
                 pos_1.y = eyePos.y;
