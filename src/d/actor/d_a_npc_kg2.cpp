@@ -102,7 +102,8 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         if (i_this != NULL) {
             J3DJoint* joint = (J3DJoint*)node;
             int jntNo = joint->getJntNo();
-            MTXCopy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
+            MtxP mVar = model->getAnmMtx(jntNo);
+            MTXCopy(mVar, mDoMtx_stack_c::get());
             if (jntNo == (i_this->m_jnt).getHeadJntNum()) {
                 cXyz tmp(
                     REG10_F(0) + 24.0f,
@@ -117,7 +118,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                 mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getHead_x());
                 mDoMtx_stack_c::multVec(&l_offsetEyePos, i_this->getAttentionBasePos());
                 mDoMtx_stack_c::multVec(&tmp, &i_this->attention_info.position);
-                i_this->attention_info.position.z += l_HIO.mNpc.mAttnYOffset;
+                i_this->attention_info.position.y += l_HIO.mNpc.mAttnYOffset;
             } else if (jntNo == (i_this->m_jnt).getBackboneJntNum()) {
                 mDoMtx_stack_c::XrotM(i_this->m_jnt.mAngles[1][1]);
                 mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getBackbone_x());
