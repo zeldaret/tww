@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_ac1.h"
+#include "d/d_snap.h"
 
 static daNpc_Ac1_HIO_c l_HIO;
 
@@ -161,7 +162,7 @@ bool daNpc_Ac1_c::createInit() {
 /* 000007C8-00000988       .text setMtx__11daNpc_Ac1_cFb */
 void daNpc_Ac1_c::setMtx(bool i_setEyePos) {
 
-    if (field_0x86B == 0) {
+    if (mbInDemo == 0) {
         plyTexPttrnAnm();
         mbMorfAnimStopped = mpMorf->play(&eyePos, 0, 0);
         if (mpMorf->getFrame() < mFrame) {
@@ -668,27 +669,147 @@ BOOL daNpc_Ac1_c::wait_1() {
 
 /* 0000189C-00001978       .text talk_1__11daNpc_Ac1_cFv */
 BOOL daNpc_Ac1_c::talk_1() {
-    /* Nonmatching */
+    u8 notMove = chk_partsNotMove();
+    if (mpCurrMsg != NULL) {
+        field_0x856 = mpCurrMsg->mStatus;
+    } else {
+        field_0x856 = fopMsgStts_MSG_UNK0_e;
+    }
+    talk(1);
+
+    if (mpCurrMsg != NULL) {
+        switch (mpCurrMsg->mStatus) {
+            case fopMsgStts_MSG_TYPING_e:
+            case fopMsgStts_BOX_OPENING_e:
+                break;
+            case fopMsgStts_MSG_DESTROYED_e:
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3F02);
+                field_0x85B = -1;
+                field_0x869 = 0;
+                setStt(field_0x876);
+                field_0x84C = 0x3C;
+                endEvent();
+        }
+    }
+    return notMove;
 }
 
 /* 00001978-00001A34       .text wait_action1__11daNpc_Ac1_cFPv */
 BOOL daNpc_Ac1_c::wait_action1(void*) {
-    /* Nonmatching */
+    switch (field_0x87A) {
+        case 0:
+            setStt(1);
+            field_0x87A++;
+            break;
+        case 1:
+        case 2:
+        case 3:
+            field_0x868 = chkAttention();
+            switch (mStatus) {
+                case 1:
+                    mbSetEyePos = wait_1();
+                    break;
+                case 2:
+                    mbSetEyePos = talk_1();
+                    break;
+            }
+            lookBack();
+            break;
+        case 9:
+            break;
+    }
+    return TRUE;
 }
 
 /* 00001A34-00001B74       .text demo__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::demo() {
-    /* Nonmatching */
+bool daNpc_Ac1_c::demo() {
+    if (demoActorID == 0) {
+        if (mbInDemo != 0) {
+            mbInDemo = 0;
+        }
+    } else {
+        mbInDemo = 1;
+        dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
+        if (m_hed_tex_pttrn) {
+            mBlinkFrame += 1;
+            if (mBlinkFrame >= m_hed_tex_pttrn->getFrameMax()) {
+                mBlinkFrame = m_hed_tex_pttrn->getFrameMax();
+            }
+        }
+        J3DAnmTexPattern* demopattern = demo_actor->getP_BtpData("Ac");
+        if (demopattern) {
+            m_hed_tex_pttrn = demopattern;
+            if (mBtpAnim.init(mpMorf->getModel()->getModelData(), m_hed_tex_pttrn, 1, 2, 1.0f, 0, -1, true, FALSE)) {
+                mBtpNum = 3;
+                mBlinkFrame = 0;
+            }
+        }
+        dDemo_setDemoData(this, 0x6A, mpMorf, "Ac");
+    }
+    return mbInDemo;
 }
 
 /* 00001B74-00001C70       .text shadowDraw__11daNpc_Ac1_cFv */
 void daNpc_Ac1_c::shadowDraw() {
-    /* Nonmatching */
+    cXyz local_18(current.pos.x, current.pos.y + 150.0f, current.pos.z);
+
+    mShadowID = dComIfGd_setShadow(
+        mShadowID,
+        1,
+        mpMorf->getModel(),
+        &local_18,
+        800.0f,
+        40.0f,
+        current.pos.y,
+        mObjAcch.GetGroundH(),
+        mObjAcch.m_gnd,
+        &tevStr,
+        0,
+        1.0,
+        dDlst_shadowControl_c::getSimpleTex()
+    );
+
+    if (mShadowID) {
+        if (field_0x85E) {
+            dComIfGd_addRealShadow(mShadowID, field_0x708->getModel());
+        } else {
+            dComIfGd_addRealShadow(mShadowID, field_0x6FC->getModel());
+        }
+        if (field_0x6D4) {
+            dComIfGd_addRealShadow(mShadowID, field_0x6D4);
+        }
+    }
 }
 
 /* 00001C70-00001DC4       .text _draw__11daNpc_Ac1_cFv */
 BOOL daNpc_Ac1_c::_draw() {
-    /* Nonmatching */
+    J3DModel* model = mpMorf->getModel();
+    J3DModelData* model_data = model->getModelData();
+    if (field_0x85D || field_0x861) {
+        return TRUE;
+    }
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(model, &tevStr);
+    mBtpAnim.entry(model_data, mBlinkFrame);
+    mpMorf->entryDL();
+    model_data->getMaterialTable().removeTexNoAnimator(mBtpAnim.getBtpAnm());
+
+    if (field_0x85E) {
+        g_env_light.setLightTevColorType(field_0x708->getModel(), &tevStr);
+        field_0x708->entryDL();
+    } else {
+        g_env_light.setLightTevColorType(field_0x6FC->getModel(), &tevStr);
+        field_0x6FC->entryDL();
+    }
+
+    if (field_0x6D4 && field_0x85E) {
+        g_env_light.setLightTevColorType(field_0x6D4, &tevStr);
+        mDoExt_modelEntryDL(field_0x6D4);
+    }
+    shadowDraw();
+    dSnap_RegistFig(DSNAP_TYPE_NPC_AC1, this, 1.0f, 1.0f, 1.0f);
+    return TRUE;
 }
 
 /* 00001DC4-00001F80       .text _execute__11daNpc_Ac1_cFv */

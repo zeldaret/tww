@@ -63,7 +63,7 @@ public:
     BOOL wait_1();
     BOOL talk_1();
     BOOL wait_action1(void*);
-    void demo();
+    bool demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
@@ -84,7 +84,7 @@ public:
     /* 0x6D0 */ s8 m_hnd_R_jnt_num;
     /* 0x6D1 */ u8 field_0x6D1[0x6D4 - 0x6D1];
     /* 0x6D4 */ J3DModel* field_0x6D4;
-    /* 0x6D8 */ u32 field_0x6D8;
+    /* 0x6D8 */ u32 mShadowID;
     /* 0x6DC */ J3DAnmTexPattern* m_hed_tex_pttrn;
     /* 0x6E0 */ mDoExt_btpAnm mBtpAnim;
     /* 0x6F4 */ u8 mBlinkFrame;
@@ -138,7 +138,7 @@ public:
     /* 0x868 */ u8 field_0x868;
     /* 0x869 */ u8 field_0x869;
     /* 0x86A */ bool field_0x86A;
-    /* 0x86B */ u8 field_0x86B;
+    /* 0x86B */ bool mbInDemo;
     /* 0x86C */ s8 mActionIndex;
     /* 0x86D */ u8 field_0x86D;
     /* 0x86E */ u8 field_0x86E;
@@ -148,11 +148,11 @@ public:
     /* 0x872 */ u8 field_0x872[0x874 - 0x872];
     /* 0x874 */ s8 field_0x874;
     /* 0x875 */ s8 mStatus;
-    /* 0x876 */ u8 field_0x876;
+    /* 0x876 */ s8 field_0x876;
     /* 0x877 */ s8 mLookBackState;
     /* 0x878 */ s8 field_0x878;
     /* 0x879 */ s8 field_0x879;
-    /* 0x87A */ u8 field_0x87A;
+    /* 0x87A */ s8 field_0x87A;
     /* 0x87B */ s8 field_0x87B;
 };
 

@@ -6,8 +6,8 @@
 
 enum {
     /* 0x00 */ DSNAP_TYPE_NONE,
-    /* 0x01 */ DSNAP_TYPE_POST, // Garrickson mailing his love letter
-    /* 0x02 */ DSNAP_TYPE_BIKUTSUKI, // Gossack scared
+    /* 0x01 */ DSNAP_TYPE_POST,        // Garrickson mailing his love letter
+    /* 0x02 */ DSNAP_TYPE_BIKUTSUKI,   // Gossack scared
     /* 0x03 */ DSNAP_TYPE_COUPLE_LOOK, // Linda and Anton, the secret couple
     /* 0x04 */ DSNAP_TYPE_UNK04,
     /* 0x05 */ DSNAP_TYPE_UNK05,
@@ -144,7 +144,7 @@ enum {
     /* 0x88 */ DSNAP_TYPE_UNK88,
     /* 0x89 */ DSNAP_TYPE_UNK89,
     /* 0x8A */ DSNAP_TYPE_NPC_MD,
-    /* 0x8B */ DSNAP_TYPE_UNK8B,
+    /* 0x8B */ DSNAP_TYPE_NPC_AC1,
     /* 0x8C */ DSNAP_TYPE_UNK8C,
     /* 0x8D */ DSNAP_TYPE_NPC_BM1_PST,
     /* 0x8E */ DSNAP_TYPE_NPC_BM1_SKT_KKT,
