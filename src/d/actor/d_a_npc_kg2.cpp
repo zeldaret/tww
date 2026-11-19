@@ -334,7 +334,7 @@ void daNpc_Kg2_c::eventOrder() {
 /* 00000BC0-00000CC4       .text checkOrder__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::checkOrder() {
     if (eventInfo.checkCommandDemoAccrpt()) {
-        setAction(&daNpc_Kg2_c::wait_action, NULL);
+        setAction(&daNpc_Kg2_c::event_wait_action, NULL);
         field_0x750 = 0;
     } else if (eventInfo.checkCommandTalk()) {
         if (field_0x750 == 1 || field_0x750 == 2) {
@@ -1015,7 +1015,7 @@ int daNpc_Kg2_c::wait_action(void*) {
 }
 
 /* 00002334-00002590       .text event_wait_action__11daNpc_Kg2_cFPv */
-u32 daNpc_Kg2_c::event_wait_action(void*) {
+int daNpc_Kg2_c::event_wait_action(void*) {
     if (mActionStatus == 0) {
         field_0x760 = 1;
         mActionStatus += 1;

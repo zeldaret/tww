@@ -56,7 +56,7 @@ public:
     s32 privateCut();
     u32 processMove();
     int wait_action(void*);
-    u32 event_wait_action(void*);
+    int event_wait_action(void*);
     cPhs_State _create();
     BOOL _delete();
     BOOL _execute();
