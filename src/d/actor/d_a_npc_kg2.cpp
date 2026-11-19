@@ -60,7 +60,7 @@ daNpc_Kg2_HIO_c::daNpc_Kg2_HIO_c() {
     mNpc.mMaxAttnAngleY = 0x4000;
     mNpc.m22 = 0;
     mNpc.mMaxAttnDistXZ = 400.0f;
-    field_0x30[0] = 0;
+    field_0x30 = 0;
     mNo = -1;
     return;
 }
@@ -96,10 +96,10 @@ static const int l_btp_ix_tbl[] = {
 /* 00000194-00000368       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     /* Nonmatching */
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         daNpc_Kg2_c* i_this = (daNpc_Kg2_c*)model->getUserArea();
-        if (i_this != NULL) {
+        if (i_this) {
             J3DJoint* joint = (J3DJoint*)node;
             int jntNo = joint->getJntNo();
             MtxP mVar = model->getAnmMtx(jntNo);
@@ -132,7 +132,6 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 000003A4-0000048C       .text set_mtx__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::set_mtx() {
-    /* Nonmatching */
     J3DModel* model = mpMorf->getModel();
 
     mDoMtx_stack_c::transS(current.pos);
@@ -142,7 +141,7 @@ void daNpc_Kg2_c::set_mtx() {
     if (field_0x736) {
         mDoMtx_stack_c::copy(model->getAnmMtx(m_handL_num));
         mDoMtx_stack_c::transM(23.46f, -22.26f, -47.05f);
-        mDoMtx_stack_c::XYZrotM(0x1F4B, -0x4F00, 0x1F4B);
+        mDoMtx_stack_c::XYZrotM(8011, -20224, 8011);
         field_0x6D4->setBaseTRMtx(mDoMtx_stack_c::get());
     }
     return;
@@ -163,8 +162,7 @@ BOOL daNpc_Kg2_c::initTexPatternAnm(bool i_modify) {
 
 /* 000005A0-000006EC       .text playTexPatternAnm__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::playTexPatternAnm() {
-    /* Nonmatching */
-    if (field_0x738[0] == 1 && field_0x748 == 0 && field_0x704 == 2) {
+    if (field_0x738 == 1 && field_0x748 == 0 && field_0x704 == 2) {
         field_0x704 = 0;
         field_0x748 = 4;
         initTexPatternAnm(true);
@@ -194,7 +192,6 @@ void daNpc_Kg2_c::playTexPatternAnm() {
 
 /* 000006EC-00000838       .text setAnm__11daNpc_Kg2_cFScf */
 void daNpc_Kg2_c::setAnm(s8 param_1, f32 param_2) {
-    /* Nonmatching */
     static int a_play_mode_tbl[] = {
         J3DFrameCtrl::EMode_LOOP,
         J3DFrameCtrl::EMode_LOOP,
@@ -255,7 +252,6 @@ void daNpc_Kg2_c::setAnm(s8 param_1, f32 param_2) {
 
 /* 00000838-000009E8       .text subAnm__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::subAnm() {
-    /* Nonmatching */
     if (field_0x748 == 4) {
         fopAcM_seStart(this, 0x4114, 0);
     }
@@ -296,26 +292,25 @@ void daNpc_Kg2_c::subAnm() {
 
 /* 000009E8-00000B3C       .text chkAttention__11daNpc_Kg2_cF4cXyzs */
 BOOL daNpc_Kg2_c::chkAttention(cXyz param_1, s16 param_2) {
-    /* Nonmatching */
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    f32 fvar_1 = l_HIO.mNpc.mMaxAttnDistXZ;
-    int ivar_1 = l_HIO.mNpc.mMaxAttnAngleY;
+    f32 fVar_1 = l_HIO.mNpc.mMaxAttnDistXZ;
+    int iVar_1 = l_HIO.mNpc.mMaxAttnAngleY;
     cXyz delta;
     delta.x = player->current.pos.x - param_1.x;
     delta.z = player->current.pos.z - param_1.z;
 
-    f32 fvar_2 = std::sqrtf(delta.x*delta.x + delta.z*delta.z);
-    s16 svar = cM_atan2s(delta.x, delta.z);
+    f32 fVar_2 = std::sqrtf(delta.x*delta.x + delta.z*delta.z);
+    s16 sVar = cM_atan2s(delta.x, delta.z);
     if (field_0x72C) {
-        fvar_1 += 40.0f;
-        ivar_1 += 1820;
+        fVar_1 += 40.0f;
+        iVar_1 += 1820;
     }
-    svar -= param_2;
-    BOOL bvar = 0;
-    if (ivar_1 > abs(svar) && fvar_1 > fvar_2) {
-        bvar = 1;
+    sVar -= param_2;
+    BOOL bVar = 0;
+    if (iVar_1 > abs(sVar) && fVar_1 > fVar_2) {
+        bVar = 1;
     }
-    return bvar;
+    return bVar;
 }
 
 /* 00000B3C-00000BC0       .text eventOrder__11daNpc_Kg2_cFv */
@@ -339,7 +334,7 @@ void daNpc_Kg2_c::checkOrder() {
     } else if (eventInfo.checkCommandTalk()) {
         if (field_0x750 == 1 || field_0x750 == 2) {
             field_0x750 = 0;
-            field_0x72D[0] = 1;
+            field_0x72D = 1;
         }
     }
     return;
@@ -351,7 +346,7 @@ u32 daNpc_Kg2_c::getMsg() {
     if (field_0x74C) {
         u8 tmp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_B703);
         if (field_0x74C == 0x3145) {
-            if (field_0x735[0] == 1) {
+            if (field_0x735 == 1) {
                 field_0x74C = 0x314B;
             } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2508)) {
                 field_0x74C = 0x314C;
@@ -370,7 +365,7 @@ u32 daNpc_Kg2_c::getMsg() {
         msgNo = field_0x74C;
         field_0x74C = 0;
     } else {
-        if (field_0x738[0] == 1) {
+        if (field_0x738 == 1) {
             msgNo = 0x315B;
         } else {
             msgNo = dComIfGs_isEventBit(dSv_event_flag_c::UNK_2540);
@@ -428,7 +423,7 @@ u16 daNpc_Kg2_c::next_msgStatus(u32* pMsgNo) {
         case 0x3149:
             if (mpCurrMsg->mSelectNum == 0) {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_2508);
-                field_0x72D[8] = 1;
+                field_0x735 = 1;
                 *pMsgNo = 0x314B;
             } else {
                 *pMsgNo = 0x314A;
@@ -476,7 +471,7 @@ u16 daNpc_Kg2_c::next_msgStatus(u32* pMsgNo) {
 /* 00001028-000012EC       .text anmAtr__11daNpc_Kg2_cFUs */
 void daNpc_Kg2_c::anmAtr(u16 i_msgStatus) {
     u8 temp = dComIfGp_getMesgAnimeAttrInfo();
-    if (field_0x738[0] != 1) {
+    if (field_0x738 != 1) {
         switch (temp) {
             case 0:
                 setAnm(0, -1.0f);
@@ -552,17 +547,17 @@ void daNpc_Kg2_c::anmAtr(u16 i_msgStatus) {
 
 /* 000012EC-00001308       .text setAttention__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::setAttention() {
-    f32 fvar_2;
-    f32 fvar_3;
-    f32 fvar_1;
+    f32 fVar_2;
+    f32 fVar_3;
+    f32 fVar_1;
 
-    fvar_1 = mAttPos.z;
-    fvar_2 = mAttPos.y;
-    fvar_3 = mAttPos.x;
+    fVar_1 = mAttPos.z;
+    fVar_2 = mAttPos.y;
+    fVar_3 = mAttPos.x;
 
-    eyePos.x = fvar_3;
-    eyePos.y = fvar_2;
-    eyePos.z = fvar_1;
+    eyePos.x = fVar_3;
+    eyePos.y = fVar_2;
+    eyePos.z = fVar_1;
     return;
 }
 
@@ -574,7 +569,8 @@ void daNpc_Kg2_c::lookBack() {
     pos_1.y = 0.0f;
     pos_1.z = 0.0f;
     cXyz* pos_p = 0x0;
-    s16 svar = current.angle.y;
+    s16 sVar = current.angle.y;
+
     switch (field_0x760) {
         case 2:
         case 1:
@@ -600,7 +596,7 @@ void daNpc_Kg2_c::lookBack() {
         &current.angle.y,
         pos_p,
         pos_1,
-        svar,
+        sVar,
         field_0x720,
         true);
     return;
@@ -613,7 +609,6 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00001468-0000180C       .text CreateHeap__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::CreateHeap() {
-    /* Nonmatching */
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kg", 5));
     JUT_ASSERT(0x391, modelData != 0);
 
@@ -713,11 +708,10 @@ int daNpc_Kg2_c::CreateInit() {
     mEventCut.setActorInfo2("Kg2", this);
     mEventCut.setJntCtrlPtr(&m_jnt);
 
-    field_0x72A[10] = 0;
-    field_0x72A[11] = 0;
-    field_0x72A[12] = 0;
-    field_0x72A[13] = 0;
-
+    field_0x734 = 0;
+    field_0x735 = 0;
+    field_0x736 = 0;
+    field_0x737 = 0;
     field_0x74C = 0;
 
     m_jnt.mbHeadLock = true;
@@ -733,10 +727,10 @@ int daNpc_Kg2_c::CreateInit() {
     set_mtx();
 
     if (dComIfGs_getTime() >= 105.0f && dComIfGs_getTime() < 300.0f) {
-        field_0x72A[0xE] = 0;  // field_0x738 = 0
+        field_0x738 = 0;
         setAnm(1, -1.0f);
     } else {
-        field_0x72A[0xE] = 1;  // field_0x738 = 1
+        field_0x738 = 1;
         setAnm(13, 0.0f);
     }
 
@@ -746,22 +740,21 @@ int daNpc_Kg2_c::CreateInit() {
 
 /* 00001A9C-00001BDC       .text wait01__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::wait01() {
-    /* Nonmatching */
     if (dComIfGs_getTime() >= 105.0f && dComIfGs_getTime() < 300.0f) {
-        if (field_0x738[0] == 1) {
-            field_0x738[0] = 0;
+        if (field_0x738 == 1) {
+            field_0x738 = 0;
             setAnm(12, -1.0f);
             field_0x748 = 0;
             initTexPatternAnm(true);
         }
-    } else if (field_0x738[0] == 0) {
-        field_0x738[0] = 1;
+    } else if (field_0x738 == 0) {
+        field_0x738 = 1;
         setAnm(13, -1.0f);
         field_0x748 = 0;
         initTexPatternAnm(true);
     }
 
-    if (field_0x72D[0] != 0) {
+    if (field_0x72D) {
         field_0x760 = 2;
         return;
     }
@@ -781,11 +774,11 @@ void daNpc_Kg2_c::talk01() {
     if (talk(1) == 0x12) {  // Maybe 0x12 = fopMsgStts_BOX_CLOSED_e ?
         field_0x760 = 1;
         dComIfGp_event_reset();
-        field_0x72D[0] = 0;
+        field_0x72D = 0;
         if (mCurrMsgNo == 0x3144) {
             field_0x750 = 3;
             mEventIdx = 0;
-        } else if (field_0x738[0] == 0) {
+        } else if (field_0x738 == 0) {
             setAnm(1, -1.0f);
             field_0x748 = 0;
             initTexPatternAnm(true);
@@ -798,7 +791,6 @@ void daNpc_Kg2_c::talk01() {
 
 /* 00001CA4-00001D88       .text evn_setAnm_init__11daNpc_Kg2_cFi */
 u32 daNpc_Kg2_c::evn_setAnm_init(int param) {
-    /* Nonmatching */
     int* piVar_1 = dComIfGp_evmng_getMyIntegerP(param, "AnmNo");
     int* piVar_2 = dComIfGp_evmng_getMyIntegerP(param, "count");
     f32* pfVar = dComIfGp_evmng_getMyFloatP(param, "hokan");
@@ -840,7 +832,6 @@ BOOL daNpc_Kg2_c::evn_setAnm() {
 
 /* 00001E4C-00001F14       .text evn_jnt_lock_init__11daNpc_Kg2_cFi */
 u32 daNpc_Kg2_c::evn_jnt_lock_init(int param) {
-    /* Nonmatching */
     int* piVar = dComIfGp_evmng_getMyIntegerP(param, "prm");
     int tmp = 0;
     if (piVar) {
@@ -869,7 +860,6 @@ u32 daNpc_Kg2_c::evn_jnt_lock_init(int param) {
 
 /* 00001F14-00001F88       .text evn_talk_init__11daNpc_Kg2_cFi */
 u32 daNpc_Kg2_c::evn_talk_init(int param) {
-    /* Nonmatching */
     int* piVar = dComIfGp_evmng_getMyIntegerP(param, "msg_num");
     mCurrMsgBsPcId = -1;
     mpCurrMsg = NULL;
@@ -1137,7 +1127,7 @@ BOOL daNpc_Kg2_c::_draw() {
     mpMorf->entryDL();
     mBtpAnm.remove(model_data);
 
-    if (field_0x72A[0xC] != NULL) {  // field_0x736 != NULL
+    if (field_0x736) {
         model_data = field_0x6D4->getModelData();
         g_env_light.setLightTevColorType(field_0x6D4, &tevStr);
         field_0x6D8.entry(model_data, field_0x737);
