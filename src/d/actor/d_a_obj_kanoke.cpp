@@ -259,6 +259,10 @@ BOOL daObjKanoke_c::_delete() {
 #if VERSION > VERSION_DEMO
         }
     }
+#else
+    for (int i=0; i<2; i++) {
+        // Empty loop
+    }
 #endif
     mParticleCallBack.end();
 #if VERSION > VERSION_DEMO
