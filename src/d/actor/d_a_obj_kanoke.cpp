@@ -132,17 +132,17 @@ static BOOL CheckCreateHeap(fopAc_ac_c* act) {
 cPhs_State daObjKanoke_c::_create() {
     /* Nonmatching */
     fopAcM_ct(this, daObjKanoke_c);
-    cPhs_State ret = dComIfG_resLoad(&mPhase, "Mkanoke");
-    if (ret == cPhs_COMPLEATE_e) {
+    if (dComIfG_resLoad(&mPhase, "Mkanoke") == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2400) != 0) {
             createInit();
         } else {
+#if VERSION > VERSION_DEMO
             mpBgW2 = NULL;
             mpBgW = NULL;
-            ret = cPhs_ERROR_e;
+#endif
+            return cPhs_ERROR_e;
         }
     }
-    return ret;
 }
 
 /* 00000700-000008BC       .text createHeap__13daObjKanoke_cFv */
@@ -195,7 +195,7 @@ cPhs_State daObjKanoke_c::createInit() {
         return cPhs_ERROR_e;
     }
     if (mSwNo != 0xff) {
-        if (dComIfGs_isSwitch(mSwNo, home.roomNo)) {
+        if (dComIfGs_isSwitch(mSwNo, fopAcM_GetHomeRoomNo(this))) {
             mMode = MODE_WAIT;
             if (mType == 0) {
                 if (dComIfG_Bgsp()->Regist(mpBgW2, this)) {
@@ -242,20 +242,30 @@ cPhs_State daObjKanoke_c::createInit() {
 /* 00000B28-00000C0C       .text _delete__13daObjKanoke_cFv */
 BOOL daObjKanoke_c::_delete() {
     /* Nonmatching */
+#if VERSION > VERSION_DEMO
     if (heap != NULL) {
         if (mpBgW != NULL) {
+#endif
             if (mpBgW->ChkUsed()) {
                 dComIfG_Bgsp()->Release(mpBgW);
             }
+#if VERSION > VERSION_DEMO
         }
         if (mpBgW2 != NULL) {
+#endif
             if (mpBgW2->ChkUsed()) {
                 dComIfG_Bgsp()->Release(mpBgW2);
             }
+#if VERSION > VERSION_DEMO
         }
     }
+#endif
     mParticleCallBack.end();
+#if VERSION > VERSION_DEMO
     dComIfG_resDelete(&mPhase, "Mkanoke");
+#else
+    dComIfG_deleteObjectRes("Mkanoke");
+#endif
     return TRUE;
 }
 
@@ -305,7 +315,7 @@ BOOL daObjKanoke_c::_execute() {
 void daObjKanoke_c::executeNormal() {
     /* Nonmatching */
     bool b1 = false;
-    if (mSwNo != 0xff && dComIfGs_isSwitch(mSwNo, home.roomNo)) {
+    if (mSwNo != 0xff && dComIfGs_isSwitch(mSwNo, fopAcM_GetHomeRoomNo(this))) {
         b1 = true;
     } else {
         if (dComIfGp_getDetect().chk_light(&current.pos) || mCps.ChkTgHit()) {
@@ -384,13 +394,15 @@ void daObjKanoke_c::executeYureYoko() {
 /* 00001358-00001544       .text executeOpenYoko__13daObjKanoke_cFv */
 void daObjKanoke_c::executeOpenYoko() {
     /* Nonmatching */
+    f32 f1 = 100.0f;
+    s16 s1 = -5600;
     field_0x860.x += 4.0f;
-    field_0x86C.x = 100.0f - field_0x860.x;
-    if (field_0x860.x > 100.0f) {
+    field_0x86C.x = f1 - field_0x860.x;
+    if (field_0x860.x > f1) {
         field_0x880 += field_0x882;
         field_0x882 -= 100;
-        if (field_0x880 <= -5600) {
-            field_0x880 = -5600;
+        if (field_0x880 <= s1) {
+            field_0x880 = s1;
             mMode = MODE_EFFECT_YOKO;
             mDoMtx_stack_c::YrotS(shape_angle.y);
             mDoMtx_stack_c::transM(100.0f, 75.0f, 0.0f);
@@ -403,9 +415,14 @@ void daObjKanoke_c::executeOpenYoko() {
             cXyz r2 = field_0x860 + daObjKanoke_Yoko_pfs;
             cMtx_multVec(m, &r2, &r2);
             mPartPos = r2 + current.pos;
+#if VERSION > VERSION_DEMO
             if (mParticleCallBack.getEmitter() == NULL) {
+#endif
                 dComIfGp_particle_setToon(dPa_name::ID_IT_ST_KANOKE_SMOKE01, &mPartPos, &field_0x858, NULL, mPartAlpha, &mParticleCallBack, -1, NULL, NULL, NULL);
+
+#if VERSION > VERSION_DEMO
             }
+#endif
             JPABaseEmitter* e = mParticleCallBack.getEmitter();
             if (e != NULL) {
                 e->becomeImmortalEmitter();
@@ -472,9 +489,13 @@ void daObjKanoke_c::executeOpenTate() {
         field_0x858.set(0, shape_angle.y, 0);
         mpEmitters[0] = dComIfGp_particle_set(dPa_name::ID_IT_SN_KANOKE_ROCK00, &mPartPos, &field_0x858, NULL, 0xff, NULL, -1, &tevStr.mColorK0);
         mPartAlpha = 180.0f;
+#if VERSION > VERSION_DEMO
         if (mParticleCallBack.getEmitter() == NULL) {
+#endif
             dComIfGp_particle_setToon(dPa_name::ID_IT_ST_KANOKE_SMOKE00, &mPartPos, &field_0x858, NULL, mPartAlpha, &mParticleCallBack, -1, NULL, NULL, NULL);
+#if VERSION > VERSION_DEMO
         }
+#endif
         if (mParticleCallBack.getEmitter() != NULL) {
             mParticleCallBack.getEmitter()->becomeImmortalEmitter();
         }
