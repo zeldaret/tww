@@ -13,7 +13,7 @@ static daNpc_Ac1_HIO_c l_HIO;
 daNpc_Ac1_HIO_c::daNpc_Ac1_HIO_c() {
     static u32 a_prm_tbl[] = { 0x20002710, 0xF000D8F0, 0x00001770, 0x0000E890, 0x07080578, 0x43160000,
                                0x00000006, 0x04000000, 0x3F000000, 0x40400000, 0x3DCCCCCD, 0x42200000 };
-    memcpy(&field_0x0C, a_prm_tbl, 0x30);
+    memcpy(&mMaxHeadX, a_prm_tbl, 0x30);
     field_0x04 = -1;
     field_0x08 = -1;
 }
@@ -814,12 +814,69 @@ BOOL daNpc_Ac1_c::_draw() {
 
 /* 00001DC4-00001F80       .text _execute__11daNpc_Ac1_cFv */
 BOOL daNpc_Ac1_c::_execute() {
-    /* Nonmatching */
+    if (!field_0x863) {
+        field_0x7F4 = current.pos;
+        field_0x800 = current.angle;
+        field_0x863 = 1;
+    }
+    m_jnt.setParam(
+        l_HIO.mMaxBackboneX,
+        l_HIO.mMaxBackboneY,
+        l_HIO.mMinBackboneX,
+        l_HIO.mMinBackboneY,
+        l_HIO.mMaxHeadX,
+        l_HIO.mMaxHeadY,
+        l_HIO.mMinHeadX,
+        l_HIO.mMinHeadY,
+        l_HIO.mMaxTurnStep
+    );
+    if (field_0x85D && demoActorID == 0) {
+        return TRUE;
+    }
+    field_0x860 = 0;
+    field_0x85D = 0;
+    checkOrder();
+    if (!demo()) {
+        s32 staffIdx = -1;
+        if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == 0) {
+            staffIdx = isEventEntry();
+        }
+        if (staffIdx >= 0) {
+            event_proc(staffIdx);
+        } else {
+            (this->*mCurrActionFunc)(NULL);
+        }
+        if (!field_0x860) {
+            fopAcM_posMoveF(this, mStts.GetCCMoveP());
+        }
+
+        if (!mbSetShapeAngle) {
+            shape_angle = current.angle;
+        }
+    }
+    eventOrder();
+    setMtx(false);
+    if (!mbInDemo) {
+        setCollision(50.0f, 140.0f);
+    }
+    return TRUE;
 }
 
 /* 00001F80-00001FFC       .text _delete__11daNpc_Ac1_cFv */
 BOOL daNpc_Ac1_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhase, "Ac");
+    if (heap != NULL) {
+        if (mpMorf != NULL) {
+            mpMorf->stopZelAnime();
+        }
+        if (field_0x6FC != NULL) {
+            field_0x6FC->stopZelAnime();
+        }
+        if (field_0x708 != NULL) {
+            field_0x708->stopZelAnime();
+        }
+    }
+    return TRUE;
 }
 
 /* 00001FFC-0000201C       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -829,8 +886,8 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000201C-0000213C       .text _create__11daNpc_Ac1_cFv */
 cPhs_State daNpc_Ac1_c::_create() {
+    fopAcM_ct_Retail(this, daNpc_Ac1_c);
     static u32 a_size_tbl[] = { 0x272E0 };
-    /* Nonmatching */
 }
 
 /* 0000256C-00002838       .text create_Anm__11daNpc_Ac1_cFv */
