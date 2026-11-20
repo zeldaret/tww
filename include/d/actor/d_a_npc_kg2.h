@@ -106,19 +106,4 @@ public:
     /* 0x763 */ s8 mActionStatus;
 };  // Size: 0x764
 
-class daNpc_Kg2_HIO_c : public JORReflexible {
-public:
-    daNpc_Kg2_HIO_c();
-    virtual ~daNpc_Kg2_HIO_c() { }
-
-    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
-
-public:
-    /* 0x00 */ // vtable for daNpc_Kg2_HIO_C
-    /* 0x04 */ s8 mNo;
-    /* 0x05 */ // vtable for dNpc_HIO_c
-    /* 0x08 */ dNpc_HIO_c mNpc;
-    /* 0x30 */ u8 field_0x30;
-};  // Size: 0x34
-
 #endif /* D_A_NPC_KG2_H */
