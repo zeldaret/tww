@@ -71,7 +71,7 @@ static dCcD_SrcCps l_cps_src_huta = {
     }},
 };
 
-static cXyz daObjKanoke_Yoko_pfs(100.0f, 0.0f, 0.0f);
+static cXyz daObjKanoke_Yoko_pfs[1] = { cXyz(100.0f, 0.0f, 0.0f) };
 static cXyz daObjKanoke_Tate_pfs[3][2] = {
     { cXyz(50.0f, 0.0f, -175.0f), cXyz(50.0f, 0.0f, 175.0f) },
     { cXyz(0.0f, 0.0f, -175.0f), cXyz(0.0f, 0.0f, -175.0f) },
@@ -416,7 +416,7 @@ void daObjKanoke_c::executeOpenYoko() {
             MTXCopy(mDoMtx_stack_c::get(), m);
             field_0x858.set(0, shape_angle.y, 0);
             mPartAlpha = 180.0f;
-            cXyz r2 = field_0x860 + daObjKanoke_Yoko_pfs;
+            cXyz r2 = field_0x860 + daObjKanoke_Yoko_pfs[0];
             cMtx_multVec(m, &r2, &r2);
             mPartPos = r2 + current.pos;
 #if VERSION > VERSION_DEMO
