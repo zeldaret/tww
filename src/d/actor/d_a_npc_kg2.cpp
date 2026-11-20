@@ -114,13 +114,13 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                 static cXyz l_offsetEyePos(24.0f, -16.0f, 0.0f);
 
                 mDoMtx_stack_c::multVec(&tmp, i_this->getEyePos());
-                mDoMtx_stack_c::XrotM(i_this->m_jnt.mAngles[0][1]);
+                mDoMtx_stack_c::XrotM((s16)i_this->m_jnt.getHead_y());
                 mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getHead_x());
                 mDoMtx_stack_c::multVec(&l_offsetEyePos, i_this->getAttentionBasePos());
                 mDoMtx_stack_c::multVec(&tmp, &i_this->attention_info.position);
                 i_this->attention_info.position.y += l_HIO.mNpc.mAttnYOffset;
             } else if (jntNo == (i_this->m_jnt).getBackboneJntNum()) {
-                mDoMtx_stack_c::XrotM(i_this->m_jnt.mAngles[1][1]);
+                mDoMtx_stack_c::XrotM((s16)i_this->m_jnt.getBackbone_y());
                 mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getBackbone_x());
             }
             cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
