@@ -134,7 +134,7 @@ enum {
     /* 0x7E */ DSNAP_TYPE_NPC_ROTEN,
     /* 0x7F */ DSNAP_TYPE_NPC_AH,
     /* 0x80 */ DSNAP_TYPE_NPC_BS1,
-    /* 0x81 */ DSNAP_TYPE_UNK81,
+    /* 0x81 */ DSNAP_TYPE_NPC_KG2,
     /* 0x82 */ DSNAP_TYPE_NPC_SA1,
     /* 0x83 */ DSNAP_TYPE_SALVAGE_CORP,
     /* 0x84 */ DSNAP_TYPE_NPC_FA1,

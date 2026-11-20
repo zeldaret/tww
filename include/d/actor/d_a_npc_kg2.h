@@ -2,42 +2,61 @@
 #define D_A_NPC_KG2_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_npc.h"
 
-class daNpc_Kg2_c : public fopAc_ac_c {
+class daNpc_Kg2_c : public fopNpc_npc_c {
 public:
-    void getAttentionBasePos() {}
-    void getEyePos() {}
+    typedef int (daNpc_Kg2_c::*ActionFunc)(void*);
+
+    enum ActionStatus {
+        ACTION_STARTING = 0,
+        ACTION_ONGOING  = 1,
+        ACTION_ENDING   = -1,
+    };
+
+    cXyz* getAttentionBasePos() { return &mAttPos; }
+    cXyz* getEyePos() { return &mEyePos; }
     void seStart(u32) {}
-    void setAction(int (daNpc_Kg2_c::*)(void*), void*) {}
+    void setAction(ActionFunc func, void* arg) {
+        if (mCurrActionFunc != func) {
+            if (mCurrActionFunc) {
+                mActionStatus = ACTION_ENDING;
+                (this->*mCurrActionFunc)(arg);
+            }
+            mCurrActionFunc = func;
+            mActionStatus = ACTION_STARTING;
+            (this->*mCurrActionFunc)(arg);
+        }
+    }
     static void setCanonGameResult(u8 result) { canon_game_result = result; }
 
     void set_mtx();
-    void initTexPatternAnm(bool);
+    BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
     void setAnm(s8, f32);
     void subAnm();
-    void chkAttention(cXyz, s16);
+    BOOL chkAttention(cXyz, s16);
     void eventOrder();
     void checkOrder();
-    void getMsg();
-    void next_msgStatus(u32*);
+    u32 getMsg();
+    u16 next_msgStatus(u32*);
     void anmAtr(u16);
     void setAttention();
     void lookBack();
-    void CreateHeap();
-    void CreateInit();
+    BOOL CreateHeap();
+    int CreateInit();
     void wait01();
     void talk01();
-    void evn_setAnm_init(int);
-    void evn_setAnm();
-    void evn_jnt_lock_init(int);
-    void evn_talk_init(int);
-    void evn_talk();
-    void evn_createItem_init(int);
-    void privateCut();
-    void processMove();
-    void wait_action(void*);
-    void event_wait_action(void*);
+    u32 evn_setAnm_init(int);
+    BOOL evn_setAnm();
+    u32 evn_jnt_lock_init(int);
+    u32 evn_talk_init(int);
+    BOOL evn_talk();
+    u32 evn_createItem_init(int);
+    s32 privateCut();
+    u32 processMove();
+    int wait_action(void*);
+    int event_wait_action(void*);
     cPhs_State _create();
     BOOL _delete();
     BOOL _execute();
@@ -47,19 +66,44 @@ public:
         canon_game_result = 0;
     }
 
-    static s8 canon_game_result;
+    static u8 canon_game_result;
     static daNpc_Kg2_c* l_kg2_pointer;
 
 public:
-    /* Place member variables here */
-};
-
-class daNpc_Kg2_HIO_c {
-public:
-    daNpc_Kg2_HIO_c();
-
-public:
-    /* Place member variables here */
-};
+    /* 0x6C4 */ s8 m_handL_num;
+    /* 0x6C8 */ request_of_phase_process_class mPhase;
+    /* 0x6D0 */ u32 mShadowId;
+    /* 0x6D4 */ J3DModel* field_0x6D4;
+    /* 0x6D8 */ mDoExt_btpAnm field_0x6D8;
+    /* 0x6EC */ J3DAnmTexPattern* m_btp;
+    /* 0x6F0 */ mDoExt_btpAnm mBtpAnm;
+    /* 0x704 */ u8 field_0x704;
+    /* 0x706 */ s16 field_0x706;
+    /* 0x708 */ cXyz mAttPos;
+    /* 0x714 */ cXyz mEyePos;
+    /* 0x720 */ s16 field_0x720;
+    /* 0x722 */ u8 field_0x722[0x724 - 0x722];
+    /* 0x724 */ csXyz mActorAngle;
+    /* 0x72A */ u8 field_0x72A[0x72C - 0x72A];
+    /* 0x72C */ u8 field_0x72C;
+    /* 0x72D */ u8 field_0x72D;
+    /* 0x72E */ u8 field_0x72E[0x734 - 0x72E];
+    /* 0x734 */ u8 field_0x734;
+    /* 0x735 */ u8 field_0x735;
+    /* 0x736 */ u8 field_0x736;
+    /* 0x737 */ u8 field_0x737;
+    /* 0x738 */ u8 field_0x738;
+    /* 0x739 */ s8 field_0x739;
+    /* 0x73C */ ActionFunc mCurrActionFunc;
+    /* 0x748 */ s8 field_0x748;
+    /* 0x749 */ s8 field_0x749;
+    /* 0x74C */ u32 field_0x74C;
+    /* 0x750 */ s8 field_0x750;
+    /* 0x754 */ s32 mEventIdx;
+    /* 0x758 */ s16 mEventIdTable[4];
+    /* 0x760 */ s8 field_0x760;
+    /* 0x761 */ u8 field_0x761[0x763 - 0x761];
+    /* 0x763 */ s8 mActionStatus;
+};  // Size: 0x764
 
 #endif /* D_A_NPC_KG2_H */

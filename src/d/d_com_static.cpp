@@ -269,7 +269,7 @@ s32 daNpc_Sarace_c::ship_race_result;
 
 daCanon_c* daCanon_c::canon_p;
 
-s8 daNpc_Kg2_c::canon_game_result;
+u8 daNpc_Kg2_c::canon_game_result;
 daNpc_Kg2_c* daNpc_Kg2_c::l_kg2_pointer;
 
 u8 daArrow_c::m_keep_type;
