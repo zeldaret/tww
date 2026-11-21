@@ -51,7 +51,7 @@ public:
     u32 getMsg();
     bool chkAttention();
     void setAttention(bool);
-    BOOL charDecide(int);
+    bool charDecide(int);
     void event_actionInit(int);
     bool event_action();
     void privateCut(int);
@@ -69,7 +69,7 @@ public:
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void create_Anm();
+    J3DModelData* create_Anm();
     void create_wng_Anm();
     void create_arm_Anm();
     void create_itm_Mdl();
@@ -150,7 +150,7 @@ public:
     /* 0x875 */ s8 mStatus;
     /* 0x876 */ s8 field_0x876;
     /* 0x877 */ s8 mLookBackState;
-    /* 0x878 */ s8 field_0x878;
+    /* 0x878 */ s8 mType;
     /* 0x879 */ s8 field_0x879;
     /* 0x87A */ s8 field_0x87A;
     /* 0x87B */ s8 field_0x87B;

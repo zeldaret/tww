@@ -534,11 +534,11 @@ void daNpc_Ac1_c::setAttention(bool i_setEyePos) {
 }
 
 /* 00001494-000014B0       .text charDecide__11daNpc_Ac1_cFi */
-BOOL daNpc_Ac1_c::charDecide(int) {
-    field_0x878 = 0;
+bool daNpc_Ac1_c::charDecide(int) {
+    mType = 0;
     field_0x879 = -1;
     field_0x879 = 0;
-    return TRUE;
+    return true;
 }
 
 /* 000014B0-00001508       .text event_actionInit__11daNpc_Ac1_cFi */
@@ -888,11 +888,60 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 cPhs_State daNpc_Ac1_c::_create() {
     fopAcM_ct_Retail(this, daNpc_Ac1_c);
     static u32 a_size_tbl[] = { 0x272E0 };
+    cPhs_State state = dComIfG_resLoad(&mPhase, "Ac");
+    if (state != cPhs_COMPLEATE_e) {
+        return state;
+    }
+    if (!charDecide(fopAcM_GetParam(this) & 0xFF)) {
+        return cPhs_ERROR_e;
+    }
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_size_tbl[mType])) {
+        return cPhs_ERROR_e;
+    }
+
+    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -50.0, -20.0, -50.0, 50.0, 140.0, 50.0);
+
+    if (!createInit()) {
+        return cPhs_ERROR_e;
+    }
+    return state;
 }
 
 /* 0000256C-00002838       .text create_Anm__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::create_Anm() {
-    /* Nonmatching */
+J3DModelData* daNpc_Ac1_c::create_Anm() {
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ac", 5);
+    JUT_ASSERT(0x6BE, a_mdl_dat != NULL);
+    mpMorf = new mDoExt_McaMorf(
+        a_mdl_dat,
+        NULL,
+        NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("Ac", 1),
+        J3DFrameCtrl::EMode_LOOP,
+        1.0f,
+        0,
+        -1,
+        TRUE,
+        NULL,
+        0x80000,
+        0x11020022
+    );
+    if (mpMorf == NULL) {
+        return NULL;
+    } else if (mpMorf->getModel() == NULL) {
+        mpMorf = NULL;
+        return NULL;
+    }
+
+    m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
+    JUT_ASSERT(0x6D2, m_hed_jnt_num >= 0);
+    m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone");
+    JUT_ASSERT(0x6D5, m_bbone_jnt_num >= 0);
+    m_arm_L_jnt_num = a_mdl_dat->getJointName()->getIndex("armL");
+    JUT_ASSERT(0x6D8, m_arm_L_jnt_num >= 0);
+    m_arm_R_jnt_num = a_mdl_dat->getJointName()->getIndex("armR");
+    JUT_ASSERT(0x6DB, m_arm_R_jnt_num >= 0);
+    return a_mdl_dat;
 }
 
 /* 00002838-00002A4C       .text create_wng_Anm__11daNpc_Ac1_cFv */
