@@ -70,9 +70,9 @@ public:
     BOOL _delete();
     cPhs_State _create();
     J3DModelData* create_Anm();
-    void create_wng_Anm();
-    void create_arm_Anm();
-    void create_itm_Mdl();
+    J3DModelData* create_wng_Anm();
+    J3DModelData* create_arm_Anm();
+    bool create_itm_Mdl();
     BOOL CreateHeap();
 
 public:
@@ -91,11 +91,11 @@ public:
     /* 0x6F5 */ u8 field_0x6F5[0x6F6 - 0x6F5];
     /* 0x6F6 */ s16 mBlinkTimer;
     /* 0x6F8 */ u8 field_0x6F8[0x6FC - 0x6F8];
-    /* 0x6FC */ mDoExt_McaMorf* field_0x6FC;
+    /* 0x6FC */ mDoExt_McaMorf* mpWingMorf;
     /* 0x700 */ s8 m_wngL1_jnt_num;
     /* 0x701 */ s8 m_wngR1_jnt_num;
     /* 0x702 */ u8 field_0x702[0x708 - 0x702];
-    /* 0x708 */ mDoExt_McaMorf* field_0x708;
+    /* 0x708 */ mDoExt_McaMorf* mpArmMorf;
     /* 0x70C */ s8 m_armL1_jnt_num;
     /* 0x70D */ s8 m_armR1_jnt_num;
     /* 0x70E */ u8 field_0x70E[0x710 - 0x70E];

@@ -151,9 +151,9 @@ bool daNpc_Ac1_c::createInit() {
     mpMorf->setMorf(0.0f);
 
     if (field_0x85E) {
-        field_0x708->setMorf(0.0f);
+        mpArmMorf->setMorf(0.0f);
     } else {
-        field_0x6FC->setMorf(0.0f);
+        mpWingMorf->setMorf(0.0f);
     }
     setMtx(true);
     return true;
@@ -170,9 +170,9 @@ void daNpc_Ac1_c::setMtx(bool i_setEyePos) {
         }
         mFrame = mpMorf->getFrame();
         if (field_0x85E) {
-            field_0x708->play(&eyePos, 0, 0);
+            mpArmMorf->play(&eyePos, 0, 0);
         } else {
-            field_0x6FC->play(&eyePos, 0, 0);
+            mpWingMorf->play(&eyePos, 0, 0);
         }
         mObjAcch.CrrPos(*dComIfG_Bgsp());
     }
@@ -183,12 +183,12 @@ void daNpc_Ac1_c::setMtx(bool i_setEyePos) {
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
     if (!field_0x85E) {
-        field_0x6FC->calc();
+        mpWingMorf->calc();
     } else {
-        field_0x708->calc();
+        mpArmMorf->calc();
     }
     if (field_0x6D4 && field_0x85E) {
-        field_0x6D4->setBaseTRMtx(field_0x708->getModel()->getAnmMtx(m_hnd_R_jnt_num));
+        field_0x6D4->setBaseTRMtx(mpArmMorf->getModel()->getAnmMtx(m_hnd_R_jnt_num));
         field_0x6D4->calc();
     }
     setAttention(i_setEyePos);
@@ -266,9 +266,9 @@ BOOL daNpc_Ac1_c::setAnm_anm(daNpc_Ac1_c::anm_prm_c* i_anmPrmP) {
     u32 wingAnmNum = wingAnmNum_toResID(mAnmNum);
     field_0x85E = i_anmPrmP->field_0x10 == 1;
     if (field_0x85E) {
-        dNpc_setAnmIDRes(field_0x708, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, wingAnmNum, -1, "Ac");
+        dNpc_setAnmIDRes(mpArmMorf, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, wingAnmNum, -1, "Ac");
     } else {
-        dNpc_setAnmIDRes(field_0x6FC, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, wingAnmNum, -1, "Ac");
+        dNpc_setAnmIDRes(mpWingMorf, i_anmPrmP->loopMode, i_anmPrmP->morf, i_anmPrmP->speed, wingAnmNum, -1, "Ac");
     }
     mFrame = 0.0f;
     field_0x859 = 0;
@@ -771,9 +771,9 @@ void daNpc_Ac1_c::shadowDraw() {
 
     if (mShadowID) {
         if (field_0x85E) {
-            dComIfGd_addRealShadow(mShadowID, field_0x708->getModel());
+            dComIfGd_addRealShadow(mShadowID, mpArmMorf->getModel());
         } else {
-            dComIfGd_addRealShadow(mShadowID, field_0x6FC->getModel());
+            dComIfGd_addRealShadow(mShadowID, mpWingMorf->getModel());
         }
         if (field_0x6D4) {
             dComIfGd_addRealShadow(mShadowID, field_0x6D4);
@@ -796,11 +796,11 @@ BOOL daNpc_Ac1_c::_draw() {
     model_data->getMaterialTable().removeTexNoAnimator(mBtpAnim.getBtpAnm());
 
     if (field_0x85E) {
-        g_env_light.setLightTevColorType(field_0x708->getModel(), &tevStr);
-        field_0x708->entryDL();
+        g_env_light.setLightTevColorType(mpArmMorf->getModel(), &tevStr);
+        mpArmMorf->entryDL();
     } else {
-        g_env_light.setLightTevColorType(field_0x6FC->getModel(), &tevStr);
-        field_0x6FC->entryDL();
+        g_env_light.setLightTevColorType(mpWingMorf->getModel(), &tevStr);
+        mpWingMorf->entryDL();
     }
 
     if (field_0x6D4 && field_0x85E) {
@@ -869,11 +869,11 @@ BOOL daNpc_Ac1_c::_delete() {
         if (mpMorf != NULL) {
             mpMorf->stopZelAnime();
         }
-        if (field_0x6FC != NULL) {
-            field_0x6FC->stopZelAnime();
+        if (mpWingMorf != NULL) {
+            mpWingMorf->stopZelAnime();
         }
-        if (field_0x708 != NULL) {
-            field_0x708->stopZelAnime();
+        if (mpArmMorf != NULL) {
+            mpArmMorf->stopZelAnime();
         }
     }
     return TRUE;
@@ -945,18 +945,84 @@ J3DModelData* daNpc_Ac1_c::create_Anm() {
 }
 
 /* 00002838-00002A4C       .text create_wng_Anm__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::create_wng_Anm() {
-    /* Nonmatching */
+J3DModelData* daNpc_Ac1_c::create_wng_Anm() {
+
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ac", 3);
+    JUT_ASSERT(0x6EA, a_mdl_dat != NULL);
+    mpWingMorf = new mDoExt_McaMorf(
+        a_mdl_dat,
+        NULL,
+        NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("Ac", 0),
+        J3DFrameCtrl::EMode_LOOP,
+        1.0f,
+        0,
+        -1,
+        TRUE,
+        NULL,
+        0x80000,
+        0x11000002
+    );
+    if (!mpWingMorf) {
+        return NULL;
+    }
+    if (!mpWingMorf->getModel()) {
+        mpWingMorf = NULL;
+        return NULL;
+    }
+    m_wngL1_jnt_num = a_mdl_dat->getJointName()->getIndex("wingL_loc");
+    JUT_ASSERT(0x6FF, m_wngL1_jnt_num >= 0);
+    m_wngR1_jnt_num = a_mdl_dat->getJointName()->getIndex("wingR_loc");
+    JUT_ASSERT(0x702, m_wngR1_jnt_num >= 0);
+    return a_mdl_dat;
 }
 
 /* 00002A4C-00002CBC       .text create_arm_Anm__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::create_arm_Anm() {
-    /* Nonmatching */
+J3DModelData* daNpc_Ac1_c::create_arm_Anm() {
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ac", 2);
+    JUT_ASSERT(0x711, a_mdl_dat != NULL);
+    mpArmMorf = new mDoExt_McaMorf(
+        a_mdl_dat,
+        NULL,
+        NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("Ac", 0),
+        J3DFrameCtrl::EMode_LOOP,
+        1.0f,
+        0,
+        -1,
+        TRUE,
+        NULL,
+        0x80000,
+        0x11000002
+    );
+    if (!mpArmMorf) {
+        return NULL;
+    }
+    if (!mpArmMorf->getModel()) {
+        mpArmMorf = NULL;
+        return NULL;
+    }
+    m_hnd_R_jnt_num = a_mdl_dat->getJointName()->getIndex("handR");
+    JUT_ASSERT(0x726, m_hnd_R_jnt_num >= 0);
+    m_armL1_jnt_num = a_mdl_dat->getJointName()->getIndex("armL_loc");
+    JUT_ASSERT(0x729, m_armL1_jnt_num >= 0);
+    m_armR1_jnt_num = a_mdl_dat->getJointName()->getIndex("armR_loc");
+    JUT_ASSERT(0x72C, m_armR1_jnt_num >= 0);
+    return a_mdl_dat;
 }
 
 /* 00002CBC-00002DC8       .text create_itm_Mdl__11daNpc_Ac1_cFv */
-void daNpc_Ac1_c::create_itm_Mdl() {
-    /* Nonmatching */
+bool daNpc_Ac1_c::create_itm_Mdl() {
+    field_0x6D4 = NULL;
+    J3DModelData* a_mdl_dat;
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1580)) {
+        a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ac", 15);
+    } else {
+        a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ac", 4);
+    }
+    JUT_ASSERT(0x744, a_mdl_dat != NULL);
+    field_0x6D4 = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
+    return TRUE;
 }
 
 /* 00002DC8-00003044       .text CreateHeap__11daNpc_Ac1_cFv */
