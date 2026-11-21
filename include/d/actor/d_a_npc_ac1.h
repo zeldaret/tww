@@ -1,10 +1,8 @@
 #ifndef D_A_NPC_AC1_H
 #define D_A_NPC_AC1_H
 
-#include "JSystem/JParticle/JPAEmitter.h"
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
-#include "m_Do/m_Do_hostIO.h"
 
 class daNpc_Ac1_c : public fopNpc_npc_c {
 public:
@@ -14,7 +12,7 @@ public:
         /* 0x04 */ f32 morf;
         /* 0x08 */ f32 speed;
         /* 0x0C */ int loopMode;
-        /* 0x10 */ BOOL field_0x10;
+        /* 0x10 */ BOOL hasArms;
     }; // Size: 0x14
 
     typedef BOOL (daNpc_Ac1_c::*ActionFunc)(void*);
@@ -31,21 +29,21 @@ public:
     bool setBtp(bool, int);
     bool iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
-    void setAnm_tex(signed char);
+    void setAnm_tex(s8);
     BOOL setAnm_anm(anm_prm_c*);
     bool setAnm();
     void chg_anmTag();
     void control_anmTag();
-    void chg_anmAtr(unsigned char);
+    void chg_anmAtr(u8);
     void control_anmAtr();
     void setAnm_ATR(int);
-    void anmAtr(unsigned short);
+    void anmAtr(u16);
     void eventOrder();
     void checkOrder();
     bool chk_talk();
     bool chk_partsNotMove();
     void lookBack();
-    u16 next_msgStatus(unsigned long*);
+    u16 next_msgStatus(u32*);
     s8 getBitMask();
     u32 getMsg_AC1_0();
     u32 getMsg();
@@ -59,7 +57,7 @@ public:
     BOOL isEventEntry();
     void event_proc(int);
     BOOL set_action(ActionFunc, void*);
-    void setStt(signed char);
+    void setStt(s8);
     BOOL wait_1();
     BOOL talk_1();
     BOOL wait_action1(void*);
@@ -83,7 +81,7 @@ public:
     /* 0x6CF */ s8 m_arm_R_jnt_num;
     /* 0x6D0 */ s8 m_hnd_R_jnt_num;
     /* 0x6D1 */ u8 field_0x6D1[0x6D4 - 0x6D1];
-    /* 0x6D4 */ J3DModel* field_0x6D4;
+    /* 0x6D4 */ J3DModel* mpItemModel;
     /* 0x6D8 */ u32 mShadowID;
     /* 0x6DC */ J3DAnmTexPattern* m_hed_tex_pttrn;
     /* 0x6E0 */ mDoExt_btpAnm mBtpAnim;
@@ -105,19 +103,19 @@ public:
     /* 0x77C */ dNpc_PathRun_c mPathRun;
     /* 0x784 */ dNpc_EventCut_c mEventCut;
     /* 0x7F0 */ u8 field_0x7F0[0x7F4 - 0x7F0];
-    /* 0x7F4 */ cXyz field_0x7F4;
-    /* 0x800 */ csXyz field_0x800;
+    /* 0x7F4 */ cXyz mInitialPos;
+    /* 0x800 */ csXyz mInitialAngle;
     /* 0x806 */ u8 field_0x806[0x808 - 0x806];
     /* 0x808 */ cXyz mEyePos;
-    /* 0x814 */ cXyz field_0x814;
+    /* 0x814 */ cXyz mLookAtPos;
     /* 0x820 */ u8 field_0x820[0x82C - 0x820];
     /* 0x82C */ f32 mFrame;
     /* 0x830 */ u8 field_0x830[0x844 - 0x830];
-    /* 0x844 */ s16 field_0x844;
-    /* 0x846 */ s16 field_0x846;
-    /* 0x848 */ s16 field_0x848;
+    /* 0x844 */ s16 mPrevHeadY;
+    /* 0x846 */ s16 mPrevBackboneY;
+    /* 0x848 */ s16 mPrevAngleY;
     /* 0x84A */ u8 field_0x84A[0x84C - 0x84A];
-    /* 0x84C */ s16 field_0x84C;
+    /* 0x84C */ s16 mTimer;
     /* 0x84E */ u8 field_0x84E[0x852 - 0x84E];
     /* 0x852 */ s16 mHeadLookAtMaxVel;
     /* 0x854 */ s16 field_0x854;
@@ -125,60 +123,35 @@ public:
     /* 0x858 */ u8 mbMorfAnimStopped;
     /* 0x859 */ u8 field_0x859;
     /* 0x85A */ u8 field_0x85A;
-    /* 0x85B */ u8 field_0x85B;
+    /* 0x85B */ u8 mItemNo;
     /* 0x85C */ u8 field_0x85C[0x85D - 0x85C];
     /* 0x85D */ u8 field_0x85D;
-    /* 0x85E */ bool field_0x85E;
-    /* 0x85F */ u8 mbSetShapeAngle;
+    /* 0x85E */ bool mbHasArms;
+    /* 0x85F */ bool mbSetShapeAngle;
     /* 0x860 */ u8 field_0x860;
     /* 0x861 */ u8 field_0x861;
     /* 0x862 */ u8 field_0x862;
-    /* 0x863 */ u8 field_0x863;
+    /* 0x863 */ bool mbRanExecute;
     /* 0x864 */ int mbSetEyePos;
-    /* 0x868 */ u8 field_0x868;
-    /* 0x869 */ u8 field_0x869;
-    /* 0x86A */ bool field_0x86A;
+    /* 0x868 */ bool mbAttention;
+    /* 0x869 */ bool mbTalking;
+    /* 0x86A */ bool mbHeadOnlyFollow;
     /* 0x86B */ bool mbInDemo;
     /* 0x86C */ s8 mActionIndex;
-    /* 0x86D */ u8 field_0x86D;
-    /* 0x86E */ u8 field_0x86E;
-    /* 0x86F */ u8 field_0x86F;
+    /* 0x86D */ u8 mActNo;
+    /* 0x86E */ u8 mAnmAtr;
+    /* 0x86F */ u8 mAnmTag;
     /* 0x870 */ s8 mBtpNum;
     /* 0x871 */ s8 mAnmNum;
     /* 0x872 */ u8 field_0x872[0x874 - 0x872];
-    /* 0x874 */ s8 field_0x874;
+    /* 0x874 */ s8 mTalkOrder;
     /* 0x875 */ s8 mStatus;
-    /* 0x876 */ s8 field_0x876;
+    /* 0x876 */ s8 mPrevStatus;
     /* 0x877 */ s8 mLookBackState;
     /* 0x878 */ s8 mType;
-    /* 0x879 */ s8 field_0x879;
-    /* 0x87A */ s8 field_0x87A;
+    /* 0x879 */ s8 mSpecificType;
+    /* 0x87A */ s8 mActionPhase;
     /* 0x87B */ s8 field_0x87B;
 };
-
-class daNpc_Ac1_HIO_c : public mDoHIO_entry_c {
-public:
-    daNpc_Ac1_HIO_c();
-    void genMessage(JORMContext* ctx) {
-        UNUSED(ctx);
-    };
-
-public:
-    /* 0x04 */ s8 field_0x04;
-    /* 0x05 */ u8 field_0x05[0x08 - 0x05];
-    /* 0x08 */ s32 field_0x08;
-    /* 0x0C */ s16 mMaxHeadX;
-    /* 0x0E */ s16 mMaxHeadY;
-    /* 0x10 */ s16 mMinHeadX;
-    /* 0x12 */ s16 mMinHeadY;
-    /* 0x14 */ s16 mMaxBackboneX;
-    /* 0x16 */ s16 mMaxBackboneY;
-    /* 0x18 */ s16 mMinBackboneX;
-    /* 0x1A */ s16 mMinBackboneY;
-    /* 0x1C */ s16 mMaxTurnStep;
-    /* 0x1E */ s16 field_0x1E;
-    /* 0x20 */ f32 field_0x20;
-    /* 0x24 */ u8 field_0x24[0x3C - 0x24];
-}; // Size: 0x3C
 
 #endif /* D_A_NPC_AC1_H */
