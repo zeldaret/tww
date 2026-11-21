@@ -8,6 +8,8 @@
 #include "d/d_snap.h"
 
 static daNpc_Ac1_HIO_c l_HIO;
+static fopAc_ac_c* l_check_inf[20];
+static s32 l_check_wrk = 0;
 
 /* 000000EC-00000150       .text __ct__15daNpc_Ac1_HIO_cFv */
 daNpc_Ac1_HIO_c::daNpc_Ac1_HIO_c() {
@@ -809,6 +811,11 @@ BOOL daNpc_Ac1_c::_draw() {
     }
     shadowDraw();
     dSnap_RegistFig(DSNAP_TYPE_NPC_AC1, this, 1.0f, 1.0f, 1.0f);
+
+    // Debug:
+    (GXColor){ 0xFF, 0x00, 0x00, 0x80 };
+    (GXColor){ 0x00, 0x00, 0xFF, 0x80 };
+
     return TRUE;
 }
 
