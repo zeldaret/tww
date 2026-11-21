@@ -569,7 +569,8 @@ bool daNpc_Ac1_c::chkAttention() {
 
 /* 0000143C-00001494       .text setAttention__11daNpc_Ac1_cFb */
 void daNpc_Ac1_c::setAttention(bool i_setEyePos) {
-    attention_info.position.set(current.pos.x, current.pos.y + l_HIO.mAttPosOffsetY, current.pos.z);
+    f32 offset = l_HIO.mAttPosOffsetY;
+    attention_info.position.set(current.pos.x, current.pos.y + offset, current.pos.z);
     if (!mbSetEyePos && !i_setEyePos) {
         return;
     }
@@ -914,7 +915,10 @@ BOOL daNpc_Ac1_c::_execute() {
 /* 00001F80-00001FFC       .text _delete__11daNpc_Ac1_cFv */
 BOOL daNpc_Ac1_c::_delete() {
     dComIfG_resDelete(&mPhase, "Ac");
-    if (heap != NULL) {
+#if VERSION > VERSION_DEMO
+    if (heap != NULL)
+#endif
+    {
         if (mpMorf != NULL) {
             mpMorf->stopZelAnime();
         }
@@ -925,6 +929,9 @@ BOOL daNpc_Ac1_c::_delete() {
             mpArmMorf->stopZelAnime();
         }
     }
+#if VERSION == VERSION_DEMO
+    l_HIO.removeHIO();
+#endif
     return TRUE;
 }
 
@@ -941,9 +948,14 @@ cPhs_State daNpc_Ac1_c::_create() {
     if (state != cPhs_COMPLEATE_e) {
         return state;
     }
-    if (!charDecide(fopAcM_GetParam(this) & 0xFF)) {
+    u32 tmp = fopAcM_GetParam(this) & 0xFF;
+    if (!charDecide(tmp)) {
         return cPhs_ERROR_e;
     }
+#if VERSION == VERSION_DEMO
+    l_HIO.entryHIO("コモリ少年");
+    fopAcM_ct(this, daNpc_Ac1_c);
+#endif
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_size_tbl[mType])) {
         return cPhs_ERROR_e;
     }
