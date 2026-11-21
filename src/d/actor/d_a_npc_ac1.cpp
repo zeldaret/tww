@@ -1027,7 +1027,49 @@ bool daNpc_Ac1_c::create_itm_Mdl() {
 
 /* 00002DC8-00003044       .text CreateHeap__11daNpc_Ac1_cFv */
 BOOL daNpc_Ac1_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* modeldat;
+    J3DModelData* anm_model = create_Anm();
+    if (!anm_model) {
+        return FALSE;
+    }
+    mBtpNum = 0;
+    if (!iniTexPttrnAnm(false)) {
+        mpMorf = NULL;
+        return FALSE;
+    }
+    modeldat = create_wng_Anm();
+    if (!modeldat) {
+        mpMorf = NULL;
+        return FALSE;
+    }
+    J3DModelData* arm_anmdata = create_arm_Anm();
+    if (arm_anmdata != NULL && create_itm_Mdl()) {
+        for (u16 i = 0; i < modeldat->getJointNum(); i++) {
+            if ((i == m_wngL1_jnt_num) || (i == m_wngR1_jnt_num)) {
+                mpWingMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Wng);
+            }
+        }
+        mpWingMorf->getModel()->setUserArea((uintptr_t)this);
+        for (u16 i = 0; i < arm_anmdata->getJointNum(); i++) {
+            if ((i == m_armL1_jnt_num) || (i == m_armR1_jnt_num)) {
+                mpArmMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Arm);
+            }
+        }
+        mpArmMorf->getModel()->setUserArea((uintptr_t)this);
+        for (u16 i = 0; i < anm_model->getJointNum(); i++) {
+            if ((i == m_hed_jnt_num) || (i == m_bbone_jnt_num) || (i == m_arm_L_jnt_num) || i == m_arm_R_jnt_num) {
+                mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Ac1);
+            }
+        }
+        mpMorf->getModel()->setUserArea((uintptr_t)this);
+        mAcchCir.SetWall(30.0f, 50.0f);
+        mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), NULL, NULL);
+        return TRUE;
+    } else {
+        mpMorf = NULL;
+        mpWingMorf = NULL;
+        return FALSE;
+    }
 }
 
 /* 00003044-00003064       .text daNpc_Ac1_Create__FP10fopAc_ac_c */
