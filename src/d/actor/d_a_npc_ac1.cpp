@@ -953,7 +953,7 @@ cPhs_State daNpc_Ac1_c::_create() {
         return cPhs_ERROR_e;
     }
 #if VERSION == VERSION_DEMO
-    l_HIO.entryHIO("コモリ少年");
+    l_HIO.entryHIO("コモリ成長");
     fopAcM_ct(this, daNpc_Ac1_c);
 #endif
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_size_tbl[mType])) {
