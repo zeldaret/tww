@@ -61,15 +61,15 @@ static BOOL nodeCallBack_Wng(J3DNode* i_node, int i_calcTiming) {
 
 /* 000001E4-00000294       .text nodeWngControl__11daNpc_Ac1_cFP7J3DNodeP8J3DModel */
 void daNpc_Ac1_c::nodeWngControl(J3DNode* i_node, J3DModel* i_model) {
-    s32 uVar1 = ((J3DJoint*)i_node)->getJntNo();
-    mDoMtx_stack_c::copy(i_model->getAnmMtx(uVar1));
-    if (uVar1 == m_wngL1_jnt_num) {
+    s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
+    mDoMtx_stack_c::copy(i_model->getAnmMtx(jntNo));
+    if (jntNo == m_wngL1_jnt_num) {
         cMtx_copy(mLeftArmMtx, j3dSys.mCurrentMtx);
-        i_model->setAnmMtx(uVar1, mLeftArmMtx);
+        i_model->setAnmMtx(jntNo, mLeftArmMtx);
     }
-    if (uVar1 == m_wngR1_jnt_num) {
+    if (jntNo == m_wngR1_jnt_num) {
         cMtx_copy(mRightArmMtx, j3dSys.mCurrentMtx);
-        i_model->setAnmMtx(uVar1, mRightArmMtx);
+        i_model->setAnmMtx(jntNo, mRightArmMtx);
     }
 }
 
